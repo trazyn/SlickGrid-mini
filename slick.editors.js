@@ -29,7 +29,7 @@
       $input = $("<INPUT type=text class='editor-text' />")
           .appendTo(args.container)
           .bind("keydown.nav", function (e) {
-            if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+            if (e.keyCode === 37 || e.keyCode === 39) {
               e.stopImmediatePropagation();
             }
           })

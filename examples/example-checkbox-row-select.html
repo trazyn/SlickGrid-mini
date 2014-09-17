@@ -3,16 +3,10 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
-  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
-  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <!--<link rel="stylesheet" href="../css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>-->
+  <!--<link rel="stylesheet" href="examples.css" type="text/css"/>-->
   <link rel="stylesheet" href="../controls/slick.columnpicker.css" type="text/css"/>
-  <style>
-    .slick-cell-checkboxsel {
-      background: #f0f0f0;
-      border-right-color: silver;
-      border-right-style: solid;
-    }
-  </style>
+
 </head>
 <body>
 <div style="position:relative">
@@ -36,19 +30,20 @@
 <script src="../lib/firebugx.js"></script>
 
 <script src="../lib/jquery-1.7.min.js"></script>
-<script src="../lib/jquery-ui-1.8.16.custom.min.js"></script>
+<!--<script src="../lib/jquery-ui-1.8.16.custom.min.js"></script>-->
 <script src="../lib/jquery.event.drag-2.2.js"></script>
-
 <script src="../slick.core.js"></script>
-<script src="../plugins/slick.checkboxselectcolumn.js"></script>
-<script src="../plugins/slick.autotooltips.js"></script>
-<script src="../plugins/slick.cellrangedecorator.js"></script>
-<script src="../plugins/slick.cellrangeselector.js"></script>
-<script src="../plugins/slick.cellcopymanager.js"></script>
-<script src="../plugins/slick.cellselectionmodel.js"></script>
+<!--<script src="../plugins/slick.checkboxselectcolumn.js"></script>-->
+<script src="../plugins/CheckboxSelectedColumn.js"></script>
+
+<!--<script src="../plugins/slick.autotooltips.js"></script>-->
+<!--<script src="../plugins/slick.cellrangedecorator.js"></script>-->
+<!--<script src="../plugins/slick.cellrangeselector.js"></script>-->
+<!--<script src="../plugins/slick.cellcopymanager.js"></script>-->
+<!--<script src="../plugins/slick.cellselectionmodel.js"></script>-->
 <script src="../plugins/slick.rowselectionmodel.js"></script>
 <script src="../controls/slick.columnpicker.js"></script>
-<script src="../slick.formatters.js"></script>
+<!--<script src="../slick.formatters.js"></script>-->
 <script src="../slick.editors.js"></script>
 <script src="../slick.grid.js"></script>
 
@@ -59,7 +54,9 @@
     editable: true,
     enableCellNavigation: true,
     asyncEditorLoading: false,
-    autoEdit: false
+    autoEdit: false,
+    enableColumnReorder: false,
+    forceFitColumns: true
   };
   var columns = [];
 
@@ -89,7 +86,7 @@
     grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
     grid.registerPlugin(checkboxSelector);
 
-    var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
+    <!--var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);-->
   })
 </script>
 </body>

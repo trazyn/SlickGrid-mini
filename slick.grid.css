@@ -4,13 +4,34 @@ In order to preserve the uniform grid appearance, all cell styles need to have p
 No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS
 classes should alter those!
 */
+body{font:13px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
 
+input[type="text"]{border:1px solid #ccc;line-height:20px;padding-left:5px;}
+input[type="text"]:focus,textarea:focus{outline:none;}
+::-webkit-scrollbar {
+width: 12px;
+height:12px;
+}
+::-webkit-scrollbar-track {
+background:none;
+}
+::-webkit-scrollbar-thumb {
+background:#e5e5e5; url(img/scrollbarBG.png) no-repeat center center;
+border:1px solid white;
+}
+::-webkit-scrollbar-thumb:hover{background:#a5a5a5;}
+.ui-widget{border:1px solid #ddd;}
+.slick-cell input[type="text"]{width:100%;height:100%;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
   border-left: 0px;
+  font-weight: bold;
 }
-
+.slick-row.odd{background: #F5F5F5;}
+.slick-row:hover{transition: all .2s linear; background: #E7F0F7;}
+.slick-cell.selected{transition: all .2s linear; background: #CDE1F1;border-top: 1px solid #FFF;}
+.slick-cell.active{transition: all .2s linear; background:rgba(0, 77, 160, 0.1);}
 .slick-header-columns, .slick-headerrow-columns {
   position: relative;
   white-space: nowrap;
@@ -24,15 +45,16 @@ classes should alter those!
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  height: 16px;
-  line-height: 16px;
+  height: 38px;
+  line-height: 38px;
   margin: 0;
-  padding: 4px;
-  border-right: 1px solid silver;
   border-left: 0px;
   border-top: 0px;
   border-bottom: 0px;
   float: left;
+  cursor:pointer;
+  border-bottom: 4px solid #ECECEC;
+  text-indent:5px;
 }
 
 .slick-headerrow-column.ui-state-default {
@@ -88,18 +110,16 @@ classes should alter those!
 
 .slick-cell, .slick-headerrow-column {
   position: absolute;
-  border: 1px solid transparent;
-  border-right: 1px dotted silver;
-  border-bottom-color: silver;
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   vertical-align: middle;
   z-index: 1;
-  padding: 1px 2px 2px 1px;
   margin: 0;
   white-space: nowrap;
   cursor: default;
+  line-height: 35px;
+  text-indent:5px;
 }
 
 .slick-group {
@@ -123,11 +143,10 @@ classes should alter those!
 }
 
 .slick-cell.editable {
-  z-index: 11;
-  overflow: visible;
-  background: white;
-  border-color: black;
-  border-style: solid;
+   outline:none;border: 1px solid #27B1FF;box-shadow: 0 0 5px rgba(27, 91, 255, 0.65);-webkit-transition:all .2s linear;
+   margin: -1px;
+   z-index: 2;
+   background:white;
 }
 
 .slick-cell:focus {
@@ -154,4 +173,75 @@ classes should alter those!
   z-index: 10;
   position: absolute;
   border: 2px dashed black;
+}
+
+
+input[type=checkbox] {
+	display: none;
+}
+
+input[type=checkbox]:checked + .toggle:after{
+	opacity: 1;
+}
+
+.toggle {
+    display: block;
+	height: 35px;
+	width: 35px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    text-indent: 100%;
+    overflow: hidden;
+	cursor: pointer;
+}
+
+.toggle:after {
+	content: '';
+	position: absolute;
+	position: absolute;
+	width: 7px;
+	height: 3px;
+	background: transparent;
+	top: 14px;
+	left: 13px;
+	border: 2px solid #aaa;
+	border-top: none;
+	border-right: none;
+
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	opacity: 0;
+}
+
+.toggle:before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    background: #faf9f9;
+    border: 1px solid #6bb3ca;
+    border-radius: 2px;
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    -webkit-box-shadow: 0 1px 1px #dfecf4;
+    -moz-box-shadow: 0 1px 1px #dfecf4;
+    box-shadow: 0 1px 1px #dfecf4;
+}
+
+.toggle:hover:before {
+    -webkit-box-shadow: 0 0 3px #6bb3ca;
+    -moz-box-shadow: 0 0 3px #6bb3ca;
+    box-shadow: 0 0 3px #6bb3ca;
+}
+
+.toggle:before, .toggle:active:before {
+    border-color: #c0c0c0 #ccc #d8d8d8;
+    -webkit-box-shadow: inset 0 1px rgba(0, 0, 0, 0.05), inset 0 5px 5px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px rgba(0, 0, 0, 0.05), inset 0 5px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.05), inset 0 5px 5px rgba(0, 0, 0, 0.05);
 }
