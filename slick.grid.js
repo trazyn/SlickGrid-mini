@@ -61,7 +61,7 @@ if (typeof Slick === "undefined") {
       enableAddRow: false,
       leaveSpaceForNewRows: false,
       editable: false,
-      autoEdit: true,
+      autoEdit: false,
       enableCellNavigation: true,
 
       /** Need jQuery-ui */

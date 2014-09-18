@@ -248,3 +248,57 @@ input[type=checkbox]:checked + .toggle:after{
 .pager-count button[name="record-count"]{background: #e0e0e0;border: none;padding:0 5px;cursor:pointer;font-size:11px;margin: 0;height: 16px;}
 .pager-count{margin-left:20px;}
 .pager-info .pager-prev:hover,.pager-info .pager-next:hover,.pager-count button[name="record-count"]:hover{background:#333;color: #fff;}
+
+.custom-select {
+  display: inline-block;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  /* Styling the select background */
+  background-color: #66d2f3;
+}
+.custom-select select {
+  width: auto;
+  margin: 0;
+  padding: .75em 1.5em;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  /* Styling the select text color */
+  color: rgba(255, 255, 255, 0.6);
+  /* removes the fucking native down arrow */
+  -webkit-appearance: none;
+  -moz-appearance: window;
+}
+.custom-select select::-ms-expand {
+  display: none;
+}
+.custom-select:after {
+  position: absolute;
+  top: 1.25em;
+  right: 1em;
+  /* Styling the down arrow */
+  width: 0;
+  height: 0;
+  padding: 0;
+  content: '';
+  border-left: .25em solid transparent;
+  border-right: .25em solid transparent;
+  border-top: .375em solid #1FBDED;
+  pointer-events: none;
+}
+
+@-moz-document url-prefix() {
+  .custom-select select {
+    padding-right: 1.75em;
+  }
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .custom-select select {
+    padding-right: 2em;
+  }
+}

@@ -15,27 +15,36 @@
 
 		<div class="pager">
 			<div class="pager-info">
-				<span class="pager-prev">&lt;</span>
 
-				<span class="pager-index">1/1+</span>
+				<button class="pager-prev" disabled="disabled">
+					&lt;
+				</button>
 
-				<span class="pager-next">&gt;</span>
+				<button class="pager-next" disabled="disabled">
+					&gt;
+				</button>
+
 			</div>
 
-			<div class="pager-go">
-				<input type="text" name="pager-num" value=""/>
-				<button name="pager-go">
-					GO
+			<div class="pager-info">
+
+				<input type="text" class="pager-current">
+				
+				<button disabled="disabled" class="pager-total">
 				</button>
 			</div>
 
-			<div class="pager-count">
+			<div class="pager-refresh"></div>
 
-				Records <small>100+</small>
-
-				<button name="record-count">
-					COUNT
-				</button>
+			<div class="pager-size">
+				<label class="custom-select">
+					<select>
+						<option disabled selected value="100">100</option>
+						<option value="200">200</option>
+						<option value="500">500</option>
+						<option value="1000">1000</option>
+					</select>
+				</label>
 			</div>
 		</div>
 	</div>
@@ -45,7 +54,7 @@
 <script src="lib/jquery.event.drag-2.2.js"></script>
 <script src="slick.core.js"></script>
 <script src="plugins/CheckboxSelectedColumn.js"></script>
-<!--<script src="../plugins/slick.autotooltips.js"></script>-->
+<script src="../plugins/slick.autotooltips.js"></script>
 <script src="plugins/slick.rowselectionmodel.js"></script>
 <script src="controls/slick.columnpicker.js"></script>
 <script src="slick.editors.js"></script>
