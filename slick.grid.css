@@ -4,13 +4,13 @@ In order to preserve the uniform grid appearance, all cell styles need to have p
 No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS
 classes should alter those!
 */
-body{font:13px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
+body{font:12px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
 
-input[type="text"]{border:1px solid #ccc;line-height:20px;padding-left:5px;}
+input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;}
 input[type="text"]:focus,textarea:focus{outline:none;}
 ::-webkit-scrollbar {
-width: 12px;
-height:12px;
+width: 10px;
+height:10px;
 }
 ::-webkit-scrollbar-track {
 background:none;
@@ -19,9 +19,9 @@ background:none;
 background:#e5e5e5; url(img/scrollbarBG.png) no-repeat center center;
 border:1px solid white;
 }
-::-webkit-scrollbar-thumb:hover{background:#a5a5a5;}
+::-webkit-scrollbar-thumb:hover{background:#333;}
 .ui-widget{border:1px solid #ddd;}
-.slick-cell input[type="text"]{width:100%;height:100%;border:none;}
+.slick-cell input[type="text"]{width: 86%;height: 86%;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
@@ -30,8 +30,8 @@ border:1px solid white;
 }
 .slick-row.odd{background: #F5F5F5;}
 .slick-row:hover{transition: all .2s linear; background: #E7F0F7;}
-.slick-cell.selected{transition: all .2s linear; background: #CDE1F1;border-top: 1px solid #FFF;}
-.slick-cell.active{transition: all .2s linear; background:rgba(0, 77, 160, 0.1);}
+.slick-cell.selected{transition: all .2s linear; background: #CDE1F1;box-shadow: 0 -1px 0 white;}
+
 .slick-header-columns, .slick-headerrow-columns {
   position: relative;
   white-space: nowrap;
@@ -45,8 +45,8 @@ border:1px solid white;
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  height: 38px;
-  line-height: 38px;
+  height: 33px;
+  line-height: 33px;
   margin: 0;
   border-left: 0px;
   border-top: 0px;
@@ -87,12 +87,12 @@ border:1px solid white;
   font-size: 0.1px;
   display: block;
   cursor: col-resize;
-  width: 4px;
+  width: 3px;
   right: 0px;
   top: 0;
   height: 100%;
 }
-
+.slick-header-column:hover .slick-resizable-handle{border-left: 1px solid #cfcfcf;border-right: 1px solid #CFCFCF;background: #F7F7F7;}
 .slick-sortable-placeholder {
   background: silver;
 }
@@ -142,11 +142,14 @@ border:1px solid white;
   border: 1px solid red !important;
 }
 
-.slick-cell.editable {
-   outline:none;border: 1px solid #27B1FF;box-shadow: 0 0 5px rgba(27, 91, 255, 0.65);-webkit-transition:all .2s linear;
-   margin: -1px;
+.slick-cell.editable input:focus{
+   outline: none;
+   border: 1px solid rgba(39, 91, 255, 0.48);
+   box-shadow: 0 0 5px rgba(27, 91, 255, 0.5);
+   -webkit-transition:all .2s linear;
    z-index: 2;
    background:white;
+   padding-left: 5px;
 }
 
 .slick-cell:focus {
@@ -177,71 +180,70 @@ border:1px solid white;
 
 
 input[type=checkbox] {
-	display: none;
+  display: none;
 }
 
 input[type=checkbox]:checked + .toggle:after{
-	opacity: 1;
+  opacity: 1;
 }
 
 .toggle {
     display: block;
-	height: 35px;
-	width: 35px;
+  height: 35px;
+  width: 35px;
     position: absolute;
     top: 0px;
     bottom: 0px;
     left: 0px;
     text-indent: 100%;
     overflow: hidden;
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .toggle:after {
-	content: '';
-	position: absolute;
-	position: absolute;
-	width: 7px;
-	height: 3px;
-	background: transparent;
-	top: 14px;
-	left: 13px;
-	border: 2px solid #aaa;
-	border-top: none;
-	border-right: none;
+  content: '';
+  position: absolute;
+  position: absolute;
+  width: 8px;
+  height: 4px;
+  background: transparent;
+  top: 12px;
+  left: 11px;
+  border: 3px solid #363636;
+  border-top: none;
+  border-right: none;
 
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-	opacity: 0;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  opacity: 0;
 }
 
 .toggle:before {
     content: '';
-    width: 15px;
-    height: 15px;
+    width: 13px;
+    height: 13px;
     background: #faf9f9;
     border: 1px solid #6bb3ca;
-    border-radius: 2px;
     position: absolute;
     top: 9px;
     left: 9px;
-    -webkit-box-shadow: 0 1px 1px #dfecf4;
     -moz-box-shadow: 0 1px 1px #dfecf4;
-    box-shadow: 0 1px 1px #dfecf4;
 }
 
-.toggle:hover:before {
-    -webkit-box-shadow: 0 0 3px #6bb3ca;
-    -moz-box-shadow: 0 0 3px #6bb3ca;
-    box-shadow: 0 0 3px #6bb3ca;
-}
+
 
 .toggle:before, .toggle:active:before {
-    border-color: #c0c0c0 #ccc #d8d8d8;
-    -webkit-box-shadow: inset 0 1px rgba(0, 0, 0, 0.05), inset 0 5px 5px rgba(0, 0, 0, 0.05);
+    border-color: #ccc;
     -moz-box-shadow: inset 0 1px rgba(0, 0, 0, 0.05), inset 0 5px 5px rgba(0, 0, 0, 0.05);
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.05), inset 0 5px 5px rgba(0, 0, 0, 0.05);
 }
+.pager{text-align:right;font-size:11px;margin: 5px 0;}
+.pager-info,.pager-go,.pager-count{display:inline-block;}
+.pager-info .pager-prev,.pager-info .pager-next{padding:0 5px;cursor:pointer;vertical-align: top;height: 16px;line-height: 14px;display:inline-block;background: #E0E0E0;}
+.pager-go input[type="text"]{vertical-align:top;width:20px;text-align: left;font-size: 11px;line-height: 14px;height: 14px;border:1px solid #aaa;}
+.pager-go button[name="pager-go"]{cursor:pointer;background:none;border:none;padding:0;margin:0;font-size:11px;vertical-align: middle;}
+.pager-count button[name="record-count"]{background: #e0e0e0;border: none;padding:0 5px;cursor:pointer;font-size:11px;margin: 0;height: 16px;}
+.pager-count{margin-left:20px;}
+.pager-info .pager-prev:hover,.pager-info .pager-next:hover,.pager-count button[name="record-count"]:hover{background:#333;color: #fff;}
