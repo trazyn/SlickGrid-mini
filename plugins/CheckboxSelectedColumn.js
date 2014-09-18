@@ -7,7 +7,7 @@
 		width: 35,
 		
 		/** TODO: Max selected */
-		max: 2
+		max: 0
 	}
 
 	/** Class */
@@ -120,7 +120,7 @@
 		}
 
 		function handleHeaderClick( e, args ) {
-		
+
 			if ( args.column.id !== settings.columnId ||
 
 					/** If editing, try to commit and return */
@@ -132,7 +132,7 @@
 					}
 
 			/** Deselect all */
-			if ( $( e.target ).is( ":checked" ) ) {
+			if ( !$( e.target ).prev().is( ":checked" ) ) {
 				
 				var rows = [];
 
@@ -143,8 +143,8 @@
 			/** Select all */
 			} else $G.setSelectedRows( [] );
 
-						e.preventDefault();
-						e.stopImmediatePropagation();
+			e.preventDefault();
+			e.stopImmediatePropagation();
 		}
 
 		$.extend( this, instance );
