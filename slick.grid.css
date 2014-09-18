@@ -6,7 +6,7 @@ classes should alter those!
 */
 body{font:12px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
 
-input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;}
+input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;padding-left: 5px;  padding-right: 5px;}
 input[type="text"]:focus,textarea:focus{outline:none;}
 ::-webkit-scrollbar {
 width: 10px;
@@ -21,7 +21,7 @@ border:1px solid white;
 }
 ::-webkit-scrollbar-thumb:hover{background:#333;}
 .ui-widget{border:1px solid #ddd;}
-.slick-cell input[type="text"]{width: 86%;height: 86%;border:none;}
+.slick-cell input[type="text"]{width: 80%;height: 86%;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
@@ -150,6 +150,7 @@ border:1px solid white;
    z-index: 2;
    background:white;
    padding-left: 5px;
+   padding-right: 5px;
 }
 
 .slick-cell:focus {
