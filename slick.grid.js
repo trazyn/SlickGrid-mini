@@ -63,7 +63,9 @@ if (typeof Slick === "undefined") {
       editable: false,
       autoEdit: true,
       enableCellNavigation: true,
-      enableColumnReorder: true,
+
+      /** Need jQuery-ui */
+      enableColumnReorder: false,
       asyncEditorLoading: false,
       asyncEditorLoadDelay: 100,
       forceFitColumns: false,
