@@ -21,7 +21,7 @@ border:1px solid white;
 }
 ::-webkit-scrollbar-thumb:hover{background:#333;}
 .ui-widget{border:1px solid #ddd;}
-.slick-cell input[type="text"]{width: 80%;height: 86%;border:none;}
+.slick-cell input[type="text"]{width: 84%;height: 86%;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
