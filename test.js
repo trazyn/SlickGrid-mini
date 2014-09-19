@@ -1,3 +1,21 @@
+
+require.config( {
+	
+	baseUrl: "src",
+
+	paths: {
+		
+		"slick": "."
+	}
+} );
+
+require( [ "slick/core/Core", 
+	"slick/core/Grid", 
+	"slick/core/Dataview",
+	"slick/cell/Editors",
+	"slick/plugins/Checkboxcolumn" ], function() {
+
+	
 	var pager = function( dataView, $G, options ) {
 
 		var container = $( options.container )
@@ -184,4 +202,8 @@ pager( dataView, $G, {
 	
 	container: $( ".pager" )
 } );
+
+	
+} );
+
 

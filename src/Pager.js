@@ -103,13 +103,21 @@ define( function() {
 
 			loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
 
+			$( $G.getContainerNode() ).append( loading );
+
 			loadData = function() {
-			
+
+				loading.fadeIn();
+
 				$.ajax( ajaxOptions )
 					
-				.pregress( function() {
+				.done( function( data ) {
 				
-					loading.fadeIn();
+				} )
+				
+				.always( function() {
+					
+					loading.fadeOut( 100 );
 				} );
 			};
 

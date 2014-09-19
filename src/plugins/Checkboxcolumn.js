@@ -1,4 +1,4 @@
-(function( $ ) {
+define( [ "slick/plugins/rowselectionmodel" ], function() {
 
 	var defaults = {
 		columnId : "_checkbox_selector",
@@ -157,4 +157,4 @@
 		}
 	} );
 
-})( window.jQuery );
+} );
