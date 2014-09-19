@@ -9,133 +9,133 @@ require.config( {
 	}
 } );
 
-require( [ "slick/core/Core", 
+require( [ "slick/Pager",
+	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/core/Dataview",
 	"slick/cell/Editors",
-	"slick/plugins/Checkboxcolumn" ], function() {
+	"slick/plugins/Checkboxcolumn" ], function( Pager ) {
 
 	
-	var pager = function( dataView, $G, options ) {
+	//var pager = function( dataView, $G, options ) {
 
-		var container = $( options.container )
+		//var container = $( options.container )
 
-		, current = container.find( "input.pager-current" )
-		, size = container.find( "select:first" )
-		, total = container.find( "button.pager-total" )
+		//, current = container.find( "input.pager-current" )
+		//, size = container.find( "select:first" )
+		//, total = container.find( "button.pager-total" )
 	
-		, loading = $( "<div class='slick-loading'> <div class='slick-head-mask'> </div> </div>" );
+		//, loading = $( "<div class='slick-loading'> <div class='slick-head-mask'> </div> </div>" );
 	
-		/** Skip the first notify */
-		dataView.setRefreshHints( { isFilterUnchanged: true } );
-		dataView.setPagingOptions( options.pagingInfo || { pageSize: 50, pageNum: 0 } );
+		//[>* Skip the first notify <]
+		//dataView.setRefreshHints( { isFilterUnchanged: true } );
+		//dataView.setPagingOptions( options.pagingInfo || { pageSize: 50, pageNum: 0 } );
 
-		dataView.onRowCountChanged.subscribe( function( e, args ) {
+		//dataView.onRowCountChanged.subscribe( function( e, args ) {
 		
-			$G.updateRowCount();
-			$G.render();
-		} );
+			//$G.updateRowCount();
+			//$G.render();
+		//} );
 
-		dataView.onRowsChanged.subscribe( function( e, args ) {
+		//dataView.onRowsChanged.subscribe( function( e, args ) {
 		
-			$G.invalidateRows( args.rows );
-			$G.render();
-		} );
+			//$G.invalidateRows( args.rows );
+			//$G.render();
+		//} );
 
-		dataView.onPagingInfoChanged.subscribe( function( e, args ) {
+		//dataView.onPagingInfoChanged.subscribe( function( e, args ) {
 
-			var 
+			//var 
 
-			  pagingInfo = dataView.getPagingInfo(),
+			  //pagingInfo = dataView.getPagingInfo(),
 
-			  prev = container.find( ".pager-prev" ), 
-			  next = container.find( ".pager-next" ),
+			  //prev = container.find( ".pager-prev" ), 
+			  //next = container.find( ".pager-next" ),
 
-			  value = pagingInfo.pageNum + 1,
-			  max = pagingInfo.totalPages || 1;
+			  //value = pagingInfo.pageNum + 1,
+			  //max = pagingInfo.totalPages || 1;
 
-			/** Clear the last state, prevent has been disabled after the size change */
-			prev.removeAttr( "disabled" ), next.removeAttr( "disabled" );
+			//[>* Clear the last state, prevent has been disabled after the size change <]
+			//prev.removeAttr( "disabled" ), next.removeAttr( "disabled" );
 
-			(value < max && value > 1) && ( prev.removeAttr( "disabled" ), next.removeAttr( "disabled" ) );
+			//(value < max && value > 1) && ( prev.removeAttr( "disabled" ), next.removeAttr( "disabled" ) );
 
-			value === 1 && prev.attr( "disabled", "disabled" );
-			value === max && next.attr( "disabled", "disabled" );
+			//value === 1 && prev.attr( "disabled", "disabled" );
+			//value === max && next.attr( "disabled", "disabled" );
 
-			current.val( value );
-			size.val( pagingInfo.pageSize );
-			total.html( max ).attr( "data-total", max );
-		} );
+			//current.val( value );
+			//size.val( pagingInfo.pageSize );
+			//total.html( max ).attr( "data-total", max );
+		//} );
 
-		dataView.onPagingInfoChanged.notify();
+		//dataView.onPagingInfoChanged.notify();
 	
-		container
+		//container
 
-		.delegate( ".pager-prev", "click", function( e ) {
+		//.delegate( ".pager-prev", "click", function( e ) {
 		
-			var value = +current.val();
+			//var value = +current.val();
 
-			e.stopImmediatePropagation();
-			e.preventDefault();
+			//e.stopImmediatePropagation();
+			//e.preventDefault();
 
-			value > 1 && dataView.setPagingOptions( { pageNum: value - 2 } );
-		} )
+			//value > 1 && dataView.setPagingOptions( { pageNum: value - 2 } );
+		//} )
 		
-		.delegate( ".pager-next", "click", function( e ) {
+		//.delegate( ".pager-next", "click", function( e ) {
 		
-			var value = +current.val()
+			//var value = +current.val()
 			
-			, max = +total.attr( "data-total" );
+			//, max = +total.attr( "data-total" );
 
-			e.stopImmediatePropagation();
-			e.preventDefault();
+			//e.stopImmediatePropagation();
+			//e.preventDefault();
 
-			value <= max && dataView.setPagingOptions( { pageNum: value } );
-		} )
+			//value <= max && dataView.setPagingOptions( { pageNum: value } );
+		//} )
 
-		.delegate( "select", "change", function( e ) {
+		//.delegate( "select", "change", function( e ) {
 
-			dataView.setPagingOptions( { pageSize: $( this ).val() } );
-			e.stopImmediatePropagation();
-		} )
+			//dataView.setPagingOptions( { pageSize: $( this ).val() } );
+			//e.stopImmediatePropagation();
+		//} )
 		
-		.delegate( "input.pager-current", "keyup", function( e ) {
+		//.delegate( "input.pager-current", "keyup", function( e ) {
 
-			var value = +current.val() || 1
-			, max = +total.attr( "data-total" ) || 1;
+			//var value = +current.val() || 1
+			//, max = +total.attr( "data-total" ) || 1;
 			
-			switch ( e.keyCode ) {
+			//switch ( e.keyCode ) {
 				
-				case 38:
-					++value <= max 
-						? current.val( value ) 
-						: --value;
-					break;
+				//case 38:
+					//++value <= max 
+						//? current.val( value ) 
+						//: --value;
+					//break;
 
-				case 40:
-					--value >= 1 
-						? current.val( value ) 
-						: ++value;
-					break;
+				//case 40:
+					//--value >= 1 
+						//? current.val( value ) 
+						//: ++value;
+					//break;
 
-				case 13:
+				//case 13:
 
-					if ( value <= max && value >= 1 ) {
+					//if ( value <= max && value >= 1 ) {
 
-						current.blur();
-						dataView.setPagingOptions( { pageNum: value } );
-					} else {
-						current.select();
-					}
-					break;
-			}
+						//current.blur();
+						//dataView.setPagingOptions( { pageNum: value } );
+					//} else {
+						//current.select();
+					//}
+					//break;
+			//}
 
-			e.stopImmediatePropagation();
-		} );
-	};
+			//e.stopImmediatePropagation();
+		//} );
+	//};
 
 
-var dataView = new Slick.Data.DataView()
+dataView = new Slick.Data.DataView()
 	
 , checkBoxColumn = new Slick.CheckboxSelectColumn();
 
@@ -151,9 +151,8 @@ for ( var i = 0, data = []; i < 1000; ++i ) {
 }
 
 dataView.setItems( data );
-dataView.setPagingOptions( { pageSize: 50, pageNum: 0 } );
 
-var $G = new Slick.Grid( "#myGrid", dataView, [ checkBoxColumn.getColumnDefinition(), {
+$G = new Slick.Grid( "#myGrid", dataView, [ checkBoxColumn.getColumnDefinition(), {
 	
 	id: "column1",
 	    name: "IDS",
@@ -192,17 +191,23 @@ var $G = new Slick.Grid( "#myGrid", dataView, [ checkBoxColumn.getColumnDefiniti
 
 	    syncColumnCellResize: true,
 
-	    multiColumnSort: true
+	    multiColumnSort: true,
+
+	    explicitInitialization: true
 } );
+
+Pager( $G, dataView );
 
 $G.setSelectionModel( new Slick.RowSelectionModel( { selectActiveRow: false } ) );
 $G.registerPlugin( checkBoxColumn );
 
-pager( dataView, $G, { 
+//pager( dataView, $G, { 
 	
-	container: $( ".pager" )
-} );
+	//container: $( ".pager" )
+//} );
 
+
+$G.init();
 	
 } );
 

@@ -1,7 +1,8 @@
 
-define( function() {
+define( [ "slick/core/Dataview" ], function() {
 
 	var html = 
+			"<div class='pager'>" +
 			"<div class='pager-nav'>" +
 				"<button class='pager-prev'></button>" +
 				"<button class='pager-next'></button>" +
@@ -16,19 +17,28 @@ define( function() {
 
 			"<div class='pager-size'>" +
 				"<label class='custom-select'>" +
-					"<select>" +
-						"<option value='50'>50</option>" +
-						"<option value='100'>100</option>" +
-						"<option value='200'>200</option>" +
-						"<option value='500'>500</option>" +
-						"<option value='1000'>1000</option>" +
-					"</select>" +
+					"<select></select>" +
 				"</label>" +
-			"</div>";
+			"</div>" +
+			"</div>"
+			
+	, defaults = {
+		
+		container: undefined,
 
-	return function( dataView, $G, ajaxOptions ) {
+		pagingInfo: {
+			pageSize: 50,
+			pageNum: 0,
+
+			sizes: [ 50, 100, 200, 500, 1000 ]
+		}
+	};
+
+	return function( $G, dataView, options ) {
+
+		var settings = $.extend( true, {}, defaults, options || {} )
 	
-		var container = $( options.container )
+		, container = $( html )
 
 		, current = container.find( "input.pager-current" )
 		, size = container.find( "select:first" )
@@ -61,18 +71,18 @@ define( function() {
 		/** A function that implement for paging */
 		, pager;
 
-		if ( !container.length ) {
-			container = $( "<div class='pager'></div>" );
+		for ( var sizes = settings.pagingInfo.sizes, length = sizes.length, i = 0; i < length; ) {
+			
+			/** Right now DOM is not in the render tree, so there is no reflow */
+			size.append( "<option value=" + sizes[ i ] + ">" + sizes[ i++ ] + "</option>" );
 		}
 
-		container.html( html );
-
 		/** All operations in local */
-		if ( !ajaxOptions ) {
+		if ( !settings.ajaxOptions ) {
 		
 			/** Skip the first notify */
 			dataView.setRefreshHints( { isFilterUnchanged: true } );
-			dataView.setPagingOptions( options.pagingInfo || { pageSize: 50, pageNum: 0 } );
+			dataView.setPagingOptions( settings.pagingInfo );
 
 			dataView.onRowCountChanged.subscribe( function( e, args ) {
 			
@@ -91,44 +101,66 @@ define( function() {
 			} );
 
 			/** The implementation of local paging */
-			pager = dataView.setPagingInfo;
+			pager = dataView.setPagingOptions;
+
+			pager( dataView.getPagingInfo() );
 		} else {
 
-			var loading, loadData;
+			var ajaxOptions, loading;
 
 			/** All operations in server-side */
 			if ( !ajaxOptions.serviceName ) {
 				throw "The service name cann't be null";
 			}
 
+			ajaxOptions = settings.ajaxOptions;
 			loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
 
 			$( $G.getContainerNode() ).append( loading );
 
-			loadData = function() {
+			pager = function() {
 
+				$.extend( ajaxOptions, {
+					
+					from: +current.val() * size.val(),
+					to: +size.val()
+				} );
+			
 				loading.fadeIn();
 
 				$.ajax( ajaxOptions )
 					
 				.done( function( data ) {
 				
+					;;for ( var i = 0, data = []; i < 1000; ++i ) {
+						
+						data[ i ] = {
+						
+							"id": "# " + i,
+							"num1": Math.random() * i * 100,
+							"num2": Math.random() * i * 1000,
+							"num3": Math.random() * i * 10000
+						};
+					}
+
+					dataView.setItems( data );
+
+					/** Rerender all the rows */
+					$G.invalidate();
+
+					//uiRefresh( { pageNum: 1 + current.val(), pageSize: +size.val(), totalPages: 1000 } );
 				} )
 				
-				.always( function() {
-					
-					loading.fadeOut( 100 );
-				} );
-			};
+				.always( function() { 
 
-			pager = function() {
-			
+					setTimeout( function() {
+						loading.fadeOut( 100 ); 
+					}, 3000 );
+				} );
 			};
 
 			$( $G.getContainerNode() ).append( loading );
 		}
-
-		dataView.onPagingInfoChanged.notify();
 	
 		container
 
@@ -184,7 +216,7 @@ define( function() {
 					if ( value <= max && value >= 1 ) {
 
 						current.blur();
-						pager( { pageNum: value } );
+						pager( { pageNum: value, pageSize: +size.val() } );
 					} else {
 						current.select();
 					}
@@ -193,6 +225,8 @@ define( function() {
 
 			e.stopImmediatePropagation();
 		} );
+
+		$( $G.getContainerNode() ).after( container );
 	};
 } );
 
