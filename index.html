@@ -8,30 +8,25 @@
 
 </head>
 <body>
-<div style="position:relative; text-align: center;">
+<div style="position:relative;">
 
 	<div style="width:600px;">
-		<div id="myGrid" style="width:100%;height:500px;"></div>
+		<div id="myGrid" style="width:100%;height:500px;">
+		</div>
 
 		<div class="pager">
-			<div class="pager-info">
+			<div class="pager-nav">
 
-				<button class="pager-prev" disabled="disabled">
-					&lt;
-				</button>
-
-				<button class="pager-next" disabled="disabled">
-					&gt;
-				</button>
+				<button class="pager-prev"></button> 
+				<button class="pager-next"></button>
 
 			</div>
 
 			<div class="pager-info">
 
-				<input type="text" class="pager-current">
+				<input type="text" class="pager-current" maxlength="5">
 				
-				<button disabled="disabled" class="pager-total">
-				</button>
+				<button disabled="disabled" class="pager-total"></button>
 			</div>
 
 			<div class="pager-refresh"></div>
@@ -39,7 +34,8 @@
 			<div class="pager-size">
 				<label class="custom-select">
 					<select>
-						<option disabled selected value="100">100</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
 						<option value="200">200</option>
 						<option value="500">500</option>
 						<option value="1000">1000</option>
