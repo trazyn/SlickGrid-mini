@@ -32,8 +32,6 @@ require( [ "slick/Pager",
 		};
 	}
 
-	dataView.setItems( data );
-
 	$G = new Slick.Grid( "#myGrid", dataView, [ checkBoxColumn.getColumnDefinition(), {
 		
 		id: "column1",
@@ -77,7 +75,26 @@ require( [ "slick/Pager",
 		explicitInitialization: true
 	} );
 
-	Pager( $G, dataView );
+	Pager( $G, dataView, {
+	
+		pagingInfo: {
+			pageSize: 50,
+			pageNum: 0,
+
+			sizes: [ 50, 100, 500, 1000 ]
+		},
+
+		data: data,
+
+		ajaxOptions: {
+		
+			data: {
+				
+				name: "scm.common.getNames",
+				params: JSON.stringify( {} )
+			}
+		}
+	} );
 
 	$G.setSelectionModel( new Slick.RowSelectionModel( { selectActiveRow: false } ) );
 
