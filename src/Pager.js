@@ -4,8 +4,8 @@ define( [ "slick/core/Dataview" ], function() {
 	var html = 
 			"<div class='pager'>" +
 			"<div class='pager-nav'>" +
-				"<button class='pager-prev'></button>" +
-				"<button class='pager-next'></button>" +
+				"<button class='pager-prev' disabled='disabled'></button>" +
+				"<button class='pager-next' disabled='disabled'></button>" +
 			"</div>" +
 
 			"<div class='pager-info'>" +
@@ -30,7 +30,7 @@ define( [ "slick/core/Dataview" ], function() {
 			pageSize: 50,
 			pageNum: 0,
 
-			sizes: [ 50, 100, 200, 500, 1000 ]
+			sizes: [ 50, 100 ]
 		}
 	};
 
@@ -79,6 +79,8 @@ define( [ "slick/core/Dataview" ], function() {
 
 		/** All operations in local */
 		if ( !settings.ajaxOptions ) {
+
+			dataView.setItems( settings.data );
 		
 			/** Skip the first notify */
 			dataView.setRefreshHints( { isFilterUnchanged: true } );
@@ -106,15 +108,10 @@ define( [ "slick/core/Dataview" ], function() {
 			pager( dataView.getPagingInfo() );
 		} else {
 
-			var ajaxOptions, loading;
-
 			/** All operations in server-side */
-			if ( !ajaxOptions.serviceName ) {
-				throw "The service name cann't be null";
-			}
-
-			ajaxOptions = settings.ajaxOptions;
-			loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
+			var
+			  ajaxOptions = settings.ajaxOptions,
+			  loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
 
 			$( $G.getContainerNode() ).append( loading );
 
