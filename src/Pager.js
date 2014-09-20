@@ -115,12 +115,12 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$( $G.getContainerNode() ).append( loading );
 
-			pager = function() {
+			pager = function( pagingInfo ) {
 
 				$.extend( ajaxOptions, {
 					
-					from: +current.val() * size.val(),
-					to: +size.val()
+					from: pagingInfo.pageNum * pagingInfo.pageSize,
+					to: ++pagingInfo.pageNum * pagingInfo.pageSize
 				} );
 			
 				loading.fadeIn();
@@ -140,12 +140,16 @@ define( [ "slick/core/Dataview" ], function() {
 						};
 					}
 
-					dataView.setItems( data );
+					setTimeout( function() {
+					
+						dataView.setItems( data );
+						/** Rerender all the rows */
+						$G.invalidate();
+						loading.fadeOut( 100 ); 
 
-					/** Rerender all the rows */
-					$G.invalidate();
+						uiRefresh( { pageNum: 1, pageSize: 50, totalPages: 100 } );
+					}, 1000 );
 
-					//uiRefresh( { pageNum: 1 + current.val(), pageSize: +size.val(), totalPages: 1000 } );
 				} )
 				
 				.always( function() { 
@@ -157,6 +161,8 @@ define( [ "slick/core/Dataview" ], function() {
 			};
 
 			$( $G.getContainerNode() ).append( loading );
+
+			pager( settings.pagingInfo );
 		}
 	
 		container
