@@ -129,7 +129,7 @@ define( [ "slick/core/Dataview" ], function() {
 					
 				.done( function( data ) {
 				
-					;;for ( var i = 0, data = []; i < 1000; ++i ) {
+					;;for ( var i = 0, data = []; i < 50; ++i ) {
 						
 						data[ i ] = {
 						
@@ -191,7 +191,7 @@ define( [ "slick/core/Dataview" ], function() {
 
 		.delegate( "select", "change", function( e ) {
 
-			pager( { pageSize: $( this ).val() } );
+			pager( { pageSize: +$( this ).val() } );
 			e.stopImmediatePropagation();
 		} )
 		
