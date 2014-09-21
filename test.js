@@ -10,16 +10,14 @@ require.config( {
 } );
 
 require( [ "slick/Pager",
+	"slick/plugins/Checkboxcolumn",
 	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/cell/Editors",
-	"slick/plugins/Checkboxcolumn" ], function( Pager ) {
+	"slick/cell/Editors" ], function( Pager, Checkboxcolumn ) {
 
 
 	var $G
-	, dataView = new Slick.Data.DataView()
-	
-	, checkBoxColumn = new Slick.CheckboxSelectColumn();
+	, dataView = new Slick.Data.DataView();
 
 	for ( var i = 0, data = []; i < 1000; ++i ) {
 		
@@ -32,8 +30,29 @@ require( [ "slick/Pager",
 		};
 	}
 
-	$G = new Slick.Grid( "#myGrid", dataView, [ checkBoxColumn.getColumnDefinition(), {
-		
+	$G = new Slick.Grid( "#myGrid", dataView, [], {
+		editable: true,
+
+		/** Enable keybord navigation */
+		enableCellNavigation: true,
+
+		/** Fast keybord navigation */
+		asyncEditorLoading: true,
+
+		/** Auto align the columns */
+		forceFitColumns: true,
+
+		syncColumnCellResize: true,
+
+		multiColumnSort: true,
+
+		explicitInitialization: true
+	} );
+
+	;;window.$G = $G;
+	;;window.dataView = dataView;
+	
+	$G.setColumns( [ Checkboxcolumn( $G, dataView ), {
 		id: "column1",
 		name: "IDS",
 		field: "id",
@@ -56,24 +75,7 @@ require( [ "slick/Pager",
 		field: "num3",
 		editor: Slick.Editors.Text,
 		sortable: true
-	} ], {
-		editable: true,
-
-		/** Enable keybord navigation */
-		enableCellNavigation: true,
-
-		/** Fast keybord navigation */
-		asyncEditorLoading: true,
-
-		/** Auto align the columns */
-		forceFitColumns: true,
-
-		syncColumnCellResize: true,
-
-		multiColumnSort: true,
-
-		explicitInitialization: true
-	} );
+	} ] );
 
 	Pager( $G, dataView, {
 	
@@ -86,6 +88,7 @@ require( [ "slick/Pager",
 
 		data: data,
 
+		/**
 		ajaxOptions: {
 		
 			data: {
@@ -94,13 +97,11 @@ require( [ "slick/Pager",
 				params: JSON.stringify( {} )
 			}
 		}
+		*/
 	} );
-
-	$G.setSelectionModel( new Slick.RowSelectionModel( { selectActiveRow: false } ) );
-
-	$G.registerPlugin( checkBoxColumn );
 
 	$G.init();
 } );
 
+//$.get( "/scm/scmui/ajax2?bst_model=huawei/wpf/Framework&nodeID=DC00000000091301" )
 
