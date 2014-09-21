@@ -119,7 +119,7 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 				$G.setSelectedRows( rows );
 
 			/** Deselect */
-			} else $G.setSelectedRows( selecteds = [] );
+			} else $G.setSelectedRows( [] );
 
 			e.preventDefault();
 			e.stopImmediatePropagation();
@@ -137,7 +137,7 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 
 		/** On the rows changed clear the selected */
 		dataView.onRowsChanged.subscribe( function( e, args ) {
-			$G.setSelectedRows( selecteds = [] );
+			$G.setSelectedRows( [] );
 		} );
 
 		/** Return the column definition */
