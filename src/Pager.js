@@ -1,5 +1,5 @@
 
-define( [ "slick/core/Dataview" ], function() {
+define( function() {
 
 	var html = 
 			"<div class='pager'>" +
@@ -95,11 +95,23 @@ define( [ "slick/core/Dataview" ], function() {
 			dataView.onRowsChanged.subscribe( function( e, args ) {
 			
 				$G.invalidateRows( args.rows );
+				$G.resetActiveCell();
 				$G.render();
 			} );
 
 			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
 				uiRefresh( dataView.getPagingInfo() );
+			} );
+
+			$G.onSort.subscribe( function( e, args ) {
+			
+				var field = args.sortCol.field;
+
+				dataView.sort( function( a, b ) {
+					var x = a[ field ], y = b[ field ];
+
+					return (x === y ? 0 : (x > y ? 1 : -1));
+				}, args.sortAsc );
 			} );
 
 			/** The implementation of local paging */
@@ -109,58 +121,80 @@ define( [ "slick/core/Dataview" ], function() {
 		} else {
 
 			/** All operations in server-side */
+
 			var
 			  ajaxOptions = settings.ajaxOptions,
 			  loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
 
+			if ( !ajaxOptions.serviceName ) {
+				
+				throw "Service name cann't be null";
+			}
+
 			$( $G.getContainerNode() ).append( loading );
 
-			pager = function( pagingInfo ) {
+			pager = function( pagingInfo, field, asc ) {
 
-				$.extend( ajaxOptions, {
-					
-					from: pagingInfo.pageNum * pagingInfo.pageSize,
-					to: ++pagingInfo.pageNum * pagingInfo.pageSize
-				} );
-			
-				loading.fadeIn();
+				var VO = { wpf_dup_token: +new Date() + Math.random() };
 
-				$.ajax( ajaxOptions )
+				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] = JSON.stringify( $.extend( {}, {
+				
+					pageVO: {
+						curPage: pagingInfo.pageNum,
+						incrementalPaging: false,
+						pageSize: pagingInfo.pageSize,
+						remoteSortField: field || "",
+						remoteSortOrder: asc === void 0 ? "" : (asc ? "asc" : "desc"),
+						totalRows: -1
+					}
+				}, ajaxOptions.VO ) );
+
+				$.ajax( {
+
+					beforeSend: function() { loading.fadeIn(); },
+
+					data: {
+						name: ajaxOptions.serviceName,
+						params: JSON.stringify( $.extend( {}, VO, ajaxOptions.params || {} ) )
+					}
+				} )
 					
 				.done( function( data ) {
-				
-					;;for ( var i = 0, data = []; i < 50; ++i ) {
-						
-						data[ i ] = {
-						
-							"id": "# " + i,
-							"num1": Math.random() * i * 100,
-							"num2": Math.random() * i * 1000,
-							"num3": Math.random() * i * 10000
-						};
-					}
 
-					setTimeout( function() {
-					
-						dataView.setItems( data );
-						/** Rerender all the rows */
+					try {
+
+						data = eval( "(" + data + ")" );
+						data = data[ "result" ][ ajaxOptions.moduleName ];
+						data = JSON.parse( data );
+
+						dataView.setItems( data.result );
+
+						/** Render all rows */
 						$G.invalidate();
-						loading.fadeOut( 100 ); 
 
-						uiRefresh( { pageNum: 1, pageSize: 50, totalPages: 100 } );
-					}, 1000 );
-
+						with ( data.pageVO ) {
+							uiRefresh( { pageNum: curPage, pageSize: pageSize, totalPages: totalPages } );
+						}
+					} catch ( ex ) {
+						
+						throw "Call the service '" + ajaxOptions.serviceName + "' failed:\n" + data;
+					}
 				} )
 				
 				.always( function() { 
-
-					setTimeout( function() {
-						loading.fadeOut( 100 ); 
-					}, 3000 );
+					loading.fadeOut( 100 ); 
 				} );
 			};
 
 			$( $G.getContainerNode() ).append( loading );
+
+			$G.onSort.subscribe( function( e, args ) {
+			
+				pager( {
+					pageSize: +size.val(),
+					pageNum: current.val()
+				}, args.sortCol.field, args.sortAsc );
+			} );
 
 			pager( settings.pagingInfo );
 		}
