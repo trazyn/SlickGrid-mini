@@ -78,9 +78,17 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 			
 				if ( selecteds[ row ] ) {
 					$G.setSelectedRows( $.grep( $G.getSelectedRows(), function( index ) {
-						return index !== row;
+						
+						var res = index !== row;
+
+						!res && $G.onRowDeselected.notify( { row: row } );
+
+						return res;
 					} ) );
-				} else $G.setSelectedRows( $G.getSelectedRows().concat( row ) );
+				} else {
+					$G.onRowSelected.notify( { row: row } );
+					$G.setSelectedRows( $G.getSelectedRows().concat( row ) );
+				}
 			};
 		
 			if ( $G.getColumns()[ args.cell ][ "id" ] === settings.columnId ) {
@@ -114,7 +122,7 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 				
 				var rows = [];
 
-				for ( var i = 0, length = $G.getDataLength(); i < length; rows.push( i++ ) );
+				for ( var i = 0, length = $G.getDataLength(); i < length; $G.rows.push( i++ ) );
 
 				$G.setSelectedRows( rows );
 
@@ -138,6 +146,11 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 		/** On the rows changed clear the selected */
 		dataView.onRowsChanged.subscribe( function( e, args ) {
 			$G.setSelectedRows( [] );
+		} );
+
+		$.extend( $G, {
+			onRowSelected: new Slick.Event(),
+			onRowDeselected: new Slick.Event()
 		} );
 
 		/** Return the column definition */

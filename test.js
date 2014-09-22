@@ -91,22 +91,11 @@ require( [ "slick/Pager",
 		
 			data: {
 				
-				name: "scm.common.getNames",
+				name: "getNames",
 				params: JSON.stringify( {} )
 			}
 		}
 		*/
-	} );
-
-	$G.onSort.subscribe( function( e, args ) {
-	
-		var sortCol = args.sortCol;
-
-		dataView.sort( function( a, b ) {
-			var x = a[sortCol], y = b[ sortCol ];
-
-			return (x === y ? 0 : (x > y ? 1 : -1));
-		},args.sortAsc );
 	} );
 
 	$G.init();

@@ -44,6 +44,28 @@ define( [ "slick/core/Dataview" ], function() {
 		, size = container.find( "select:first" )
 		, total = container.find( "button.pager-total" )
 
+		, sort = {
+			
+			local: function( e, args ) {
+			
+				var field = args.sortCol.field;
+
+				dataView.sort( function( a, b ) {
+					var x = a[ field ], y = b[ field ];
+
+					return (x === y ? 0 : (x > y ? 1 : -1));
+				}, args.sortAsc );
+			},
+
+			ajax: function( e, args ) {
+			
+				pager( {
+					pageSize: +size.val(),
+					pageNum: current.val()
+				}, args.sortCol.field, args.sortAsc );
+			}
+		}
+
 		/** Update the paging info to UI */
 		, uiRefresh = function( pagingInfo ) {
 		
@@ -110,16 +132,7 @@ define( [ "slick/core/Dataview" ], function() {
 				uiRefresh( dataView.getPagingInfo() );
 			} );
 
-			$G.onSort.subscribe( function( e, args ) {
-			
-				var field = args.sortCol.field;
-
-				dataView.sort( function( a, b ) {
-					var x = a[ field ], y = b[ field ];
-
-					return (x === y ? 0 : (x > y ? 1 : -1));
-				}, args.sortAsc );
-			} );
+			$G.onSort.subscribe( sort[ "local" ] );
 
 			/** The implementation of local paging */
 			pager = dataView.setPagingOptions;
@@ -130,6 +143,7 @@ define( [ "slick/core/Dataview" ], function() {
 			/** All operations in server-side */
 
 			var
+			  request,
 			  ajaxOptions = settings.ajaxOptions,
 			  loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
 
@@ -156,7 +170,10 @@ define( [ "slick/core/Dataview" ], function() {
 					}
 				}, ajaxOptions.VO ) );
 
-				$.ajax( {
+				/** Keep one ajax instance */
+				request && request.abort();
+
+				request = $.ajax( {
 
 					beforeSend: function() { loading.fadeIn(); },
 
@@ -195,13 +212,7 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$( $G.getContainerNode() ).append( loading );
 
-			$G.onSort.subscribe( function( e, args ) {
-			
-				pager( {
-					pageSize: +size.val(),
-					pageNum: current.val()
-				}, args.sortCol.field, args.sortAsc );
-			} );
+			$G.onSort.subscribe( sort[ "ajax" ] );
 
 			pager( settings.pagingInfo );
 		}
