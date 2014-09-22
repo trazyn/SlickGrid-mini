@@ -44,8 +44,6 @@ require( [ "slick/Pager",
 
 		syncColumnCellResize: true,
 
-		multiColumnSort: true,
-
 		explicitInitialization: true
 	} );
 

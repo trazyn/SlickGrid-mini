@@ -1,5 +1,5 @@
 
-define( function() {
+define( [ "slick/core/Dataview" ], function() {
 
 	var html = 
 			"<div class='pager'>" +
@@ -63,6 +63,9 @@ define( function() {
 			value === 1 && prev.attr( "disabled", "disabled" );
 			value === max && next.attr( "disabled", "disabled" );
 
+			$G.resetActiveCell();
+			$G.setSortColumns( [] );
+
 			current.val( value );
 			size.val( pagingInfo.pageSize );
 			total.html( max ).attr( "data-total", max );
@@ -76,6 +79,11 @@ define( function() {
 			/** Right now DOM is not in the render tree, so there is no reflow */
 			size.append( "<option value=" + sizes[ i ] + ">" + sizes[ i++ ] + "</option>" );
 		}
+
+		$G.onSort.subscribe( function( e, args ) {
+		
+			$G.resetActiveCell();
+		} );
 
 		/** All operations in local */
 		if ( !settings.ajaxOptions ) {
@@ -95,7 +103,6 @@ define( function() {
 			dataView.onRowsChanged.subscribe( function( e, args ) {
 			
 				$G.invalidateRows( args.rows );
-				$G.resetActiveCell();
 				$G.render();
 			} );
 
