@@ -9,8 +9,8 @@ define( [ "slick/core/Dataview" ], function() {
 			"</div>" +
 
 			"<div class='pager-info'>" +
-				"<input type='text' class='pager-current' maxlength='5'>" +
-				"<button disabled='disabled' class='pager-total'></button>" +
+				"<input type='text' class='pager-current' maxlength='5' value='1'>" +
+				"<button disabled='disabled' class='pager-total'>1</button>" +
 			"</div>" +
 
 			"<div class='pager-refresh'></div>" +
@@ -61,8 +61,8 @@ define( [ "slick/core/Dataview" ], function() {
 			
 				pager( {
 					pageSize: +size.val(),
-					pageNum: current.val()
-				}, args.sortCol.field, args.sortAsc );
+					pageNum: +current.val()
+				}, 0, args.sortCol.field, args.sortAsc );
 			}
 		}
 
@@ -86,7 +86,6 @@ define( [ "slick/core/Dataview" ], function() {
 			value === max && next.attr( "disabled", "disabled" );
 
 			$G.resetActiveCell();
-			$G.setSortColumns( [] );
 
 			current.val( value );
 			size.val( pagingInfo.pageSize );
@@ -101,11 +100,6 @@ define( [ "slick/core/Dataview" ], function() {
 			/** Right now DOM is not in the render tree, so there is no reflow */
 			size.append( "<option value=" + sizes[ i ] + ">" + sizes[ i++ ] + "</option>" );
 		}
-
-		$G.onSort.subscribe( function( e, args ) {
-		
-			$G.resetActiveCell();
-		} );
 
 		/** All operations in local */
 		if ( !settings.ajaxOptions ) {
@@ -137,7 +131,7 @@ define( [ "slick/core/Dataview" ], function() {
 			/** The implementation of local paging */
 			pager = dataView.setPagingOptions;
 
-			pager( dataView.getPagingInfo() );
+			pager( dataView.getPagingInfo(), 1 );
 		} else {
 
 			/** All operations in server-side */
@@ -154,16 +148,17 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$( $G.getContainerNode() ).append( loading );
 
-			pager = function( pagingInfo, field, asc ) {
+			/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
+			pager = function( pagingInfo, offset, field, asc ) {
 
 				var VO = { wpf_dup_token: +new Date() + Math.random() };
 
 				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] = JSON.stringify( $.extend( {}, {
 				
 					pageVO: {
-						curPage: pagingInfo.pageNum,
+						curPage: +pagingInfo.pageNum + (offset || 0),
 						incrementalPaging: false,
-						pageSize: pagingInfo.pageSize,
+						pageSize: +pagingInfo.pageSize,
 						remoteSortField: field || "",
 						remoteSortOrder: asc === void 0 ? "" : (asc ? "asc" : "desc"),
 						totalRows: -1
@@ -175,7 +170,10 @@ define( [ "slick/core/Dataview" ], function() {
 
 				request = $.ajax( {
 
-					beforeSend: function() { loading.fadeIn(); },
+					beforeSend: function() { 
+						/** Show the loading */
+						loading.fadeIn(); 
+					},
 
 					data: {
 						name: ajaxOptions.serviceName,
@@ -197,7 +195,7 @@ define( [ "slick/core/Dataview" ], function() {
 						$G.invalidate();
 
 						with ( data.pageVO ) {
-							uiRefresh( { pageNum: curPage, pageSize: pageSize, totalPages: totalPages } );
+							uiRefresh( { pageNum: curPage - 1, pageSize: pageSize, totalPages: totalPages } );
 						}
 					} catch ( ex ) {
 						
@@ -214,7 +212,7 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$G.onSort.subscribe( sort[ "ajax" ] );
 
-			pager( settings.pagingInfo );
+			pager( settings.pagingInfo, 1 );
 		}
 	
 		container
@@ -226,7 +224,9 @@ define( [ "slick/core/Dataview" ], function() {
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			value > 1 && pager( { pageNum: value - 2 } );
+			$G.setSortColumns( [] );
+
+			value > 1 && pager( { pageNum: value - 2, pageSize: +size.val() } );
 		} )
 		
 		.delegate( ".pager-next", "click", function( e ) {
@@ -238,13 +238,18 @@ define( [ "slick/core/Dataview" ], function() {
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			value <= max && pager( { pageNum: value } );
+			$G.setSortColumns( [] );
+
+			value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1 );
 		} )
 
 		.delegate( "select", "change", function( e ) {
 
-			pager( { pageSize: +$( this ).val() } );
+			pager( { pageSize: +$( this ).val(), pageNum: 0 }, 1 );
+
 			e.stopImmediatePropagation();
+
+			$G.setSortColumns( [] );
 		} )
 		
 		.delegate( "input.pager-current", "keyup", function( e ) {
@@ -271,7 +276,7 @@ define( [ "slick/core/Dataview" ], function() {
 					if ( value <= max && value >= 1 ) {
 
 						current.blur();
-						pager( { pageNum: value, pageSize: +size.val() } );
+						pager( { pageNum: value, pageSize: +size.val() }, -1 );
 					} else {
 						current.select();
 					}
@@ -279,6 +284,20 @@ define( [ "slick/core/Dataview" ], function() {
 			}
 
 			e.stopImmediatePropagation();
+
+			$G.setSortColumns( [] );
+		} )
+		
+		.delegate( "div.pager-refresh", "click", function( e ) {
+		
+			pager( {
+				pageSize: +size.val(),
+				pageNum: +current.val()
+			} );
+
+			$G.setSortColumns( [] );
+
+			e.stopPropagation();
 		} );
 
 		$( $G.getContainerNode() ).after( container );
