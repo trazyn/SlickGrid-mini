@@ -1,4 +1,4 @@
-define( [ "slick/plugins/Rows" ], function( RowsModel ) {
+define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 
 	"use strict";
 
