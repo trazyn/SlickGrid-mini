@@ -1,4 +1,4 @@
-define( [ "slick/plugins/rowselectionmodel" ], function() {
+define( [ "slick/plugins/Rows" ], function( RowsModel ) {
 
 	"use strict";
 
@@ -12,24 +12,17 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 		max: 0
 	}
 
-	/** The settings of this plugin */
-	, settings
-
-	/** Cache the selected items */
-	, selecteds = {}
-
 	/** CLASS */
-	, CheckboxSelectColumn = function( dataView, options ) {
+	, CheckboxSelectColumn = function( $G, dataView, settings ) {
 	
-		var $G
+		var handler = new Slick.EventHandler()
 
-		, handler = new Slick.EventHandler()
+		/** Cache the selected items */
+		, selecteds = {}
 
 		, instance = {
 		
 			init: function( grid ) {
-			
-				$G = grid;
 
 				handler
 					.subscribe( $G.onSelectedRowsChanged, handleSelectedRowsChanged )
@@ -39,10 +32,37 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 
 			destroy: function() {
 				handler.unsubscribeAll();
+			},
+
+			getColumnDefinifion: function() {
+			
+				return {
+					id: settings.columnId,
+					name: settings.max ? "" :"<input type='checkbox'><label class='toggle'></label>",
+					toolTip: settings.toolTip,
+					width: settings.width,
+					resizable: false,
+					sortable: false,
+					cssClass: settings.cssClass,
+					formatter: function( row, cell, value, column, dataContext ) {
+
+						var condition = settings.condition, res = true;
+
+						if ( dataContext ) {
+
+							if ( "function" === typeof condition ) {
+							
+								res = condition.apply( this, arguments );
+							}
+
+							return res && selecteds[ row ] 
+								? "<input type='checkbox' checked='checked'><label class='toggle'></label>"
+								: "<input type='checkbox'><label class='toggle'></label>";
+						}
+					}
+				};
 			}
 		};
-
-		settings = $.extend( true, {}, defaults, options || {} );
 
 		function handleSelectedRowsChanged( e, args ) {
 		
@@ -138,9 +158,14 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 
 	return function( $G, dataView, options ) {
 	
-		var plugin = new CheckboxSelectColumn( dataView, options );
+		var
+		  settings = $.extend( true, {}, defaults, options || {} ),
+		  plugin = new CheckboxSelectColumn( $G, dataView, settings );
 
-		$G.setSelectionModel( new Slick.RowSelectionModel( { selectActiveRow: false } ) );
+		/** Enable rows selected ability */
+		$G.setSelectionModel( RowsModel( $G ) );
+
+		/** Register plugin */
 		$G.registerPlugin( plugin );
 
 		/** On the rows changed clear the selected */
@@ -148,37 +173,15 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 			$G.setSelectedRows( [] );
 		} );
 
+		/** Add events hook */
 		$.extend( $G, {
 			onRowSelected: new Slick.Event(),
 			onRowDeselected: new Slick.Event()
 		} );
 
 		/** Return the column definition */
-		return {
-			id: settings.columnId,
-			name: settings.max ? "" :"<input type='checkbox'><label class='toggle'></label>",
-			toolTip: settings.toolTip,
-			field: "sel",
-			width: settings.width,
-			resizable: false,
-			sortable: false,
-			cssClass: settings.cssClass,
-			formatter: function( row, cell, value, column, dataContext ) {
-
-				var condition = settings.condition, res = true;
-
-				if ( dataContext ) {
-
-					if ( "function" === typeof condition ) {
-					
-						res = condition.apply( this, arguments );
-					}
-
-					return res && selecteds[ row ] 
-						? "<input type='checkbox' checked='checked'><label class='toggle'></label>"
-						: "<input type='checkbox'><label class='toggle'></label>";
-				}
-			}
-		};
+		return plugin.getColumnDefinifion();
 	};
 } );
+
+
