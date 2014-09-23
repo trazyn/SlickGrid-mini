@@ -122,7 +122,7 @@ define( [ "slick/plugins/rowselectionmodel" ], function() {
 				
 				var rows = [];
 
-				for ( var i = 0, length = $G.getDataLength(); i < length; $G.rows.push( i++ ) );
+				for ( var i = 0, length = $G.getDataLength(); i < length; rows.push( i++ ) );
 
 				$G.setSelectedRows( rows );
 
