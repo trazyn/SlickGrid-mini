@@ -1,5 +1,5 @@
 
-define( function() {
+define( [ "slick/paging/Filter" ], function( Filter ) {
 	
 	var 
 	  handleSort = function( e, args ) {
@@ -13,22 +13,6 @@ define( function() {
 		}, args.sortAsc );
 
 		this.getData().$G = this;
-	  },
-
-	  handleRowCountChanged = function() {
-
-	  	  var $G = Slick.Event.$G;
-	  
-		  $G.updateRowCount();
-		  $G.render();
-	  },
-
-	  handleRowsChanged = function( e, args ) {
-
-	  	  var $G = Slick.Event.$G;
-
-		  $G.invalidateRows( args.rows );
-		  $G.render();
 	  };
 
 	return function( $G, enable ) {
@@ -39,14 +23,11 @@ define( function() {
 
 			pager = $G.getData().setPagingOptions;
 			
+			$G.onSort.unsubscribe( handleSort );
 			$G.onSort.subscribe( handleSort );
-			$G.getData().onRowCountChanged.subscribe( handleRowCountChanged );
-			$G.getData().onRowsChanged.subscribe( handleRowsChanged );
 		} else {
 		
 			$G.onSort.unsubscribe( handleSort );
-			$G.getData().onRowCountChanged.unsubscribe( handleRowCountChanged );
-			$G.getData().onRowsChanged.unsubscribe( handleRowsChanged );
 		}
 
 		return pager;

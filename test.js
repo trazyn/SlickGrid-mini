@@ -9,11 +9,11 @@ require.config( {
 	}
 } );
 
-require( [ "slick/Pager",
+require( [ "slick/paging/Paging",
 	"slick/plugins/Checkboxcolumn",
 	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/cell/Editors" ], function( Pager, Checkboxcolumn ) {
+	"slick/cell/Editors" ], function( Paging, Checkboxcolumn ) {
 
 
 	var $G
@@ -43,6 +43,8 @@ require( [ "slick/Pager",
 		forceFitColumns: true,
 
 		syncColumnCellResize: true,
+
+		showHeaderRow: true,
 
 		explicitInitialization: true
 	} );
@@ -75,7 +77,7 @@ require( [ "slick/Pager",
 		sortable: true
 	} ] );
 
-	Pager( $G, dataView, {
+	Paging( $G, dataView, {
 	
 		pagingInfo: {
 			pageSize: 50,

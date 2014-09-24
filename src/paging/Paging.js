@@ -1,7 +1,8 @@
 
 define( [ "slick/paging/LocalSort", 
 	"slick/paging/RemoteSort",
-	"slick/core/Dataview" ], function( LocalSort, RemoteSort ) {
+	"slick/paging/Filter",
+	"slick/core/Dataview" ], function( LocalSort, RemoteSort, Filter ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -82,6 +83,9 @@ define( [ "slick/paging/LocalSort",
 		/** A function that implement for paging */
 		, pager;
 
+		/** Prevent refresh dataview */
+		dataView.beginUpdate();
+
 		for ( var sizes = settings.pagingInfo.sizes, length = sizes.length, i = 0; i < length; ) {
 			
 			/** Right now DOM is not in the render tree, so there is no reflow */
@@ -94,7 +98,6 @@ define( [ "slick/paging/LocalSort",
 			dataView.setItems( settings.data );
 		
 			/** Skip the first notify */
-			dataView.setRefreshHints( { isFilterUnchanged: true } );
 			dataView.setPagingOptions( settings.pagingInfo );
 
 			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
@@ -118,7 +121,13 @@ define( [ "slick/paging/LocalSort",
 
 			(pager = RemoteSort( $G, settings.ajaxOptions, true ))( settings.pagingInfo, 1, uiRefresh );
 		}
-	
+
+		/** This function will be cause a refresh */
+		Filter( $G, !!ajaxOptions );
+
+		/** Refresh dataview */
+		dataView.endUpdate();
+
 		container
 
 		.delegate( ".pager-prev", "click", function( e ) {
@@ -128,7 +137,7 @@ define( [ "slick/paging/LocalSort",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			$G.setSortColumns( [] );
+			ajaxOptions && $G.setSortColumns( [] );
 
 			value > 1 && pager( { pageNum: value - 2, pageSize: +size.val() }, 0, uiRefresh );
 		} )
@@ -142,7 +151,7 @@ define( [ "slick/paging/LocalSort",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			$G.setSortColumns( [] );
+			ajaxOptions && $G.setSortColumns( [] );
 
 			value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1, uiRefresh );
 		} )
@@ -153,7 +162,7 @@ define( [ "slick/paging/LocalSort",
 
 			e.stopImmediatePropagation();
 
-			$G.setSortColumns( [] );
+			ajaxOptions && $G.setSortColumns( [] );
 		} )
 		
 		.delegate( "input.pager-current", "keyup", function( e ) {
@@ -189,7 +198,7 @@ define( [ "slick/paging/LocalSort",
 
 			e.stopImmediatePropagation();
 
-			$G.setSortColumns( [] );
+			ajaxOptions && $G.setSortColumns( [] );
 		} )
 
 		.delegate( ":checkbox.slick-fast-query", "click", function( e ) {

@@ -329,6 +329,17 @@ if (typeof Slick === "undefined") {
             .delegate(".slick-cell", "mouseenter", handleMouseEnter)
             .delegate(".slick-cell", "mouseleave", handleMouseLeave);
 
+        data.onRowCountChanged instanceof Slick.Event
+        	&& data.onRowCountChanged.subscribe( function() {
+        	  self.updateRowCount();
+        	  self.render();
+        	});
+
+        data.onRowsChanged instanceof Slick.Event 
+        	&& data.onRowsChanged.subscribe( function( e, args ) {
+        	  self.invalidateRows( args.rows );
+        	  self.render();
+        	} );
         // Work around http://crbug.com/312427.
         if (navigator.userAgent.toLowerCase().match(/webkit/) &&
             navigator.userAgent.toLowerCase().match(/macintosh/)) {
