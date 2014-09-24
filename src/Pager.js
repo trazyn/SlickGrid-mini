@@ -1,5 +1,7 @@
 
-define( [ "slick/core/Dataview" ], function() {
+define( [ "slick/paging/LocalSort", 
+	"slick/paging/RemoteSort",
+	"slick/core/Dataview" ], function( LocalSort, RemoteSort ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -14,6 +16,11 @@ define( [ "slick/core/Dataview" ], function() {
 			"</div>" +
 
 			"<div class='pager-refresh'></div>" +
+
+			"<div style='display: inline-block;'>" +
+				"<input type='checkbox' class='slick-fast-query' id='slick-fast-query' checked='checked'>" +
+				"<label for='slick-fast-query'></label>" +
+			"</div>" +
 
 			"<div class='pager-size'>" +
 				"<label class='custom-select'>" +
@@ -44,27 +51,7 @@ define( [ "slick/core/Dataview" ], function() {
 		, size = container.find( "select:first" )
 		, total = container.find( "button.pager-total" )
 
-		, sort = {
-			
-			local: function( e, args ) {
-			
-				var field = args.sortCol.field;
-
-				dataView.sort( function( a, b ) {
-					var x = a[ field ], y = b[ field ];
-
-					return (x === y ? 0 : (x > y ? 1 : -1));
-				}, args.sortAsc );
-			},
-
-			ajax: function( e, args ) {
-			
-				pager( {
-					pageSize: +size.val(),
-					pageNum: +current.val()
-				}, 0, args.sortCol.field, args.sortAsc );
-			}
-		}
+		, ajaxOptions = options.ajaxOptions
 
 		/** Update the paging info to UI */
 		, uiRefresh = function( pagingInfo ) {
@@ -102,7 +89,7 @@ define( [ "slick/core/Dataview" ], function() {
 		}
 
 		/** All operations in local */
-		if ( !settings.ajaxOptions ) {
+		if ( !ajaxOptions ) {
 
 			dataView.setItems( settings.data );
 		
@@ -110,109 +97,26 @@ define( [ "slick/core/Dataview" ], function() {
 			dataView.setRefreshHints( { isFilterUnchanged: true } );
 			dataView.setPagingOptions( settings.pagingInfo );
 
-			dataView.onRowCountChanged.subscribe( function( e, args ) {
-			
-				$G.updateRowCount();
-				$G.render();
-			} );
-
-			dataView.onRowsChanged.subscribe( function( e, args ) {
-			
-				$G.invalidateRows( args.rows );
-				$G.render();
-			} );
-
 			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
 				uiRefresh( dataView.getPagingInfo() );
 			} );
 
-			$G.onSort.subscribe( sort[ "local" ] );
-
-			/** The implementation of local paging */
-			pager = dataView.setPagingOptions;
-
-			pager( dataView.getPagingInfo(), 1 );
+			(pager = LocalSort( $G, true ))( dataView.getPagingInfo() );
 		} else {
 
-			/** All operations in server-side */
+			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
 
-			var
-			  request,
-			  ajaxOptions = settings.ajaxOptions,
-			  loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
-
-			if ( !ajaxOptions.serviceName ) {
+				if ( args.sortCol ) {
 				
-				throw "Service name cann't be null";
-			}
-
-			$( $G.getContainerNode() ).append( loading );
-
-			/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
-			pager = function( pagingInfo, offset, field, asc ) {
-
-				var VO = { wpf_dup_token: +new Date() + Math.random() };
-
-				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] = JSON.stringify( $.extend( {}, {
-				
-					pageVO: {
-						curPage: +pagingInfo.pageNum + (offset || 0),
-						incrementalPaging: false,
-						pageSize: +pagingInfo.pageSize,
-						remoteSortField: field || "",
-						remoteSortOrder: asc === void 0 ? "" : (asc ? "asc" : "desc"),
-						totalRows: -1
-					}
-				}, ajaxOptions.VO ) );
-
-				/** Keep one ajax instance */
-				request && request.abort();
-
-				request = $.ajax( {
-
-					beforeSend: function() { 
-						/** Show the loading */
-						loading.fadeIn(); 
-					},
-
-					data: {
-						name: ajaxOptions.serviceName,
-						params: JSON.stringify( $.extend( {}, VO, ajaxOptions.params || {} ) )
-					}
-				} )
+					pager( {
+						pageSize: +size.val(),
+						pageNum: +current.val()
+					}, 0, uiRefresh, args.sortCol.field, args.sortAsc );
 					
-				.done( function( data ) {
+				} else e.stopImmediatePropagation();
+			} );
 
-					try {
-
-						data = eval( "(" + data + ")" );
-						data = data[ "result" ][ ajaxOptions.moduleName ];
-						data = JSON.parse( data );
-
-						dataView.setItems( data.result );
-
-						/** Render all rows */
-						$G.invalidate();
-
-						with ( data.pageVO ) {
-							uiRefresh( { pageNum: curPage - 1, pageSize: pageSize, totalPages: totalPages } );
-						}
-					} catch ( ex ) {
-						
-						throw "Call the service '" + ajaxOptions.serviceName + "' failed:\n" + data;
-					}
-				} )
-				
-				.always( function() { 
-					loading.fadeOut( 100 ); 
-				} );
-			};
-
-			$( $G.getContainerNode() ).append( loading );
-
-			$G.onSort.subscribe( sort[ "ajax" ] );
-
-			pager( settings.pagingInfo, 1 );
+			(pager = RemoteSort( $G, settings.ajaxOptions, true ))( settings.pagingInfo, 1, uiRefresh );
 		}
 	
 		container
@@ -226,7 +130,7 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$G.setSortColumns( [] );
 
-			value > 1 && pager( { pageNum: value - 2, pageSize: +size.val() } );
+			value > 1 && pager( { pageNum: value - 2, pageSize: +size.val() }, 0, uiRefresh );
 		} )
 		
 		.delegate( ".pager-next", "click", function( e ) {
@@ -240,12 +144,12 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$G.setSortColumns( [] );
 
-			value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1 );
+			value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1, uiRefresh );
 		} )
 
 		.delegate( "select", "change", function( e ) {
 
-			pager( { pageSize: +$( this ).val(), pageNum: 0 }, 1 );
+			pager( { pageSize: +$( this ).val(), pageNum: 0 }, 1, uiRefresh );
 
 			e.stopImmediatePropagation();
 
@@ -276,7 +180,7 @@ define( [ "slick/core/Dataview" ], function() {
 					if ( value <= max && value >= 1 ) {
 
 						current.blur();
-						pager( { pageNum: value, pageSize: +size.val() }, -1 );
+						pager( { pageNum: value, pageSize: +size.val() }, 0, uiRefresh );
 					} else {
 						current.select();
 					}
@@ -287,13 +191,25 @@ define( [ "slick/core/Dataview" ], function() {
 
 			$G.setSortColumns( [] );
 		} )
+
+		.delegate( ":checkbox.slick-fast-query", "click", function( e ) {
+			
+			if ( $( this ).is( ":checked" ) ) {
+				
+				LocalSort( $G, false );
+				RemoteSort( $G, ajaxOptions, true );
+			} else {
+				LocalSort( $G, true );
+				RemoteSort( $G, ajaxOptions, false );
+			}
+		} )
 		
 		.delegate( "div.pager-refresh", "click", function( e ) {
 		
 			pager( {
 				pageSize: +size.val(),
 				pageNum: +current.val()
-			} );
+			}, 0, uiRefresh );
 
 			$G.setSortColumns( [] );
 
