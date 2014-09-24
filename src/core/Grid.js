@@ -1013,7 +1013,7 @@ if (typeof Slick === "undefined") {
     function trigger(evt, args, e) {
       e = e || new Slick.EventData();
       args = args || {};
-      args.grid = self;
+      Slick.Event.$G = args.grid = self;
       return evt.notify(args, e, self);
     }
 
