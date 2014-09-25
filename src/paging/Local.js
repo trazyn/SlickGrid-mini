@@ -1,5 +1,5 @@
 
-define( [ "slick/paging/Filter" ], function( Filter ) {
+define( function() {
 	
 	var 
 	  handleSort = function( e, args ) {
