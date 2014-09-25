@@ -1,7 +1,8 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions",
+	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -110,6 +111,10 @@ define( [ "slick/paging/Local",
 			dataView.setPagingOptions( settings.pagingInfo );
 
 			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
+
+				if ( args.pagingInfo ) {
+					pager( args.pagingInfo );
+				}
 				uiRefresh( dataView.getPagingInfo() );
 			} );
 
@@ -120,10 +125,10 @@ define( [ "slick/paging/Local",
 
 				if ( args.doSearch ) {
 				
-					pager( {
+					pager( args.pagingInfo || {
 						pageSize: +size.val(),
 						pageNum: +current.val()
-					}, 0, uiRefresh, Condition.getVO() );
+					}, args.offset || 0, uiRefresh, Condition.getVO() );
 					
 				} else e.stopImmediatePropagation();
 			} );
@@ -141,12 +146,13 @@ define( [ "slick/paging/Local",
 
 		.delegate( ".pager-prev", "click", function( e ) {
 		
-			var value = +current.val();
-
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			value > 1 && pager( { pageNum: value - 2, pageSize: +size.val() }, 0, uiRefresh );
+			dataView.onPagingInfoChanged.notify( { 
+				doSearch: 1, 
+				pagingInfo: { pageNum: +current.val() - 2, pageSize: +size.val() }
+			} );
 		} )
 		
 		.delegate( ".pager-next", "click", function( e ) {
@@ -158,15 +164,22 @@ define( [ "slick/paging/Local",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			//value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1, uiRefresh );
-			value <= max && dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
+			dataView.onPagingInfoChanged.notify( { 
+				doSearch: 1, 
+				pagingInfo: { pageNum: +current.val(), pageSize: +size.val() },
+				offset: 1
+			} );
 		} )
 
 		.delegate( "select", "change", function( e ) {
 
-			pager( { pageSize: +$( this ).val(), pageNum: 0 }, 1, uiRefresh );
-
 			e.stopImmediatePropagation();
+
+			dataView.onPagingInfoChanged.notify( { 
+				doSearch: 1, 
+				pagingInfo: { pageNum: +current.val(), pageSize: +size.val() },
+				offset: 1
+			} );
 		} )
 		
 		.delegate( "input.pager-current", "keyup", function( e ) {
@@ -193,7 +206,11 @@ define( [ "slick/paging/Local",
 					if ( value <= max && value >= 1 ) {
 
 						current.blur();
-						pager( { pageNum: value + -!ajaxOptions, pageSize: +size.val() }, 0, uiRefresh );
+
+						dataView.onPagingInfoChanged.notify( { 
+							doSearch: 1, 
+							pagingInfo: { pageNum: value + -!ajaxOptions, pageSize: +size.val() }
+						} );
 					} else {
 						current.select();
 					}

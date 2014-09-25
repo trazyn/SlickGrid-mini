@@ -62,18 +62,21 @@ require( [ "slick/paging/Paging",
 		name: "Language",
 		field: "num1",
 		editor: Slick.Editors.Text,
+		filter: true,
 		sortable: true
 	}, {
 		id: "column3",
 		name: "Year",
 		field: "num2",
 		editor: Slick.Editors.Text,
+		filter: true,
 		sortable: true
 	}, {
 		id: "column4",
 		name: "Value",
 		field: "num3",
 		editor: Slick.Editors.Text,
+		filter: true,
 		sortable: true
 	} ] );
 

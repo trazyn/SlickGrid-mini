@@ -74,7 +74,7 @@ if (typeof Slick === "undefined") {
       autoHeight: false,
       editorLock: Slick.GlobalEditorLock,
       showHeaderRow: false,
-      headerRowHeight: 25,
+      headerRowHeight: 35,
       showTopPanel: false,
       topPanelHeight: 25,
       formatterFactory: null,
