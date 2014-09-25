@@ -1,8 +1,7 @@
 
-define( [ "slick/paging/LocalSort", 
-	"slick/paging/RemoteSort",
-	"slick/paging/Filter",
-	"slick/core/Dataview" ], function( LocalSort, RemoteSort, Filter ) {
+define( [ "slick/paging/Local", 
+	"slick/paging/Remote",
+	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -83,6 +82,16 @@ define( [ "slick/paging/LocalSort",
 		/** A function that implement for paging */
 		, pager;
 
+		dataView.onRowCountChanged.subscribe( function() {
+			$G.updateRowCount();
+			$G.render();
+		});
+
+		dataView.onRowsChanged.subscribe( function( e, args ) {
+			$G.invalidateRows( args.rows );
+			$G.render();
+		} );
+
 		/** Prevent refresh dataview */
 		dataView.beginUpdate();
 
@@ -104,26 +113,26 @@ define( [ "slick/paging/LocalSort",
 				uiRefresh( dataView.getPagingInfo() );
 			} );
 
-			(pager = LocalSort( $G, true ))( dataView.getPagingInfo() );
+			(pager = Local( $G, true ))( dataView.getPagingInfo() );
 		} else {
 
 			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
 
-				if ( args.sortCol ) {
+				if ( args.doSearch ) {
 				
 					pager( {
 						pageSize: +size.val(),
 						pageNum: +current.val()
-					}, 0, uiRefresh, args.sortCol.field, args.sortAsc );
+					}, 0, uiRefresh, Condition.getVO() );
 					
 				} else e.stopImmediatePropagation();
 			} );
 
-			(pager = RemoteSort( $G, settings.ajaxOptions, true ))( settings.pagingInfo, 1, uiRefresh );
+			(pager = Remote( $G, settings.ajaxOptions, true ))( settings.pagingInfo, 1, uiRefresh );
 		}
 
 		/** This function will be cause a refresh */
-		Filter( $G, !!ajaxOptions );
+		Conditions = Conditions( $G, !!ajaxOptions );
 
 		/** Refresh dataview */
 		dataView.endUpdate();
@@ -137,8 +146,6 @@ define( [ "slick/paging/LocalSort",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			ajaxOptions && $G.setSortColumns( [] );
-
 			value > 1 && pager( { pageNum: value - 2, pageSize: +size.val() }, 0, uiRefresh );
 		} )
 		
@@ -151,9 +158,8 @@ define( [ "slick/paging/LocalSort",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			ajaxOptions && $G.setSortColumns( [] );
-
-			value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1, uiRefresh );
+			//value <= max && pager( { pageNum: value, pageSize: +size.val() }, 1, uiRefresh );
+			value <= max && dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 		} )
 
 		.delegate( "select", "change", function( e ) {
@@ -161,8 +167,6 @@ define( [ "slick/paging/LocalSort",
 			pager( { pageSize: +$( this ).val(), pageNum: 0 }, 1, uiRefresh );
 
 			e.stopImmediatePropagation();
-
-			ajaxOptions && $G.setSortColumns( [] );
 		} )
 		
 		.delegate( "input.pager-current", "keyup", function( e ) {
@@ -189,7 +193,7 @@ define( [ "slick/paging/LocalSort",
 					if ( value <= max && value >= 1 ) {
 
 						current.blur();
-						pager( { pageNum: value, pageSize: +size.val() }, 0, uiRefresh );
+						pager( { pageNum: value + -!ajaxOptions, pageSize: +size.val() }, 0, uiRefresh );
 					} else {
 						current.select();
 					}
@@ -197,19 +201,17 @@ define( [ "slick/paging/LocalSort",
 			}
 
 			e.stopImmediatePropagation();
-
-			ajaxOptions && $G.setSortColumns( [] );
 		} )
 
 		.delegate( ":checkbox.slick-fast-query", "click", function( e ) {
 			
 			if ( $( this ).is( ":checked" ) ) {
 				
-				LocalSort( $G, false );
-				RemoteSort( $G, ajaxOptions, true );
+				Local( $G, false );
+				Remote( $G, ajaxOptions, true );
 			} else {
-				LocalSort( $G, true );
-				RemoteSort( $G, ajaxOptions, false );
+				Local( $G, true );
+				Remote( $G, ajaxOptions, false );
 			}
 		} )
 		
@@ -220,8 +222,6 @@ define( [ "slick/paging/LocalSort",
 				pageNum: +current.val()
 			}, 0, uiRefresh );
 
-			$G.setSortColumns( [] );
-
 			e.stopPropagation();
 		} );
 
@@ -229,3 +229,25 @@ define( [ "slick/paging/LocalSort",
 	};
 } );
 
+/*
+$.ajax( {
+	
+	data: {
+		name: "saasGetCatalogById",
+		params: JSON.stringify( { "a03_id": this.getAttribute( "href" ).split( "/!" )[ 2 ] } )
+	}
+} )
+
+.done( function( data ) {
+	
+	data = eval( "(" + data + ")" ).result;
+
+	$.ajax( {
+		
+		data: {
+			name: "saaspermissionGetPermResByResId",
+			params: JSON.stringify( { "a12_resource_id": "/scmscmui/huawei/scmscmui/dmd/homepage/Notice" } )
+		}
+	} )
+} );
+*/
