@@ -11,9 +11,10 @@ require.config( {
 
 require( [ "slick/paging/Paging",
 	"slick/plugins/Checkboxcolumn",
+	"slick/curd/Delete",
 	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/cell/Editors" ], function( Paging, Checkboxcolumn ) {
+	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete ) {
 
 
 	var $G
@@ -102,6 +103,8 @@ require( [ "slick/paging/Paging",
 		}
 		*/
 	} );
+
+	Delete( $G );
 
 	$G.init();
 } );
