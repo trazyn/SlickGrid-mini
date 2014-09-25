@@ -2,9 +2,9 @@
 define( function() {
 
 	var handleSort = function( e, args ) {
-		this.getData().onPagingInfoChanged.notify( args );
+		this.getData().onPagingInfoChanged.notify( { doSearch: 1 } );
 	};
-
+	
 	return function( $G, ajaxOptions, enable ) {
 	
 		/** All operations in server-side */
@@ -25,25 +25,26 @@ define( function() {
 			$( $G.getContainerNode() ).append( loading );
 
 			/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
-			pager = function( pagingInfo, offset, callback, field, asc ) {
+			pager = function( pagingInfo, offset, callback, args ) {
 
 				var VO = { wpf_dup_token: +new Date() + Math.random() }
 				
-				, request = loading.data( "data-request" );
-
+				, request = loading.data( "data-request" )
+				, sortColumn = $G.getSortColumns()[ 0 ];
+				
 				offset = offset || 0;
 
-				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] = JSON.stringify( $.extend( {}, {
+				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] 
+
+					= JSON.stringify( $.extend( {}, {
 				
-					pageVO: {
-						curPage: +pagingInfo.pageNum + offset,
-						incrementalPaging: false,
-						pageSize: +pagingInfo.pageSize,
-						remoteSortField: field || "",
-						remoteSortOrder: asc === void 0 ? "" : (asc ? "asc" : "desc"),
-						totalRows: -1
-					}
-				}, ajaxOptions.VO ) );
+						pageVO: {
+							curPage: +pagingInfo.pageNum + offset,
+							incrementalPaging: false,
+							pageSize: +pagingInfo.pageSize,
+							totalRows: -1
+						}
+					} ) );
 
 				/** Keep one ajax instance */
 				request && request.abort();
@@ -57,7 +58,7 @@ define( function() {
 
 					data: {
 						name: ajaxOptions.serviceName,
-						params: JSON.stringify( $.extend( {}, VO, ajaxOptions.params || {} ) )
+						params: JSON.stringify( $.extend( {}, VO, args || {} ) )
 					}
 				} )
 					
@@ -70,7 +71,7 @@ define( function() {
 
 					} catch ( ex ) {
 						
-						throw "Call the service '" + ajaxOptions.serviceName + "' failed:\n" + data;
+						throw "Call the service '" + ajaxOptions.serviceName + "' failed:\n" + ex;
 					}
 
 					dataView.setItems( data.result );
