@@ -5,6 +5,12 @@ define( function() {
 	
 		args.column.filter && $( args.node )
 			.html( "<input type='text' data-column-field='" + args.column.field + "' >" );
+
+		if ( args.column.filter ) {
+			$( args.node ).html( "<input type='text' data-column-field='" + args.column.field + "' >" );
+		} else if ( args.column.id === "_checkbox_selector" ) {
+			$( args.node ).html( "<button class='slick-filter-clear'></button>" );
+		}
 	}
 	
 	, getSort = function() {
@@ -19,11 +25,8 @@ define( function() {
 		column = $G.getColumns()[ $G.getColumnIndex( sortColumn.columnId ) ];
 
 		return {
-			pageVO: {
-			
-				remoteSortField: column.field,
-				remoteSortOrder: sortColumn.sortAsc ? "asc" : "desc"
-			}
+			remoteSortField: column.field,
+			remoteSortOrder: sortColumn.sortAsc ? "asc" : "desc"
 		};
 	};
 
@@ -76,20 +79,37 @@ define( function() {
 
 		return {
 
-			getVO: function( args ) {
-				var criteria = [];
+			getConditions: function() {
+
+				var criteria = [], value;
 
 				for ( var field in filters ) {
 					
-					criteria.push( {
-						
-						field: field,
-						operator: "like",
-						value: filters[ field ]
-					} );
+					(value = filters[ field ])
+
+						&& criteria.push( {
+							field: field,
+							operator: "like",
+							value: value
+						} );
 				}
 
-				return $.extend( true, {}, getSort.call( $G ), { criteria: JSON.stringify( criteria ) }, args || {} );
+				return {
+					pageVO: getSort.call( $G ),
+
+					params: {
+
+						criteria: JSON.stringify( criteria ) ,
+
+						result: {
+							
+							items2Create: [],
+							items2Delete: JSON.stringify( $G.getDeleteRowsData() ),
+							items2Update: [],
+							items2Selected: []
+						}
+					}
+				};
 			}
 		};
 	};
