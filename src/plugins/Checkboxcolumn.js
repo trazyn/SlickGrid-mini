@@ -184,4 +184,3 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 	};
 } );
 
-
