@@ -1,8 +1,7 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions",
-	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -16,12 +15,12 @@ define( [ "slick/paging/Local",
 				"<button disabled='disabled' class='pager-total'>1</button>" +
 			"</div>" +
 
-			"<div class='pager-refresh'></div>" +
-
 			"<div style='display: inline-block;'>" +
 				"<input type='checkbox' class='slick-fast-query' id='slick-fast-query' checked='checked'>" +
 				"<label for='slick-fast-query'></label>" +
 			"</div>" +
+
+			"<div class='pager-refresh'></div>" +
 
 			"<div class='pager-size'>" +
 				"<label class='custom-select'>" +
@@ -128,7 +127,7 @@ define( [ "slick/paging/Local",
 					pager( args.pagingInfo || {
 						pageSize: +size.val(),
 						pageNum: +current.val()
-					}, args.offset || 0, uiRefresh, Condition.getVO() );
+					}, args.offset || 0, uiRefresh, Conditions.getConditions() );
 					
 				} else e.stopImmediatePropagation();
 			} );
@@ -177,8 +176,7 @@ define( [ "slick/paging/Local",
 
 			dataView.onPagingInfoChanged.notify( { 
 				doSearch: 1, 
-				pagingInfo: { pageNum: +current.val(), pageSize: +size.val() },
-				offset: 1
+				offset: +!ajaxOptions
 			} );
 		} )
 		
@@ -233,11 +231,8 @@ define( [ "slick/paging/Local",
 		} )
 		
 		.delegate( "div.pager-refresh", "click", function( e ) {
-		
-			pager( {
-				pageSize: +size.val(),
-				pageNum: +current.val()
-			}, 0, uiRefresh );
+
+			dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 
 			e.stopPropagation();
 		} );
@@ -245,26 +240,3 @@ define( [ "slick/paging/Local",
 		$( $G.getContainerNode() ).after( container );
 	};
 } );
-
-/*
-$.ajax( {
-	
-	data: {
-		name: "saasGetCatalogById",
-		params: JSON.stringify( { "a03_id": this.getAttribute( "href" ).split( "/!" )[ 2 ] } )
-	}
-} )
-
-.done( function( data ) {
-	
-	data = eval( "(" + data + ")" ).result;
-
-	$.ajax( {
-		
-		data: {
-			name: "saaspermissionGetPermResByResId",
-			params: JSON.stringify( { "a12_resource_id": "/scmscmui/huawei/scmscmui/dmd/homepage/Notice" } )
-		}
-	} )
-} );
-*/
