@@ -29,22 +29,23 @@ define( function() {
 
 				var VO = { wpf_dup_token: +new Date() + Math.random() }
 				
-				, request = loading.data( "data-request" )
-				, sortColumn = $G.getSortColumns()[ 0 ];
+				, request = loading.data( "data-request" );
 				
 				offset = offset || 0;
 
+				args = args || {};
+
 				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] 
 
-					= JSON.stringify( $.extend( {}, {
+					= JSON.stringify( {
 				
-						pageVO: {
+						pageVO: $.extend( {}, {
 							curPage: +pagingInfo.pageNum + offset,
 							incrementalPaging: false,
 							pageSize: +pagingInfo.pageSize,
 							totalRows: -1
-						}
-					} ) );
+						}, args.pageVO || {} )
+					} );
 
 				/** Keep one ajax instance */
 				request && request.abort();
@@ -58,7 +59,7 @@ define( function() {
 
 					data: {
 						name: ajaxOptions.serviceName,
-						params: JSON.stringify( $.extend( {}, VO, args || {} ) )
+						params: JSON.stringify( $.extend( {}, VO, args.params || {} ) )
 					}
 				} )
 					
