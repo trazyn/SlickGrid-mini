@@ -142,8 +142,6 @@ define( function() {
 
 		function handleKeyDown( e ) {
 			
-			e.stopImmediatePropagation();
-
 			var cell = $G.getActiveCell(), active;
 
 			if ( cell && e.shiftKey && (e.which === 38 || e.which === 40) ) {
