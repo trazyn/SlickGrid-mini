@@ -4,7 +4,8 @@ define( function() {
 	var defaults = {
 		
 		key: "delete",
-		cssClass: "slick-delete"
+		cssClass: "slick-delete",
+		sync: true
 	}
 	
 	, deleteItems = function( rows ) {
@@ -26,7 +27,7 @@ define( function() {
 	
 		, deleteds = {};
 	
-		$G.setDeleteRows = function( rows ) {
+		$G.setDeleteRows = function( rows, sync ) {
 		
 			var hash = {};
 
@@ -36,7 +37,7 @@ define( function() {
 			} else
 				deleteds = $G.getSelectedRows();
 
-			if ( !settings.ajaxOptions ) {
+			if ( !sync || !settings.sync ) {
 				
 				for ( var i = deleteds.length; --i >= 0; ) {
 					
@@ -59,6 +60,15 @@ define( function() {
 
 		$G.getDeleteRows = function() {
 			return deleteds;
+		};
+
+		$G.getDeleteRowsData = function(){
+		
+			var result = [];
+
+			for ( var i = deleteds.length; --i >=0; 
+					result.push( $G.getDataItem( deleteds[ i ] ) ) );
+			return result;
 		};
 	};
 } );
