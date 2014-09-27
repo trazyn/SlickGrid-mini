@@ -25,7 +25,7 @@ define( function() {
 	
 		var settings = $.extend( {}, defaults, options || {} )
 	
-		, deleteds = {};
+		, deleteds = [];
 	
 		$G.setDeleteRows = function( rows, sync ) {
 		
@@ -33,7 +33,12 @@ define( function() {
 
 			if ( rows ) {
 				
-				deleteds = rows;
+				if ( deleteds.length ) {
+					
+					deleteds = $.grep( deleteds, function( index ) {
+						return rows.indexOf( index ) === -1;
+					} );
+				} else deleteds = rows;
 			} else
 				deleteds = $G.getSelectedRows();
 

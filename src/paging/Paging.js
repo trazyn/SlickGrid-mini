@@ -1,7 +1,8 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions",
+	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -237,6 +238,17 @@ define( [ "slick/paging/Local",
 			e.stopPropagation();
 		} );
 
-		$( $G.getContainerNode() ).after( container );
+		$( $G.getContainerNode() )
+
+			.after( container )
+
+			.focusout( function( e ) { 
+				
+				var editor = $G.getEditorLock();
+
+				editor.isActive() && editor.cancelCurrentEdit();
+
+				e.stopImmediatePropagation();
+			} );
 	};
 } );

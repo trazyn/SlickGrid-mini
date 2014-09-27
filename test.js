@@ -12,9 +12,10 @@ require.config( {
 require( [ "slick/paging/Paging",
 	"slick/plugins/Checkboxcolumn",
 	"slick/curd/Delete",
+	"slick/Actionbar",
 	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete ) {
+	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete, Actionbar ) {
 
 
 	var $G
@@ -105,6 +106,8 @@ require( [ "slick/paging/Paging",
 	} );
 
 	Delete( $G );
+
+	Actionbar( $G, $G.getContainerNode().previousElementSibling );
 
 	$G.init();
 } );

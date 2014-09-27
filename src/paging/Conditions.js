@@ -3,11 +3,8 @@ define( function() {
 
 	var handleHeaderRowCellRendered = function( e, args ) {
 	
-		args.column.filter && $( args.node )
-			.html( "<input type='text' data-column-field='" + args.column.field + "' >" );
-
 		if ( args.column.filter ) {
-			$( args.node ).html( "<input type='text' data-column-field='" + args.column.field + "' >" );
+			$( args.node ).html( "<input type='text' data-column-field='" + args.column.field + "' placeholder='Search...' >" );
 		} else if ( args.column.id === "_checkbox_selector" ) {
 			$( args.node ).html( "<button class='slick-filter-clear'></button>" );
 		}

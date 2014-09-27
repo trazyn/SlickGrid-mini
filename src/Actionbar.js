@@ -4,7 +4,7 @@ define( function() {
 	var defaults = {
 
 		add: {
-			selector: ".slick-action-add",
+			selector: ".slick-actionbar-add",
 			type: "click",
 			callback: function( e ) {
 			
@@ -12,7 +12,7 @@ define( function() {
 		},
 
 		update: {
-			selector: ".slick-action-update",
+			selector: ".slick-actionbar-update",
 			type: "click",
 			callback: function( e ) {
 				
@@ -20,15 +20,15 @@ define( function() {
 		},
 
 		del: {
-			selector: ".slick-action-delete",
+			selector: ".slick-actionbar-delete",
 			type: "click",
 			callback: function( $G, e ) {
-				$G.setDeleteRows();
+				$G.setDeleteRows( $G.getSelectedRows() );
 			},
 
 			init: function( $G ) {
 
-				var self = $( this );
+				var self = $( this ).attr( "disabled", "disabled" );
 
 				$G.onRowSelected.subscribe( function() {
 					self.removeAttr( "disabled" );
@@ -46,7 +46,7 @@ define( function() {
 		},
 
 		save: {
-			selector: ".slick-action-save",
+			selector: ".slick-actionbar-save",
 			type: "click",
 			callback: function( e ) {
 			
@@ -54,7 +54,7 @@ define( function() {
 		},
 
 		filter: {
-			selector: ".slick-action-filter",
+			selector: ".slick-actionbar-filter",
 			type: "click",
 			callback: function( $G ) {
 				$G.setHeaderRowVisibility( !$( $G.getHeaderRow() ).is( ":visible" ) );
@@ -62,7 +62,7 @@ define( function() {
 		},
 		
 		settings: {
-			selector: ".slick-action-settings",
+			selector: ".slick-actionbar-settings",
 			type: "click",
 			callback: function( e ) {
 			
@@ -70,7 +70,7 @@ define( function() {
 		},
 
 		fullscreen: {
-			selector: ".slick-action-fullscreen",
+			selector: ".slick-actionbar-fullscreen",
 			type: "click",
 			callback: function( e ) {
 				
@@ -97,7 +97,7 @@ define( function() {
 				})( action.callback, $G ) );
 
 			"function" === typeof action.init 
-				&& action.init.call( container.find( action.selector ).attr( "disabled", "disabled" ), $G );
+				&& action.init.call( container.find( action.selector ), $G );
 		}
 	};
 } );

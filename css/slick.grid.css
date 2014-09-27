@@ -6,8 +6,8 @@ classes should alter those!
 */
 body{font:12px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
 
-input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;padding-left: 5px;  padding-right: 5px;}
-input[type="text"]:focus,textarea:focus{outline:none;}
+.slick-cell input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;padding-left: 5px;  padding-right: 5px;}
+.slick-cell input[type="text"]:focus,textarea:focus{outline:none;}
 ::-webkit-scrollbar {
 width: 12px;
 height: 12px;
@@ -20,13 +20,15 @@ background:#e5e5e5; url(img/scrollbarBG.png) no-repeat center center;
 border:1px solid white;
 }
 ::-webkit-scrollbar-thumb:hover{background:#333;}
+
+.slick-header { box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4); z-index: 100; }
 .ui-widget{border:1px solid #ddd;}
 .slick-cell input[type="text"]{width: 88%;height: 86%;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
   border-left: 0px;
-  font-weight: bold;
+  font-weight: 300;
 }
 .slick-row.odd{background: #F5F5F5;}
 .slick-row:hover{transition: all .2s linear; background: #E7F0F7;}
@@ -37,6 +39,26 @@ border:1px solid white;
   white-space: nowrap;
   cursor: default;
   overflow: hidden;
+}
+.slick-headerrow-columns { 
+	background: #eaeaea;
+}
+
+.slick-headerrow-columns input {
+	height: 35px;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: rgba(50, 197, 180, 0);
+	text-indent: 5px;
+	outline: none;
+	transition: all 0.3s linear;
+	color: #777;
+}
+
+.slick-headerrow-columns input:focus {
+	background: rgba(50, 197, 180, 0.3);
 }
 
 .slick-header-column.ui-state-default {
@@ -55,7 +77,10 @@ border:1px solid white;
   cursor:pointer;
   border-bottom: 4px solid #ECECEC;
   text-indent:5px;
+  border: 0px;
 }
+
+.slick-header-column
 
 .slick-headerrow-column.ui-state-default {
   padding: 4px;
@@ -316,3 +341,22 @@ input[type=checkbox]:checked + .toggle:after{
 .pager-refresh:hover{background-position:-20px 0;}
 
 .grid-canvas .active.editable { background: none; }
+
+.slick-delete {
+	font-style: italic;
+	color: #999;
+	background: #FFFAE4 !important;
+}
+
+.slick-delete::after {
+	content: " ";
+	position: absolute;
+	left: 0; top: 50%; width: 100%;
+	border-bottom: 1px solid #777; 
+}
+
+.ui-state-default.slick-headerrow-column {
+	text-indent: 0px;
+	padding: 0px;
+	margin: 0px;
+}
