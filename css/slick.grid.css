@@ -270,7 +270,7 @@ input[type=checkbox]:checked + .toggle:after{
 .pager-nav .pager-next{margin-left:-3px;margin-right:5px;}
 .pager-nav .pager-prev:after,.pager-nav .pager-next:after{border-width: 2px;border-style:solid;border-color:#333;width: 7px;display: block;height: 7px;content:'';-webkit-transform: rotate(-45deg);border-bottom: none;border-right: none;}
 .pager-nav .pager-next:after{border:none;border-right:2px solid #333;border-bottom:2px solid #333;}
-.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;}
+.pager-info .pager-current{width: 30px;height: 20px;padding:0;color: #06F;margin:0;outline: 0px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;}
 .pager-nav .pager-prev:hover,.pager-nav .pager-next:hover,.pager-count button[name="record-count"]:hover{background:#333;color: #fff;}
 .pager-nav .pager-prev:hover:after,.pager-nav .pager-next:hover:after{border-color:white;}
 .pager-nav .pager-prev[disabled],.pager-nav .pager-next[disabled]{background:#eee;color:#bbb;cursor: default;}

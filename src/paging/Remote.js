@@ -24,15 +24,12 @@ define( function() {
 
 			$( $G.getContainerNode() ).append( loading );
 
-			/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
-			pager = function( pagingInfo, offset, callback, args ) {
+			pager = function( pagingInfo, callback, args ) {
 
 				var VO = { wpf_dup_token: +new Date() + Math.random() }
 				
 				, request = loading.data( "data-request" );
 				
-				offset = offset || 0;
-
 				args = args || {};
 
 				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] 
@@ -40,7 +37,7 @@ define( function() {
 					= JSON.stringify( {
 				
 						pageVO: $.extend( {}, {
-							curPage: +pagingInfo.pageNum + offset,
+							curPage: +pagingInfo.pageNum,
 							incrementalPaging: false,
 							pageSize: +pagingInfo.pageSize,
 							totalRows: -1
