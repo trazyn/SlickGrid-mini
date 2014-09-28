@@ -28,8 +28,12 @@ define( function() {
 		
 					.subscribe( $G.onCellChange, function( e, args ) {
 						
-						var node = $( $G.getCellNode( args.row, args.cell ) )
-						, value = $G.getCellEditor().getValue();
+						var node, value, adds = $G .getAddRowsIndexes ? $G .getAddRowsIndexes() : [];
+
+						if ( adds.indexOf( args.row ) > -1 ) { return; }
+
+						node = $( $G.getCellNode( args.row, args.cell ) );
+						value = $G.getCellEditor().getValue();
 
 						updateds[ args.row ] = updateds[ args.row ] || {};
 
@@ -46,17 +50,12 @@ define( function() {
 
 						$G.setCellCssStyles( settings.key, 
 							/** Beak the refrence */
-							$.extend( updateds.concat( [] ) ) );
+							$.extend( true, {}, updateds ) );
 					} );
 			},
 
 			destroy: function() {
 				handler.unsubscribeAll();
-			},
-
-			setUpdateRows: function( hash ) {
-			
-				$G.setCellCssStyles( settings.key, updateds = hash );
 			}
 		} );
 
@@ -74,6 +73,16 @@ define( function() {
 				}
 
 				return rows;
+			},
+
+			getUpdateRowsIndexes: function() {
+			
+				return updateds;
+			},
+
+			setUpdateRows: function( hash ) {
+			
+				$G.setCellCssStyles( settings.key, updateds = hash );
 			}
 		} );
 	};

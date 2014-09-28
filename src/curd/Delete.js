@@ -22,14 +22,14 @@ define( function() {
 			
 				handler
 					.subscribe( $G.getData().onRowsChanged, function( e, args ) {
-						self.setDeleteRows( [] );
+						$G.setDeleteRows( [] );
 					} )
 		
 					.subscribe( $G.onKeyDown, function( e, args ) {
 					
 						if ( !$G.getEditorLock().isActive() && 8 === e.keyCode ) {
 							
-							self.setDeleteRows( [ args.row ] );
+							$G.setDeleteRows( [ args.row ] );
 						}
 					} );
 			},
@@ -37,6 +37,23 @@ define( function() {
 			destroy: function() {
 			
 				handler.unsubscribeAll();
+			},
+
+		} );
+
+		$.extend( $G, {
+
+			getDeleteRows: function(){
+			
+				var result = [];
+
+				for ( var i = deleteds.length; --i >=0; 
+						result.push( $G.getDataItem( deleteds[ i ] ) ) );
+				return result;
+			},
+
+			getDeleteRowsIndexes: function() {
+				return deleteds;
 			},
 
 			setDeleteRows: function( rows, sync ) {
@@ -59,11 +76,16 @@ define( function() {
 
 						for ( var i = rows.length; --i >= 0; ) {
 							
-							var index = selecteds.indexOf( rows[ i ] );
+							var index;
 
+							index = selecteds.indexOf( rows[ i ] );
 							index > -1 && selecteds.splice( index, 1 );
 
+							index = adds.indexOf( rows[ i ] );
+							index > -1 && adds.splice( index, 1 );
+
 							dataView.deleteItem( $G.getDataItem( rows[ i ] )[ "id" ] );
+							$G.setAddRows( adds );
 						}
 
 						dataView.endUpdate();
@@ -130,19 +152,6 @@ define( function() {
 				} else removeItem( rows );
 
 				return deleteds;
-			},
-		} );
-
-		/** Exports */
-		$.extend( $G, {
-
-			getDeleteRows: function(){
-			
-				var result = [];
-
-				for ( var i = deleteds.length; --i >=0; 
-						result.push( $G.getDataItem( deleteds[ i ] ) ) );
-				return result;
 			}
 		} );
 	};

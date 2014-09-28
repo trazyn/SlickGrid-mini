@@ -57,6 +57,10 @@ define( function() {
 			getAddRowsIndexes: function() {
 				
 				return adds;
+			},
+
+			setAddRows: function( rows ) {
+				adds = rows;
 			}
 		} );
 	};

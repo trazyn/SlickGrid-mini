@@ -13,6 +13,7 @@ define( [ "slick/curd/Delete",
 
 			callback: function( $G, plugin ) {
 				plugin.addRow();
+				$G.onBeforeCellEditorDestroy.notify();
 			},
 			init: Add
 		},
@@ -20,14 +21,40 @@ define( [ "slick/curd/Delete",
 		update: {
 
 			enable: true,
+			selector: ".slick-actionbar-save",
+			type: "-ignore",
+
+			callback: function( $G ) {
+				
+				var 
+				  adds = $G.getAddRows(),
+				  deleteds = $G.getDeleteRows(),
+				  updates = $G.getUpdateRows();
+
+				if ( adds.length || deleteds.length || updates.length ) {
+					
+					$( this ).removeAttr( "disabled" );
+				} else $( this ).attr( "disabled", "disabled" );
+			},
 			
 			init: function( $G ) {
 			
-				var plugin = new Update( $G );
+				var self = $( this ).attr( "disabled", "disabled" );
 
-				$G.getData().onRowsChanged.subscribe( function() {
-					plugin.setUpdateRows( {} );
+				$G.onBeforeCellEditorDestroy.subscribe( function( e, args ) {
+					
+					var 
+					  adds = $G.getAddRows(),
+					  deleteds = $G.getDeleteRows(),
+					  updates = $G.getUpdateRows();
+
+					if ( adds.length || deleteds.length || updates.length ) {
+						
+						self.removeAttr( "disabled" );
+					} else self.attr( "disabled", "disabled" );
 				} );
+
+				return new Update( $G );
 			}
 		},
 
@@ -37,8 +64,9 @@ define( [ "slick/curd/Delete",
 
 			enable: true,
 
-			callback: function( $G, plugin, e ) {
-				plugin.setDeleteRows( $G.getSelectedRows() );
+			callback: function( $G ) {
+				$G.setDeleteRows( $G.getSelectedRows() );
+				$G.onBeforeCellEditorDestroy.notify();
 			},
 
 			init: function( $G ) {
