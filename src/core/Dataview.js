@@ -342,8 +342,8 @@
       refresh();
     }
 
-    function addItem(item, order) {
-      order ? items.unshift(item) : items.push(item);
+    function addItem(item) {
+      items.push(item);
       updateIdxById(items.length - 1);
       refresh();
     }
