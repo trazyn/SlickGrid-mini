@@ -44,7 +44,7 @@ define( [ "slick/paging/Local",
 
 	return function( $G, dataView, options ) {
 
-		var settings = $.extend( true, {}, defaults, options || {} )
+		var settings = $.extend( {}, defaults, options || {} )
 	
 		, container = $( html )
 
@@ -232,15 +232,6 @@ define( [ "slick/paging/Local",
 
 		$( $G.getContainerNode() )
 
-			.after( container )
-
-			.focusout( function( e ) { 
-				
-				var editor = $G.getEditorLock();
-
-				editor.isActive() && editor.cancelCurrentEdit();
-
-				e.stopImmediatePropagation();
-			} );
+			.after( container );
 	};
 } );

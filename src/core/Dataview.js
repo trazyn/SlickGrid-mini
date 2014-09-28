@@ -134,7 +134,7 @@
       refresh();
     }
 
-    function setPagingOptions(args) {
+    function setPagingOptions(args, isNotify) {
       if (args.pageSize != undefined) {
         pagesize = args.pageSize;
         pagenum = pagesize ? Math.min(pagenum, Math.max(0, Math.ceil(totalRows / pagesize) - 1)) : 0;
@@ -144,7 +144,7 @@
         pagenum = Math.min(args.pageNum, Math.max(0, Math.ceil(totalRows / pagesize) - 1));
       }
 
-      onPagingInfoChanged.notify(getPagingInfo(), null, self);
+      isNotify === false || onPagingInfoChanged.notify(getPagingInfo(), null, self);
 
       refresh();
     }
@@ -342,8 +342,8 @@
       refresh();
     }
 
-    function addItem(item) {
-      items.push(item);
+    function addItem(item, order) {
+      order ? items.unshift(item) : items.push(item);
       updateIdxById(items.length - 1);
       refresh();
     }

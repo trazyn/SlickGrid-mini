@@ -1,29 +1,44 @@
 
-define( function() {
+define( [ "slick/curd/Delete", 
+	"slick/curd/Update",
+	"slick/curd/Add" ], function( Delete, Update, Add ) {
 
 	var defaults = {
 
 		add: {
+			enable: true,
+
 			selector: ".slick-actionbar-add",
 			type: "click",
-			callback: function( e ) {
-			
-			}
+
+			callback: function( $G, plugin ) {
+				plugin.addRow();
+			},
+			init: Add
 		},
 
 		update: {
-			selector: ".slick-actionbar-update",
-			type: "click",
-			callback: function( e ) {
-				
+
+			enable: true,
+			
+			init: function( $G ) {
+			
+				var plugin = new Update( $G );
+
+				$G.getData().onRowsChanged.subscribe( function() {
+					plugin.setUpdateRows( {} );
+				} );
 			}
 		},
 
 		del: {
 			selector: ".slick-actionbar-delete",
 			type: "click",
-			callback: function( $G, e ) {
-				$G.setDeleteRows( $G.getSelectedRows() );
+
+			enable: true,
+
+			callback: function( $G, plugin, e ) {
+				plugin.setDeleteRows( $G.getSelectedRows() );
 			},
 
 			init: function( $G ) {
@@ -34,26 +49,12 @@ define( function() {
 					self.attr( "disabled", "disabled" );
 				} );
 
-				$G.onRowSelected.subscribe( function() {
-					self.removeAttr( "disabled" );
+				$G.onSelectedRowsChanged.subscribe( function( e, args ) {
+					
+					args.rows.length ? self.removeAttr( "disabled" ) : self.attr( "disabled", "disabled" );
 				} );
 
-				$G.onRowDeselected.subscribe( function( e, args ) {
-
-					var selecteds = $G.getSelectedRows();
-
-					if ( 1 === selecteds.length && selecteds[ 0 ] == args.row ) {
-						self.attr( "disabled", "disabled" );
-					}
-				} );
-
-				$G.onSelectedAllRows.subscribe( function() {
-					self.removeAttr( "disabled" );
-				} );
-
-				$G.onDeselectedAllRows.subscribe( function() {
-					self.attr( "disabled", "disabled" );
-				} );
+				return Delete( $G );
 			}
 		},
 
@@ -70,7 +71,9 @@ define( function() {
 			type: "click",
 			callback: function( $G ) {
 				$G.setHeaderRowVisibility( !$( $G.getHeaderRow() ).is( ":visible" ) );
-			}
+			},
+
+			enable: true
 		},
 		
 		settings: {
@@ -98,18 +101,22 @@ define( function() {
 
 		for ( var action in settings ) {
 			
+			var plugin;
+
 			action = settings[ action ];
+
+			if ( !action.enable ) { continue; }
 			
+			"function" === typeof action.init 
+				&& (plugin = action.init.call( container.find( action.selector ), $G ));
+
 			container
-				.delegate( action.selector, action.type, (function( callback, $G ) {
+				.delegate( action.selector, action.type, (function( callback, $G, plugin ) {
 					return function( e ) {
 						
-						callback instanceof Function && callback.call( this, $G, e );
+						callback instanceof Function && callback.call( this, $G, plugin, e );
 					};
-				})( action.callback, $G ) );
-
-			"function" === typeof action.init 
-				&& action.init.call( container.find( action.selector ), $G );
+				})( action.callback, $G, plugin ) );
 		}
 	};
 } );

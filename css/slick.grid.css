@@ -360,3 +360,7 @@ input[type=checkbox]:checked + .toggle:after{
 	padding: 0px;
 	margin: 0px;
 }
+
+.slick-update {
+	background: #2ECC71;
+}

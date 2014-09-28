@@ -72,6 +72,13 @@ define( function() {
 					dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 				}
 			}
+		} )
+		
+		.delegate( ".slick-headerrow-column", "click", function( e ) {
+		
+			$G.getEditorLock().isActive() && $G.getEditorLock().cancelCurrentEdit();
+
+			e.stopPropagation();
 		} );
 
 		return {
@@ -101,7 +108,7 @@ define( function() {
 						result: {
 							
 							items2Create: [],
-							items2Delete: JSON.stringify( $G.getDeleteRowsData() ),
+							items2Delete: JSON.stringify( $G.getDeleteRows() ),
 							items2Update: [],
 							items2Selected: []
 						}

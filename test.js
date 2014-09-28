@@ -12,16 +12,17 @@ require.config( {
 require( [ "slick/paging/Paging",
 	"slick/plugins/Checkboxcolumn",
 	"slick/curd/Delete",
+	"slick/curd/Update",
 	"slick/Actionbar",
 	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete, Actionbar ) {
+	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete, Update, Actionbar ) {
 
 
 	var $G
 	, dataView = new Slick.Data.DataView();
 
-	for ( var i = 0, data = []; i < 1000; ++i ) {
+	for ( var i = 0, data = []; i < 44444; ++i ) {
 		
 		data[ i ] = {
 		
@@ -104,8 +105,6 @@ require( [ "slick/paging/Paging",
 		}
 		*/
 	} );
-
-	Delete( $G );
 
 	Actionbar( $G, $G.getContainerNode().previousElementSibling );
 

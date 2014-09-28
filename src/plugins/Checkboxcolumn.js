@@ -99,15 +99,10 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 				if ( selecteds[ row ] ) {
 					$G.setSelectedRows( $.grep( $G.getSelectedRows(), function( index ) {
 						
-						var res = index !== row;
-
-						!res && $G.onRowDeselected.notify( { row: row } );
-
-						return res;
+						return index !== row;
 					} ) );
 				} else {
 					$G.setSelectedRows( $G.getSelectedRows().concat( row ) );
-					$G.onRowSelected.notify( { row: row } );
 				}
 			};
 		
@@ -145,12 +140,10 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 				for ( var i = 0, length = $G.getDataLength(); i < length; rows.push( i++ ) );
 
 				$G.setSelectedRows( rows );
-				$G.onSelectedAllRows.notify();
 
 			/** Deselect */
 			} else {
 				$G.setSelectedRows( [] );
-				$G.onDeselectedAllRows.notify();
 			}
 
 			e.preventDefault();
@@ -163,7 +156,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 	return function( $G, dataView, options ) {
 	
 		var
-		  settings = $.extend( true, {}, defaults, options || {} ),
+		  settings = $.extend( {}, defaults, options || {} ),
 		  plugin = new CheckboxSelectColumn( $G, dataView, settings );
 
 		/** Enable rows selected ability */
@@ -175,15 +168,6 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 		/** On the rows changed clear the selected */
 		dataView.onRowsChanged.subscribe( function( e, args ) {
 			$G.setSelectedRows( [] );
-		} );
-
-		/** Add events hook */
-		$.extend( $G, {
-			onRowSelected: new Slick.Event(),
-			onRowDeselected: new Slick.Event(),
-
-			onSelectedAllRows: new Slick.Event(),
-			onDeselectedAllRows: new Slick.Event()
 		} );
 
 		/** Return the column definition */

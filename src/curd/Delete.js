@@ -7,39 +7,76 @@ define( function() {
 		cssClass: "slick-delete",
 		sync: true
 	}
-	
-	, deleteItems = function( rows ) {
-		
-		var dataView = this.getData();
 
-		for ( var i = rows.length; --i >= 0; ) {
-			
-			dataView.deleteItem( this.getDataItem( i )[ "id" ] );
-		}
+	, Delete = function( $G, settings ) {
 
-		this.invalidate( rows );
-		this.render();
-	};
-
-	return function( $G, options ) {
-	
-		var settings = $.extend( {}, defaults, options || {} )
+		var handler = new Slick.EventHandler()
 	
 		, deleteds = [];
 
-		$G.getData().onRowsChanged.subscribe( function() {
+		$.extend( this, {
 			
-			$G.setDeleteRows( [] );
-		} );
-	
-		$.extend( $G, {
+			init: function() {
+
+				var self = this;
+			
+				handler
+					.subscribe( $G.getData().onRowsChanged, function( e, args ) {
+						self.setDeleteRows( [] );
+					} )
 		
+					.subscribe( $G.onKeyDown, function( e, args ) {
+					
+						if ( !$G.getEditorLock().isActive() && 8 === e.keyCode ) {
+							
+							self.setDeleteRows( [ args.row ] );
+						}
+					} );
+			},
+
+			destroy: function() {
+			
+				handler.unsubscribeAll();
+			},
+
 			setDeleteRows: function( rows, sync ) {
 			
-				var hash = {};
+				var hash = {}
+
+				, adds = $G.getAddRowsIndexes ? $G.getAddRowsIndexes() : []
+
+				, immediate = []
+
+				, removeItem = function( rows ) {
+				
+					var dataView = $G.getData()
+						
+					, selecteds = $G.getSelectedRows();
+
+					if ( rows.length ) {
+					
+						dataView.beginUpdate();
+
+						for ( var i = rows.length; --i >= 0; ) {
+							
+							var index = selecteds.indexOf( rows[ i ] );
+
+							index > -1 && selecteds.splice( index, 1 );
+
+							dataView.deleteItem( $G.getDataItem( rows[ i ] )[ "id" ] );
+						}
+
+						dataView.endUpdate();
+
+						$G.setSelectedRows( selecteds );
+						$G.invalidate( rows );
+						$G.render();
+					}
+				};
 
 				if ( rows && rows.length ) {
 					
+					/** Toggle the delete items */
 					if ( deleteds.length ) {
 
 						deleteds = deleteds.concat( rows );
@@ -56,12 +93,26 @@ define( function() {
 
 						deleteds = res;
 
-					} else deleteds = rows;
+					} else 
+						/** Set the delete items */
+						deleteds = rows;
 				} else if ( rows && !rows.length ) {
-					/** Remove the deleted rows */
+					/** Remove all delete rows */
 					deleteds = [];
 				} else
+					/** Delete the selecte items */
 					deleteds = $G.getSelectedRows();
+
+				deleteds = $.grep( deleteds, function( index ) {
+					
+					var res = adds.indexOf( index );
+
+					res > -1 && immediate.push( index );
+
+					return res === -1;
+				} );
+
+				removeItem( immediate );
 
 				if ( !sync || !settings.sync ) {
 					
@@ -76,19 +127,16 @@ define( function() {
 					}
 
 					$G.setCellCssStyles( settings.key, hash );
-				} else {
-					
-					deleteItems.call( $G, deleteds );
-				}
+				} else removeItem( rows );
 
 				return deleteds;
 			},
+		} );
 
-			getDeleteRows: function() {
-				return deleteds;
-			},
+		/** Exports */
+		$.extend( $G, {
 
-			getDeleteRowsData: function(){
+			getDeleteRows: function(){
 			
 				var result = [];
 
@@ -97,5 +145,16 @@ define( function() {
 				return result;
 			}
 		} );
+	};
+	
+	return function( $G, options ) {
+	
+		var settings = $.extend( {}, defaults, options || {} )
+			
+		, plugin = new Delete( $G, settings );
+
+		$G.registerPlugin( plugin );
+
+		return plugin;
 	};
 } );

@@ -166,7 +166,6 @@ if (typeof Slick === "undefined") {
     var columnPosLeft = [];
     var columnPosRight = [];
 
-
     // async call handles
     var h_editorLoader = null;
     var h_render = null;
@@ -3197,6 +3196,7 @@ if (typeof Slick === "undefined") {
                   updateRow(this.row);
                   trigger(self.onCellChange, {
                     row: activeRow,
+                    column: column,
                     cell: activeCell,
                     item: item
                   });
