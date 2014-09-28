@@ -30,6 +30,10 @@ define( function() {
 
 				var self = $( this ).attr( "disabled", "disabled" );
 
+				$G.getData().onRowsChanged.subscribe( function() {
+					self.attr( "disabled", "disabled" );
+				} );
+
 				$G.onRowSelected.subscribe( function() {
 					self.removeAttr( "disabled" );
 				} );
@@ -41,6 +45,14 @@ define( function() {
 					if ( 1 === selecteds.length && selecteds[ 0 ] == args.row ) {
 						self.attr( "disabled", "disabled" );
 					}
+				} );
+
+				$G.onSelectedAllRows.subscribe( function() {
+					self.removeAttr( "disabled" );
+				} );
+
+				$G.onDeselectedAllRows.subscribe( function() {
+					self.attr( "disabled", "disabled" );
 				} );
 			}
 		},

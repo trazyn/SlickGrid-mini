@@ -106,8 +106,8 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 						return res;
 					} ) );
 				} else {
-					$G.onRowSelected.notify( { row: row } );
 					$G.setSelectedRows( $G.getSelectedRows().concat( row ) );
+					$G.onRowSelected.notify( { row: row } );
 				}
 			};
 		
@@ -145,9 +145,13 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 				for ( var i = 0, length = $G.getDataLength(); i < length; rows.push( i++ ) );
 
 				$G.setSelectedRows( rows );
+				$G.onSelectedAllRows.notify();
 
 			/** Deselect */
-			} else $G.setSelectedRows( [] );
+			} else {
+				$G.setSelectedRows( [] );
+				$G.onDeselectedAllRows.notify();
+			}
 
 			e.preventDefault();
 			e.stopImmediatePropagation();
@@ -176,7 +180,10 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 		/** Add events hook */
 		$.extend( $G, {
 			onRowSelected: new Slick.Event(),
-			onRowDeselected: new Slick.Event()
+			onRowDeselected: new Slick.Event(),
+
+			onSelectedAllRows: new Slick.Event(),
+			onDeselectedAllRows: new Slick.Event()
 		} );
 
 		/** Return the column definition */

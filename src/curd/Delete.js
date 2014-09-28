@@ -26,65 +26,76 @@ define( function() {
 		var settings = $.extend( {}, defaults, options || {} )
 	
 		, deleteds = [];
+
+		$G.getData().onRowsChanged.subscribe( function() {
+			
+			$G.setDeleteRows( [] );
+		} );
 	
-		$G.setDeleteRows = function( rows, sync ) {
+		$.extend( $G, {
 		
-			var hash = {};
+			setDeleteRows: function( rows, sync ) {
+			
+				var hash = {};
 
-			if ( rows ) {
-				
-				if ( deleteds.length ) {
+				if ( rows && rows.length ) {
+					
+					if ( deleteds.length ) {
 
-					deleteds = deleteds.concat( rows );
+						deleteds = deleteds.concat( rows );
 
-					for ( var res = [], i = deleteds.length; --i >= 0; ) {
-						
-						var index = res.indexOf( deleteds[ i ] );
-
-						if ( index === -1 ) {
+						for ( var res = [], i = deleteds.length; --i >= 0; ) {
 							
-							res.push( deleteds[ i ] );
-						} else res.splice( index, 1 );
+							var index = res.indexOf( deleteds[ i ] );
+
+							if ( index === -1 ) {
+								
+								res.push( deleteds[ i ] );
+							} else res.splice( index, 1 );
+						}
+
+						deleteds = res;
+
+					} else deleteds = rows;
+				} else if ( rows && !rows.length ) {
+					/** Remove the deleted rows */
+					deleteds = [];
+				} else
+					deleteds = $G.getSelectedRows();
+
+				if ( !sync || !settings.sync ) {
+					
+					for ( var i = deleteds.length; --i >= 0; ) {
+						
+						hash[ deleteds[ i ] ] = {};
+
+						$G.getColumns().forEach( function( column ) { 
+							
+							hash[ deleteds[ i ] ][ column.id ] = settings.cssClass;
+						} );
 					}
 
-					deleteds = res;
-
-				} else deleteds = rows;
-			} else
-				deleteds = $G.getSelectedRows();
-
-			if ( !sync || !settings.sync ) {
-				
-				for ( var i = deleteds.length; --i >= 0; ) {
+					$G.setCellCssStyles( settings.key, hash );
+				} else {
 					
-					hash[ deleteds[ i ] ] = {};
-
-					$G.getColumns().forEach( function( column ) { 
-						
-						hash[ deleteds[ i ] ][ column.id ] = settings.cssClass;
-					} );
+					deleteItems.call( $G, deleteds );
 				}
 
-				$G.setCellCssStyles( settings.key, hash );
-			} else {
-				
-				deleteItems.call( $G, deleteds );
+				return deleteds;
+			},
+
+			getDeleteRows: function() {
+				return deleteds;
+			},
+
+			getDeleteRowsData: function(){
+			
+				var result = [];
+
+				for ( var i = deleteds.length; --i >=0; 
+						result.push( $G.getDataItem( deleteds[ i ] ) ) );
+				return result;
 			}
-
-			return deleteds;
-		};
-
-		$G.getDeleteRows = function() {
-			return deleteds;
-		};
-
-		$G.getDeleteRowsData = function(){
-		
-			var result = [];
-
-			for ( var i = deleteds.length; --i >=0; 
-					result.push( $G.getDataItem( deleteds[ i ] ) ) );
-			return result;
-		};
+		} );
 	};
 } );
