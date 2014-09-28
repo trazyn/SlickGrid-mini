@@ -34,10 +34,21 @@ define( function() {
 			if ( rows ) {
 				
 				if ( deleteds.length ) {
-					
-					deleteds = $.grep( deleteds, function( index ) {
-						return rows.indexOf( index ) === -1;
-					} );
+
+					deleteds = deleteds.concat( rows );
+
+					for ( var res = [], i = deleteds.length; --i >= 0; ) {
+						
+						var index = res.indexOf( deleteds[ i ] );
+
+						if ( index === -1 ) {
+							
+							res.push( deleteds[ i ] );
+						} else res.splice( index, 1 );
+					}
+
+					deleteds = res;
+
 				} else deleteds = rows;
 			} else
 				deleteds = $G.getSelectedRows();
