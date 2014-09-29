@@ -39,7 +39,7 @@ define( function() {
 
 						if ( node.attr( "data-original" ) === value ) {
 
-							delete updateds[ args.row ][ args.column.id ];
+							delete updateds[ args.row ][ args.column.rr ];
 
 							--updateds[ args.row ][ "_length_" ] || delete updateds[ args.row ];
 						} else {
@@ -65,11 +65,18 @@ define( function() {
 				
 				var deleteds = $G.getDeletedRows ? $G.getDeletedRows() : []
 			
-				, rows = [];
+				, rows = [], item;
 
 				for ( var row in updateds ) {
 					
-					deleteds.indexOf( row ) === -1 && rows.push( $G.getDataItem( row ) );
+					if ( deleteds.indexOf( row ) === -1 ) {
+					
+						item = $G.getDataItem( row );
+
+						item[ "grid_action" ] = "update";
+
+						rows.push( item );
+					}
 				}
 
 				return rows;
