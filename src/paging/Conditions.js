@@ -27,7 +27,7 @@ define( function() {
 		};
 	};
 
-	return function( $G, isAjax ) {
+	return function( $G, fastQuery ) {
 	
 		var dataView = $G.getData(), filters = {};
 	
@@ -38,6 +38,8 @@ define( function() {
 		dataView.setFilter( function( row ) {
 			
 			var value;
+
+			if ( row[ "_isNew" ] ) { return true; }
 
 			for ( var field in filters ) {
 
@@ -67,9 +69,11 @@ define( function() {
 				filters[ field ] = self.val().replace( /^\s+|\s+$/g, "" );
 				dataView.refresh();
 
-				if ( isAjax && 13 === e.keyCode ) {
+				if ( fastQuery.is( ":checked" ) && 13 === e.keyCode ) {
 					
 					dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
+
+					e.stopPropagation();
 				}
 			}
 		} )
@@ -101,18 +105,7 @@ define( function() {
 				return {
 					pageVO: getSort.call( $G ),
 
-					params: {
-
-						criteria: JSON.stringify( criteria ) ,
-
-						result: {
-							
-							items2Create: [],
-							items2Delete: JSON.stringify( $G.getDeleteRows() ),
-							items2Update: [],
-							items2Selected: []
-						}
-					}
+					params: { criteria: JSON.stringify( criteria ) }
 				};
 			}
 		};
