@@ -14,22 +14,26 @@ require( [ "slick/paging/Paging",
 	"slick/curd/Delete",
 	"slick/curd/Update",
 	"slick/Actionbar",
+	"slick/plugins/Highlight",
 	"slick/core/Core", 
 	"slick/core/Grid", 
-	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete, Update, Actionbar ) {
-
+	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete, Update, Actionbar, Highlight ) {
 
 	var $G
 	, dataView = new Slick.Data.DataView();
 
-	for ( var i = 0, data = []; i < 44444; ++i ) {
+	for ( var i = 0, data = []; i < 4444; ++i ) {
 		
 		data[ i ] = {
 		
-			"id": "# " + i,
+			"rr": "# " + i,
 			"num1": Math.random() * 100,
 			"num2": Math.random() * 1000,
-			"num3": Math.random() * 10000
+			"num3": Math.random() * 10000,
+			"num4": Math.random() * 100000,
+			"num5": Math.random() * 100000,
+			"num6": Math.random() * 100000,
+			"num7": Math.random() * 100000,
 		};
 	}
 
@@ -58,26 +62,51 @@ require( [ "slick/paging/Paging",
 	$G.setColumns( [ Checkboxcolumn( $G, dataView ), {
 		id: "column1",
 		name: "IDS",
-		field: "id",
+		field: "rr",
 		width: 40
 	}, {
 		id: "column2",
-		name: "Language",
+		name: "No.1",
 		field: "num1",
 		editor: Slick.Editors.Text,
 		filter: true,
 		sortable: true
 	}, {
 		id: "column3",
-		name: "Year",
+		name: "No.2",
 		field: "num2",
 		editor: Slick.Editors.Text,
 		filter: true,
 		sortable: true
 	}, {
+	
 		id: "column4",
-		name: "Value",
-		field: "num3",
+		name: "No.4",
+		field: "num4",
+		editor: Slick.Editors.Text,
+		filter: true,
+		sortable: true
+	}, {
+	
+		id: "column5",
+		name: "No.5",
+		field: "num5",
+		editor: Slick.Editors.Text,
+		filter: true,
+		sortable: true
+	}, {
+	
+		id: "column6",
+		name: "No.6",
+		field: "num6",
+		editor: Slick.Editors.Text,
+		filter: true,
+		sortable: true
+	}, {
+	
+		id: "column7",
+		name: "No.7",
+		field: "num7",
 		editor: Slick.Editors.Text,
 		filter: true,
 		sortable: true
@@ -107,6 +136,8 @@ require( [ "slick/paging/Paging",
 	} );
 
 	Actionbar( $G, $G.getContainerNode().previousElementSibling );
+
+	Highlight( $G );
 
 	$G.init();
 } );

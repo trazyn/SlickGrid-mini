@@ -15,7 +15,7 @@ define( function() {
 				, index = dataView.getItems().length
 
 				/** Generate an unique index */
-				, label = /^(?:\+\s)?(\d{1,})/.exec( $G.getDataItem( index - 1 )[ "rr" ] + "" )[ 1 ];
+				, label = adds.length ? /^(?:\+\s)?(\d{1,})/.exec( $G.getDataItem( index - 1 )[ "rr" ] + "" )[ 1 ] : 0;
 
 				if ( !row ) {
 					

@@ -41,6 +41,7 @@ define( [ "slick/curd/Delete",
 			
 				var self = $( this ).attr( "disabled", "disabled" );
 
+				/** Toggle the save button */
 				$G.onBeforeCellEditorDestroy.subscribe( function( e, args ) {
 					
 					var 

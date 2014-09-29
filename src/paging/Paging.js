@@ -1,7 +1,8 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions",
+	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +

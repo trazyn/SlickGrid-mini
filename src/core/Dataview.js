@@ -30,7 +30,7 @@
 
 
     // private
-    var idProperty = "id";  // property holding a unique row id
+    var idProperty = "rr";  // property holding a unique row id
     var items = [];         // data by index
     var rows = [];          // data by row
     var idxById = {};       // indexes by id
