@@ -165,11 +165,6 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 		/** Register plugin */
 		$G.registerPlugin( plugin );
 
-		/** On the rows changed clear the selected */
-		dataView.onRowsChanged.subscribe( function( e, args ) {
-			$G.setSelectedRows( [] );
-		} );
-
 		/** Return the column definition */
 		return plugin.getColumnDefinifion();
 	};
