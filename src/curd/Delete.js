@@ -21,15 +21,14 @@ define( function() {
 				var self = this;
 			
 				handler
-					.subscribe( $G.getData().onRowsChanged, function( e, args ) {
-						$G.setDeleteRows( [] );
-					} )
-		
 					.subscribe( $G.onKeyDown, function( e, args ) {
 					
 						if ( !$G.getEditorLock().isActive() && 8 === e.keyCode ) {
 							
 							$G.setDeleteRows( [ args.row ] );
+
+							e.preventDefault();
+							e.stopImmediatePropagation();
 						}
 					} );
 			},
@@ -47,8 +46,14 @@ define( function() {
 			
 				var result = [];
 
-				for ( var i = deleteds.length; --i >=0; 
-						result.push( $G.getDataItem( deleteds[ i ] ) ) );
+				for ( var i = deleteds.length; --i >=0; ) {
+				
+					var item = $G.getDataItem( deleteds[ i ] );
+
+					item[ "grid_action" ] = "delete";
+
+					result.push( item );
+				}
 				return result;
 			},
 
@@ -84,12 +89,12 @@ define( function() {
 							index = adds.indexOf( rows[ i ] );
 							index > -1 && adds.splice( index, 1 );
 
-							dataView.deleteItem( $G.getDataItem( rows[ i ] )[ "id" ] );
-							$G.setAddRows( adds );
+							dataView.deleteItem( $G.getDataItem( rows[ i ] )[ "rr" ] );
 						}
 
 						dataView.endUpdate();
 
+						$G.setAddRows( adds );
 						$G.setSelectedRows( selecteds );
 						$G.invalidate( rows );
 						$G.render();
