@@ -34,20 +34,22 @@ define( function() {
 
 				VO[ ajaxOptions.moduleName || (ajaxOptions.moduleName = "gridElement_kiss") ] 
 
-					= JSON.stringify( {
+					= JSON.stringify( $.extend( {}, {
 				
 						pageVO: $.extend( {}, {
-							curPage: +pagingInfo.pageNum,
+							curPage: +pagingInfo.pageNum - 1,
 							incrementalPaging: false,
 							pageSize: +pagingInfo.pageSize,
 							totalRows: -1
 						}, args.pageVO || {} )
-					} );
+					}, args.result || {} ) );
 
 				/** Keep one ajax instance */
 				request && request.abort();
 
 				request = $.ajax( {
+
+					type: "POST",
 
 					beforeSend: function() { 
 						/** Show the loading */
