@@ -1,10 +1,7 @@
 
 define( function() {
 
-	var defaults = {
-		
-		id: "+"
-	}
+	var defaults = { }
 
 	, Add = function( $G ) {
 		
@@ -15,14 +12,18 @@ define( function() {
 			addRow: function( row ) {
 				
 				var dataView = $G.getData()
-				, index = dataView.getItems().length;
+				, index = dataView.getItems().length
+
+				/** Generate an unique index */
+				, label = /^(?:\+\s)?(\d{1,})/.exec( $G.getDataItem( index - 1 )[ "rr" ] + "" )[ 1 ];
 
 				if ( !row ) {
 					
-					row = {
+					row = $.extend( {}, defaults, {
 						
-						id: "+ " + index
-					};
+						rr: "+ " + (+label + 1),
+						_isNew: true
+					} );
 				}
 
 				dataView.beginUpdate();
@@ -60,6 +61,13 @@ define( function() {
 			},
 
 			setAddRows: function( rows ) {
+
+				var index = $G.getDataLength();
+
+				for ( var i = rows.length; --i >= 0; ) {
+					rows[ i ] = index - i - 1;
+				}
+
 				adds = rows;
 			}
 		} );
