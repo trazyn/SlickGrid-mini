@@ -1,8 +1,7 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions",
-	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -16,7 +15,7 @@ define( [ "slick/paging/Local",
 				"<button disabled='disabled' class='pager-total'>1</button>" +
 			"</div>" +
 
-			"<div style='display: inline-block;'>" +
+			"<div style='display: inline-block; margin-left: 74%;'>" +
 				"<input type='checkbox' class='slick-fast-query' id='slick-fast-query' checked='checked'>" +
 				"<label for='slick-fast-query'></label>" +
 			"</div>" +
@@ -142,7 +141,7 @@ define( [ "slick/paging/Local",
 		}
 
 		/** This function will be cause a refresh */
-		Conditions = Conditions( $G, !!ajaxOptions );
+		Conditions = Conditions( $G, container.find( ":checkbox.slick-fast-query" ) );
 
 		/** Refresh dataview */
 		dataView.endUpdate();
@@ -227,11 +226,39 @@ define( [ "slick/paging/Local",
 
 			dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 
+			$G.setDeleteRows( [] );
+			$G.setUpdateRows( [] );
+			$G.setAddRows( [] );
+
 			e.stopPropagation();
 		} );
 
 		$( $G.getContainerNode() )
 
 			.after( container );
+
+		$.extend( $G, {
+			
+			search: function( pagingInfo, VO ) {
+
+				var args = Conditions.getConditions();
+
+				args.result = {
+
+					result: {
+					
+						items2Create: JSON.stringify( $G.getAddRows ? $G.getAddRows() : [] ),
+						items2Update: JSON.stringify( $G.getUpdateRows ? $G.getUpdateRows() : [] ),
+						items2Delete: JSON.stringify( $G.getDeleteRows ? $G.getDeleteRows() : [] ),
+						items2Selected: JSON.stringify( $G.getSelectedRow ? $G.getSelectedRows() : [] )
+					}
+				};
+			
+				pager( pagingInfo || {
+					pageSize: +size.val(),
+					pageNum: 0
+				}, uiRefresh, args );
+			}
+		} );
 	};
 } );
