@@ -89,6 +89,8 @@ define( function() {
 				} );
 
 				loading.data( "data-request", request );
+
+				return request;
 			};
 
 			/** Registe event handler */
