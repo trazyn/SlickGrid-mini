@@ -79,6 +79,15 @@ define( [ "slick/paging/Local",
 			size.val( pagingInfo.pageSize );
 			total.html( max ).attr( "data-total", max );
 		}
+
+		, reset = function() {
+		
+			$G.setDeleteRows && $G.setDeleteRows( [] );
+			$G.setUpdateRows && $G.setUpdateRows( [] );
+			$G.setAddRows && $G.setAddRows( [] );
+
+			$G.setSelectedRows( [] );
+		}
 		
 		/** A function that implement for paging */
 		, pager;
@@ -227,9 +236,7 @@ define( [ "slick/paging/Local",
 
 			dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 
-			$G.setDeleteRows( [] );
-			$G.setUpdateRows( [] );
-			$G.setAddRows( [] );
+			reset();
 
 			e.stopPropagation();
 		} );
@@ -255,10 +262,13 @@ define( [ "slick/paging/Local",
 					}
 				};
 			
-				pager( pagingInfo || {
+				reset();
+
+				return pager( pagingInfo || {
 					pageSize: +size.val(),
 					pageNum: 0
 				}, uiRefresh, args );
+
 			}
 		} );
 	};
