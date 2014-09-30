@@ -66,9 +66,9 @@ define( [ "slick/curd/Delete",
 				, toggleSave = function() {
 				
 					var 
-					  adds = $G.getAddRows(),
-					  deleteds = $G.getDeleteRows(),
-					  updates = $G.getUpdateRows();
+					  adds = $G.getAddRowsIndexes(),
+					  deleteds = $G.getDeleteRowsIndexes(),
+					  updates = $G.getUpdateRowsIndexes();
 
 					if ( adds.length || deleteds.length || updates.length ) {
 						

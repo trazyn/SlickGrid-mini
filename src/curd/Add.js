@@ -5,14 +5,15 @@ define( function() {
 
 	, Add = function( $G ) {
 		
-		var adds = [];
+		var adds = []
+	
+		, dataView = $G.getData();
 
 		$.extend( this, {
 			
 			addRow: function( row ) {
 				
-				var dataView = $G.getData()
-				, index = dataView.getItems().length
+				var index = dataView.getItems().length
 
 				/** Generate an unique index */
 				, label = adds.length ? /^(?:\+\s)?(\d{1,})/.exec( $G.getDataItem( index - 1 )[ "rr" ] + "" )[ 1 ] : 0;
@@ -21,7 +22,7 @@ define( function() {
 					
 					row = $.extend( {}, defaults, {
 						
-						rr: "+ " + (+label + 1),
+						rr: (index = "+ " + (+label + 1)),
 						_isNew: true
 					} );
 				}
@@ -39,8 +40,7 @@ define( function() {
 
 				dataView.endUpdate();
 
-				$G.scrollRowIntoView( index );
-				$G.onAddNewRow.notify( { row: row } );
+				$G.scrollRowIntoView( dataView.getLength() );
 				$G.onAddRowsChanged.notify( { rows: adds } );
 			}
 		} );
@@ -53,7 +53,7 @@ define( function() {
 				
 				var rows = [];
 
-				for ( var i = adds.length; --i >= 0; rows.push( $G.getDataItem( adds[ i ] ) ) );
+				for ( var i = adds.length; --i >= 0; rows.push( dataView.getItemById( adds[ i ] ) ) );
 
 				return rows;
 			},
@@ -71,7 +71,7 @@ define( function() {
 					rows[ i ] = index - i - 1;
 				}
 
-				adds = rows;
+				adds = dataView.idxToId( rows );
 
 				this.onAddRowsChanged.notify( { rows: adds } );
 			}

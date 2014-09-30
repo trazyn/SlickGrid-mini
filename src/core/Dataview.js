@@ -92,7 +92,7 @@
     function setRefreshHints(hints) {
       refreshHints = hints;
     }
-
+    	
     function setFilterArgs(args) {
       filterArgs = args;
     }
@@ -282,6 +282,34 @@
 
     function getIdxById(id) {
       return idxById[id];
+    }
+
+    function getIdByIdx(idx) {
+    	return items[idx][idProperty];
+    }
+
+    function idxToId(idx) {
+    	var res = [];
+
+    	idx = idx instanceof Array ? idx : [idx];
+
+    	for (var i = idx.length; --i >= 0;) {
+    		res.push(items[idx[i]][idProperty]);
+    	}
+
+    	return res;
+    }
+
+    function idToIdx(id) {
+    	var res = [];
+
+    	id = id instanceof Array ? id : [id];
+
+    	for (var i = id.length; --i >= 0;) {
+    		res.push(idxById[id[i]]);
+    	}
+
+    	return res;
     }
 
     function ensureRowsByIdCache() {
@@ -995,7 +1023,10 @@
       "expandGroup": expandGroup,
       "getGroups": getGroups,
       "getIdxById": getIdxById,
+      "getIdByIdx": getIdByIdx,
       "getRowById": getRowById,
+      "idxToId": idxToId,
+      "idToIdx": idToIdx,
       "getItemById": getItemById,
       "getItemByIdx": getItemByIdx,
       "mapRowsToIds": mapRowsToIds,

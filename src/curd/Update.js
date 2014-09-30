@@ -10,6 +10,8 @@ define( function() {
 	, Update = function( $G, settings ) {
 	
 		var handler = new Slick.EventHandler()
+		
+		, dataView = $G.getData()
 	
 		, updateds = {};
 
@@ -28,29 +30,27 @@ define( function() {
 		
 					.subscribe( $G.onCellChange, function( e, args ) {
 						
-						var node, value, adds = $G .getAddRowsIndexes ? $G .getAddRowsIndexes() : [];
+						var index = args.item.rr, hash = {};
 
-						if ( adds.indexOf( args.row ) > -1 ) { return; }
+						updateds[ index ] = updateds[ index ] || {};
 
-						node = $( $G.getCellNode( args.row, args.cell ) );
-						value = $G.getCellEditor().getValue();
+						if ( $( $G.getCellNode( args.row, args.cell ) )
+							.attr( "data-original" ) === $G.getCellEditor().getValue() ) {
 
-						updateds[ args.row ] = updateds[ args.row ] || {};
-
-						if ( node.attr( "data-original" ) === value ) {
-
-							delete updateds[ args.row ][ args.column.rr ];
-
-							--updateds[ args.row ][ "_length_" ] || delete updateds[ args.row ];
+							--updateds[ index ][ "_length_" ] || delete updateds[ index ];
 						} else {
 
-							updateds[ args.row ][ args.column.id ] = settings.cssClass;
-							updateds[ args.row ][ "_length_" ] = (updateds[ args.row ][ "_length_" ] || 0) + 1;
+							updateds[ index ][ args.column.id ] = settings.cssClass;
+							updateds[ index ][ "_length_" ] = (updateds[ index ][ "_length_" ] || 0) + 1;
+						}
+
+						for ( var id in updateds ) {
+							hash[ dataView.getIdxById( id ) ] = updateds[ id ];
 						}
 
 						$G.setCellCssStyles( settings.key, 
-							/** Beak the refrence */
-							$.extend( true, {}, updateds ) );
+							/** Break the refrence */
+							$.extend( true, {}, hash ) );
 					} );
 			},
 
@@ -65,20 +65,16 @@ define( function() {
 			
 			getUpdateRows: function() {
 				
-				var deleteds = $G.getDeletedRows ? $G.getDeletedRows() : []
-			
-				, rows = [], item;
+				var
+				  deleteds = $G.getDeleteRowsIndexes ? $G.getDeleteRowsIndexes() : [],
+				  adds = $G.getAddRowsIndexes ? $G.getAddRowsIndexes() : [],
 
-				for ( var row in updateds ) {
+				  rows = [],
+				  ignore = deleteds.concat( adds );
+
+				for ( var id in updateds ) {
 					
-					if ( deleteds.indexOf( row ) === -1 ) {
-					
-						item = $G.getDataItem( row );
-
-						item[ "grid_action" ] = "update";
-
-						rows.push( item );
-					}
+					-1 === ignore.indexOf( id ) && rows.push( dataView.getItemById( id ) );
 				}
 
 				return rows;
@@ -89,9 +85,22 @@ define( function() {
 				return updateds;
 			},
 
-			setUpdateRows: function( hash ) {
+			setUpdateRows: function( hash, rebuild ) {
+
+				if ( true === rebuild ) {
+				
+					updateds = {};
+
+					for ( var id in hash ) {
+						updateds[ dataView.getIdxById( id ) ] = hash[ id ];
+					}
+				}
 			
-				$G.setCellCssStyles( settings.key, updateds = hash );
+				$G.setCellCssStyles( settings.key, updateds );
+
+				/** Use ID as index, because the 'idx' will be rebuild by sort or filter */
+				updateds = hash;
+
 				this.onUpdateRowsChanged.notify( { rows: updateds } );
 			}
 		} );
