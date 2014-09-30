@@ -60,6 +60,8 @@ define( function() {
 		} );
 
 		$.extend( $G, {
+
+			onUpdateRowsChanged: new Slick.Event(),
 			
 			getUpdateRows: function() {
 				
@@ -90,6 +92,7 @@ define( function() {
 			setUpdateRows: function( hash ) {
 			
 				$G.setCellCssStyles( settings.key, updateds = hash );
+				this.onUpdateRowsChanged.notify( { rows: updateds } );
 			}
 		} );
 	};
