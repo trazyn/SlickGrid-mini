@@ -13,50 +13,8 @@ define( [ "slick/curd/Delete",
 
 			callback: function( $G, plugin ) {
 				plugin.addRow();
-				$G.onBeforeCellEditorDestroy.notify();
 			},
 			init: Add
-		},
-
-		update: {
-
-			enable: true,
-			selector: ".slick-actionbar-save",
-			type: "-ignore",
-
-			callback: function( $G ) {
-				
-				var 
-				  adds = $G.getAddRows(),
-				  deleteds = $G.getDeleteRows(),
-				  updates = $G.getUpdateRows();
-
-				if ( adds.length || deleteds.length || updates.length ) {
-					
-					$( this ).removeAttr( "disabled" );
-				} else $( this ).attr( "disabled", "disabled" );
-			},
-			
-			init: function( $G ) {
-			
-				var self = $( this ).attr( "disabled", "disabled" );
-
-				/** Toggle the save button */
-				$G.onBeforeCellEditorDestroy.subscribe( function( e, args ) {
-					
-					var 
-					  adds = $G.getAddRows(),
-					  deleteds = $G.getDeleteRows(),
-					  updates = $G.getUpdateRows();
-
-					if ( adds.length || deleteds.length || updates.length ) {
-						
-						self.removeAttr( "disabled" );
-					} else self.attr( "disabled", "disabled" );
-				} );
-
-				return new Update( $G );
-			}
 		},
 
 		del: {
@@ -67,7 +25,6 @@ define( [ "slick/curd/Delete",
 
 			callback: function( $G ) {
 				$G.setDeleteRows( $G.getSelectedRows() );
-				$G.onBeforeCellEditorDestroy.notify();
 			},
 
 			init: function( $G ) {
@@ -88,10 +45,46 @@ define( [ "slick/curd/Delete",
 		},
 
 		save: {
+			enable: true,
+
 			selector: ".slick-actionbar-save",
 			type: "click",
-			callback: function( e ) {
+
+			callback: function( $G ) {
+				
+				var self = $( this ).attr( "disabled", "disabled" );
+
+				$G.search()
+					.done( function() { self.attr( "disabled", "disabled" ); } )
+					.fail( function() { self.removeAttr( "disabled" ); } );
+			},
+
+			init: function( $G ) {
 			
+				var self = $( this ).attr( "disabled", "disabled" )
+
+				, toggleSave = function() {
+				
+					var 
+					  adds = $G.getAddRows(),
+					  deleteds = $G.getDeleteRows(),
+					  updates = $G.getUpdateRows();
+
+					if ( adds.length || deleteds.length || updates.length ) {
+						
+						self.removeAttr( "disabled" );
+					} else self.attr( "disabled", "disabled" );
+				}
+				
+				, plugin = Update( $G );
+				
+				new Slick.EventHandler()
+					.subscribe( $G.onBeforeCellEditorDestroy, toggleSave )
+					.subscribe( $G.onDeleteRowsChanged, toggleSave )
+					.subscribe( $G.onUpdateRowsChanged, toggleSave )
+					.subscribe( $G.onAddRowsChanged, toggleSave );
+
+				return plugin;
 			}
 		},
 
@@ -114,10 +107,31 @@ define( [ "slick/curd/Delete",
 		},
 
 		fullscreen: {
+			enable: true,
 			selector: ".slick-actionbar-fullscreen",
 			type: "click",
-			callback: function( e ) {
+			callback: function( $G ) {
 				
+				var self = $( this )
+				, wrapper = $( $G.getContainerNode().parentElement );
+					
+				/** Save the inline style */
+				wrapper.data( "data-slick-style" ) 
+					|| wrapper.data( "data-slick-style", wrapper.attr( "style" ) );
+
+				if ( self.is( ".slick-actionbar-fullscreen-min" ) ) {
+
+					wrapper
+						.removeClass( "slick-fullscreen" )
+						.attr( "style", wrapper.data( "data-slick-style" ) );
+					self.removeClass( "slick-actionbar-fullscreen-min" );
+				} else {
+					/** Remove the inline style */
+					wrapper.removeAttr( "style" ).addClass( "slick-fullscreen" );
+					self.addClass( "slick-actionbar-fullscreen-min" );
+				}
+
+				$G.resizeCanvas();
 			}
 		}
 	};
