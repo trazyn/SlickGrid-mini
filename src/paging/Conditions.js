@@ -29,7 +29,11 @@ define( function() {
 
 	return function( $G, fastQuery ) {
 	
-		var dataView = $G.getData(), filters = {};
+		var dataView = $G.getData()
+		
+		, bar = $( $G.getHeaderRow() )
+
+		, filters = {};
 	
 		$G.onHeaderRowCellRendered.unsubscribe( handleHeaderRowCellRendered );
 		$G.onHeaderRowCellRendered.subscribe( handleHeaderRowCellRendered );
@@ -39,20 +43,23 @@ define( function() {
 			
 			var value;
 
+			/** Skip the new line */
 			if ( row[ "_isNew" ] ) { return true; }
 
 			for ( var field in filters ) {
 
 				value = filters[ field ];
 
-				if ( value && row[ field ].toString().indexOf( value ) === -1 ) {
+				if ( value 
+					/** Fuzzy search */
+					&& (row[ field ] || "").toString().toLowerCase().indexOf( value.toLowerCase() ) === -1 ) {
 					return false;
 				}
 			}
 			return true;
 		} );
 
-		$( $G.getHeaderRow() )
+		bar
 
 		/** Remove all keyup handler */
 		.undelegate( "input:visible", "keyup" )	
@@ -76,6 +83,21 @@ define( function() {
 					e.stopPropagation();
 				}
 			}
+		} )
+
+		.delegate( "button.slick-filter-clear", "click", function( e ) {
+		
+			bar.find( "div.slick-headerrow-column input[data-column-field]" )
+
+				.each( function() {
+					$( this ).val( "" );
+				} );
+
+			/** Reset filter */
+			dataView.setFilter();
+
+			e.stopPropagation();
+			e.preventDefault();
 		} )
 		
 		.delegate( ".slick-headerrow-column", "click", function( e ) {
@@ -103,7 +125,7 @@ define( function() {
 				}
 
 				return {
-					pageVO: getSort.call( $G ),
+					pageVO: fastQuery.is( ":checked" ) ? getSort.call( $G ) : {},
 
 					params: { criteria: JSON.stringify( criteria ) }
 				};
