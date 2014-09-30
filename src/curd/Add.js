@@ -41,11 +41,14 @@ define( function() {
 
 				$G.scrollRowIntoView( index );
 				$G.onAddNewRow.notify( { row: row } );
+				$G.onAddRowsChanged.notify( { rows: adds } );
 			}
 		} );
 
 		$.extend( $G, {
 			
+			onAddRowsChanged: new Slick.Event(),
+
 			getAddRows: function() {
 				
 				var rows = [];
@@ -69,6 +72,8 @@ define( function() {
 				}
 
 				adds = rows;
+
+				this.onAddRowsChanged.notify( { rows: adds } );
 			}
 		} );
 	};
