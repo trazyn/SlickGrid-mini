@@ -42,6 +42,8 @@ define( function() {
 
 		$.extend( $G, {
 
+			onDeleteRowsChanged: new Slick.Event(),
+
 			getDeleteRows: function(){
 			
 				var result = [];
@@ -155,6 +157,8 @@ define( function() {
 
 					$G.setCellCssStyles( settings.key, hash );
 				} else removeItem( rows );
+
+				this.onDeleteRowsChanged.notify( { rows: deleteds } );
 
 				return deleteds;
 			}
