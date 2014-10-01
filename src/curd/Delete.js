@@ -80,7 +80,6 @@ define( function() {
 
 					/** Sort array asc, don't interrupt the index */
 					rows = dataView.idToIdx( rows ).sort();
-					adds = dataView.idToIdx( adds );
 
 					if ( rows.length ) {
 					
@@ -94,9 +93,10 @@ define( function() {
 							index = selecteds.indexOf( rows[ i ] );
 							index > -1 && selecteds.splice( index, 1 );
 
-							adds.splice( adds.indexOf( rows[ i ] ), 1 );
-
 							index = dataView.getIdByIdx( rows[ i ] );
+
+							adds.splice( adds.indexOf( index ), 1 );
+
 							updateds[ index ] && delete updateds[ index ];
 
 							dataView.deleteItem( index );

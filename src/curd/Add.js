@@ -13,16 +13,14 @@ define( function() {
 			
 			addRow: function( row ) {
 				
-				var index = dataView.getItems().length
-
 				/** Generate an unique index */
-				, label = adds.length ? /^(?:\+\s)?(\d{1,})/.exec( $G.getDataItem( index - 1 )[ "rr" ] + "" )[ 1 ] : 0;
+				var index = /^(?:\+\s)?(\d{1,})/.exec( adds.length ? adds[ adds.length - 1 ] : 0)[ 1 ];
 
 				if ( !row ) {
 					
 					row = $.extend( {}, defaults, {
 						
-						rr: (index = "+ " + (+label + 1)),
+						rr: (index = "+ " + (+index + 1)),
 						_isNew: true
 					} );
 				}
@@ -65,13 +63,7 @@ define( function() {
 
 			setAddRows: function( rows ) {
 
-				var index = $G.getDataLength();
-
-				for ( var i = rows.length; --i >= 0; ) {
-					rows[ i ] = index - i - 1;
-				}
-
-				adds = dataView.idxToId( rows );
+				adds = rows;
 
 				this.onAddRowsChanged.notify( { rows: adds } );
 			}
