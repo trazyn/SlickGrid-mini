@@ -17,7 +17,6 @@ define( function() {
 		}, args.sortAsc );
 
 		dataView.endUpdate();
-		//this.getData().$G = this;
 	  };
 
 	return function( $G, enable ) {

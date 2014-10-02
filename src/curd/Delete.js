@@ -12,9 +12,7 @@ define( function() {
 
 		var handler = new Slick.EventHandler()
 
-		, dataView = $G.getData()
-	
-		, deleteds = [];
+		, dataView = $G.getData();
 
 		$.extend( this, {
 			
@@ -48,134 +46,73 @@ define( function() {
 
 			getDeleteRows: function(){
 			
-				var result = [];
+				var result = []
+			
+				, hash = this.getDeleteRowsHash();
 
-				for ( var i = deleteds.length; --i >=0; ) {
-				
-					var item = dataView.getItemById( deleteds[ i ] );
+				for ( var idx in hash ) {
+					
+					var item = dataView.getItemByIdx( idx );
 
 					item[ "grid_action" ] = "delete";
 
 					result.push( item );
 				}
+
 				return result;
 			},
 
-			getDeleteRowsIndexes: function() {
-				return deleteds;
+			getDeleteRowsHash: function() {
+				return $G.getCellCssStyles( settings.key );
 			},
 
 			setDeleteRows: function( rows, sync ) {
 			
-				var hash = {}
+				var 
+				  hash = $G.getCellCssStyles( settings.key ) || {},
+				  adds = $G.getAddRowsHash(),
+				  	  
+				  deletes = [];
 
-				, adds = $G.getAddRowsIndexes ? $G.getAddRowsIndexes() : []
+				rows = (rows instanceof Array ? rows : [ rows ]).sort();
 
-				, immediate = []
-
-				, removeItem = function( rows ) {
-				
-					var selecteds, updateds;
-
-					if ( rows.length ) {
-
-						selecteds = dataView.idxToId( $G.getSelectedRows() );
-						updateds = $G.getUpdateRowsIndexes();
+				for ( var i = rows.length; --i >= 0; ) {
 					
-						dataView.beginUpdate();
+					var idx = rows[ i ];
 
-						for ( var i = rows.length; --i >= 0; ) {
-							
-							var index;
 
-							adds.splice( adds.indexOf( rows[ i ] ), 1 );
+					if ( hash[ idx ] || adds[ idx ] ) {
+					
+						delete hash[ idx ];
 
-							/** Update selection */
-							index = selecteds.indexOf( rows[ i ] );
-							index > -1 && selecteds.splice( index, 1 );
-
-							index = rows[ i ];
-
-							updateds[ index ] && delete updateds[ index ];
-
-							dataView.deleteItem( index );
-						}
-
-						dataView.endUpdate();
-
-						$G.setAddRows( adds );
-						$G.setUpdateRows( updateds, true );
-						$G.setSelectedRows( dataView.idToIdx( selecteds ) );
-						$G.invalidateRows( dataView.idToIdx( rows ) );
-						$G.render();
+						adds[ idx ] && dataView.deleteItem( $G.getDataItem( idx )[ "rr" ] );
 					}
-				};
-
-				if ( rows && rows.length ) {
-
-					rows = dataView.idxToId( rows );
-					
-					/** Toggle the delete items */
-					if ( deleteds.length ) {
-
-						deleteds = deleteds.concat( rows );
-
-						for ( var res = [], i = deleteds.length; --i >= 0; ) {
-							
-							var index = res.indexOf( deleteds[ i ] );
-
-							if ( index === -1 ) {
-								
-								res.push( deleteds[ i ] );
-							} else res.splice( index, 1 );
-						}
-
-						deleteds = res;
-
-					} else 
-						/** Set the delete items */
-						deleteds = rows;
-				} else if ( rows && !rows.length ) {
-					/** Remove all delete rows */
-					deleteds = [];
-				} else
-					/** Delete the selecte items */
-					deleteds = dataView.idxToId( $G.getSelectedRows() );
-
-				/** Remove the new rows from viewport */
-				deleteds = $.grep( deleteds, function( index ) {
-					
-					var res = adds.indexOf( index );
-
-					res > -1 && immediate.push( index );
-
-					return res === -1;
-				} );
+					else deletes.push( idx );
+				}
 
 				if ( !sync || !settings.sync ) {
 
-					removeItem( immediate );
-
-					var idx = dataView.idToIdx( deleteds );
-
-					for ( var i = idx.length; --i >= 0; ) {
+					for ( var i = deletes.length, columns = $G.getColumns(); --i >= 0; ) {
 						
-						hash[ idx[ i ] ] = {};
+						hash[ deletes[ i ] ] = {};
 
-						$G.getColumns().forEach( function( column ) { 
+						columns.forEach( function( column ) { 
 							
-							hash[ idx[ i ] ][ column.id ] = settings.cssClass;
+							hash[ deletes[ i ] ][ column.id ] = settings.cssClass;
 						} );
 					}
 
 					$G.setCellCssStyles( settings.key, hash );
 				} 
 				/** Remove item from viewport */
-				else removeItem( deleteds.concat( immediate ) );
+				else {
+					
+					for ( var i = deletes.length; --i >= 0; ) {
+						dataView.deleteItem( $G.getDataItem( deletes[ i ] )[ "rr" ] );
+					}
+				}
 
-				this.onDeleteRowsChanged.notify( { rows: deleteds } );
-
-				return deleteds;
+				this.onDeleteRowsChanged.notify( { hash: hash } );
 			}
 		} );
 	};
@@ -185,6 +122,8 @@ define( function() {
 		var settings = $.extend( {}, defaults, options || {} )
 			
 		, plugin = new Delete( $G, settings );
+
+		$G.getData().syncGridCellCssStyles( $G, settings.key );
 
 		$G.registerPlugin( plugin );
 

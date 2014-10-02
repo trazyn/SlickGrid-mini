@@ -11,8 +11,8 @@ define( [ "slick/curd/Delete",
 			selector: ".slick-actionbar-add",
 			type: "click",
 
-			callback: function( $G, plugin ) {
-				plugin.addRow();
+			callback: function( $G ) {
+				$G.setAddRows();
 			},
 			init: Add
 		},
@@ -66,9 +66,9 @@ define( [ "slick/curd/Delete",
 				, toggleSave = function() {
 				
 					var 
-					  adds = $G.getAddRowsIndexes(),
-					  deleteds = $G.getDeleteRowsIndexes(),
-					  updates = $G.getUpdateRowsIndexes();
+					  adds = $G.getAddRows(),
+					  deleteds = $G.getDeleteRows(),
+					  updates = $G.getUpdateRows();
 
 					if ( adds.length || deleteds.length || updates.length ) {
 						
@@ -82,7 +82,7 @@ define( [ "slick/curd/Delete",
 					.subscribe( $G.onBeforeCellEditorDestroy, toggleSave )
 					.subscribe( $G.onDeleteRowsChanged, toggleSave )
 					.subscribe( $G.onUpdateRowsChanged, toggleSave )
-					.subscribe( $G.onAddRowsChanged, toggleSave );
+					.subscribe( $G.onAddNewRow, toggleSave );
 
 				return plugin;
 			}
@@ -141,6 +141,21 @@ define( [ "slick/curd/Delete",
 		var settings = $.extend( {}, selectors || {}, defaults );
 
 		container = $( container );
+
+		$G.getData().syncGridSelection( $G );
+
+		$G.onCellCssStylesChanged.subscribe( function( e, args ) {
+			
+			var rows = [];
+
+			for ( var idx in args.hash ) {
+				
+				rows.push( idx );
+			}
+
+			$G.invalidateRows( rows );
+			$G.render();
+		} );
 
 		for ( var action in settings ) {
 			

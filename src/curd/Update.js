@@ -11,9 +11,7 @@ define( function() {
 	
 		var handler = new Slick.EventHandler()
 		
-		, dataView = $G.getData()
-	
-		, updateds = {};
+		, dataView = $G.getData();
 
 		$.extend( this, {
 		
@@ -30,27 +28,21 @@ define( function() {
 		
 					.subscribe( $G.onCellChange, function( e, args ) {
 						
-						var index = args.item.rr, hash = {};
+						var index = args.row, hash = $G.getCellCssStyles( settings.key ) || {};
 
-						updateds[ index ] = updateds[ index ] || {};
+						hash[ index ] = hash[ index ] || {};
 
 						if ( $( $G.getCellNode( args.row, args.cell ) )
 							.attr( "data-original" ) === $G.getCellEditor().getValue() ) {
 
-							--updateds[ index ][ "_length_" ] || delete updateds[ index ];
+							--hash[ index ][ "_length_" ] || delete hash[ index ];
 						} else {
 
-							updateds[ index ][ args.column.id ] = settings.cssClass;
-							updateds[ index ][ "_length_" ] = (updateds[ index ][ "_length_" ] || 0) + 1;
+							hash[ index ][ args.column.id ] = settings.cssClass;
+							hash[ index ][ "_length_" ] = (hash[ index ][ "_length_" ] || 0) + 1;
 						}
 
-						for ( var id in updateds ) {
-							hash[ dataView.getIdxById( id ) ] = updateds[ id ];
-						}
-
-						$G.setCellCssStyles( settings.key, 
-							/** Break the refrence */
-							$.extend( true, {}, hash ) );
+						$G.setCellCssStyles( settings.key, hash );
 					} );
 			},
 
@@ -66,42 +58,29 @@ define( function() {
 			getUpdateRows: function() {
 				
 				var
-				  deleteds = $G.getDeleteRowsIndexes ? $G.getDeleteRowsIndexes() : [],
-				  adds = $G.getAddRowsIndexes ? $G.getAddRowsIndexes() : [],
+				  deletes = $G.getDeleteRowsHash ? $G.getDeleteRowsHash() : [],
+				  adds = $G.getAddRowsHash ? $G.getAddRowsHash() : [],
 
-				  rows = [],
-				  ignore = deleteds.concat( adds );
+				  rows = [];
 
-				for ( var id in updateds ) {
-					
-					-1 === ignore.indexOf( id ) && rows.push( dataView.getItemById( id ) );
+				for ( var idx in this.getUpdateRowsHash() ) {
+
+					!deletes[ idx ] && !adds[ idx ] && rows.push( dataView.getItemByIdx( idx ) );
 				}
 
 				return rows;
 			},
 
-			getUpdateRowsIndexes: function() {
+			getUpdateRowsHash: function() {
 			
-				return updateds;
+				return $G.getCellCssStyles( settings.key );
 			},
 
-			setUpdateRows: function( hash, rebuild ) {
+			setUpdateRows: function( hash ) {
 
-				if ( true === rebuild ) {
-				
-					updateds = {};
+				$G.setCellCssStyles( settings.key, hash );
 
-					for ( var id in hash ) {
-						updateds[ dataView.getIdxById( id ) ] = hash[ id ];
-					}
-				}
-			
-				$G.setCellCssStyles( settings.key, updateds );
-
-				/** Use ID as index, because the 'idx' will be rebuild by sort or filter */
-				updateds = hash;
-
-				this.onUpdateRowsChanged.notify( { rows: updateds } );
+				this.onUpdateRowsChanged.notify( { hash: hash } );
 			}
 		} );
 	};
@@ -111,6 +90,8 @@ define( function() {
 		var settings = $.extend( {}, defaults, options || {} )
 			
 		, plugin = new Update( $G, settings );
+
+		$G.getData().syncGridCellCssStyles( $G, settings.key );
 		
 		$G.registerPlugin( plugin );
 

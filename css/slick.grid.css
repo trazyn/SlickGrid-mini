@@ -171,7 +171,7 @@ border:1px solid white;
 
 .slick-header { box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4); z-index: 100; }
 .ui-widget{border:1px solid #ddd;}
-.slick-cell input[type="text"]{width: 92%;height: 33px;border:none;}
+.slick-cell input[type="text"]{width: 95%;height: 33px;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
@@ -294,6 +294,9 @@ border:1px solid white;
   text-indent:5px;
   padding: 0;
 }
+.slick-cell.editable { 
+	text-indent: 0;
+}
 
 .slick-group {
 }
@@ -324,6 +327,7 @@ border:1px solid white;
    background:white;
    padding-left: 5px;
    padding-right: 5px;
+   text-index: 0;
 }
 
 .slick-cell:focus {
@@ -512,9 +516,8 @@ input[type=checkbox]:checked + .toggle:after{
 	margin: 0px;
 }
 
-.slick-update {
-	/*background: #2ECC71;*/
-}
+.slick-invalid:after{position:absolute;content:'';border-width:6px;border-color: rgba(0, 0, 0, 0) #f00 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);border-style:solid;-webkit-transform:rotate(-135deg);right:-6px;bottom:-6px;}
+
 .slick-update:after{position:absolute;content:'';border-width:6px;border-color: rgba(0, 0, 0, 0) #028F07 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);border-style:solid;-webkit-transform:rotate(-135deg);right:-6px;bottom:-6px;}
 .slick-actionbar-left { 
 	float: left;
@@ -537,12 +540,13 @@ input[type=checkbox]:checked + .toggle:after{
 .slick-actionbar-fullscreen:before{content:'\e6ca';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
 .slick-actionbar-fullscreen-min:before{content:'\e6cb'}
 .slick-actionbar-lab:before{content:'\e654';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
-.slick-actionbar-fullscreen,.slick-actionbar-lab{text-indent: -999px;position:relative;width: 24px;}
+.slick-actionbar-fullscreen,.slick-actionbar-lab, .slick-actionbar-genius{text-indent: -999px;position:relative;width: 24px;}
+.slick-actionbar-genius:before{content:'\e6cf';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
 .slick-actionbar-left button:hover,.slick-actionbar-right button:hover{
 	box-shadow: -1px 0px 9px rgba(0, 0, 0, 0.16) inset;
 }
-.slick-filter-clear{background:none;border: none;margin: 10px 0 0 7px;cursor:pointer;}
-.slick-filter-clear:before{content: '\e681';font-size: 18px;color: #333;}
+.slick-filter-clear{background:none;border: none;margin: 10px 0 0 8px;cursor:pointer;}
+.slick-filter-clear:before{content: '\e681';font-size: 16px;color: #333;}
 .slick-filter-clear:hover:before{color:#66A1EB;}
 .slick-actionbar-left button[disabled],.slick-actionbar-right button[disabled]{background:none;border-color: #ccc;color:#ccc;cursor: default;box-shadow: none;}
 .slick-actionbar-right { 

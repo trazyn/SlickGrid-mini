@@ -3,10 +3,6 @@ define( function() {
 	
 	var defaults = {};
 
-	var Highlight = function( $G ) {
-		
-	};
-
 	return function( $G ) {
 	
 		$.extend( $G, {

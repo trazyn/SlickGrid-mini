@@ -1,77 +1,145 @@
 
 define( function() {
 
-	var defaults = { }
-
-	, Add = function( $G ) {
+	var defaults = { 
 		
-		var adds = []
-	
-		, dataView = $G.getData();
+		add: {
+		
+			key: "add",
+			cssClass: "slick-add"
+		},
 
-		$.extend( this, {
+		invalid: {
 			
-			addRow: function( row ) {
+			key: "invalid",
+			cssClass: "slick-invalid"
+		}
+	}
+
+	, Add = function( $G, settings ) {
+		
+		var index = 0
+	
+		, dataView = $G.getData()
+
+		, inHandler;
+
+		$G.onValidationError.subscribe( function( e, args ) {
+			
+			var hash = $G.getCellCssStyles( settings.invalid.key ) || {};
+
+			hash[ args.row ] = hash[ args.row ] || {};
+
+			hash[ args.row ][ args.column.id ] = settings.invalid.cssClass;
+
+			if ( !inHandler ) {
+
+				$G.setCellCssStyles( settings.invalid.key, hash );
+			}
+		} );
+
+		$G.onCellChange.subscribe( function( e, args ) {
+			
+		} );
+
+		$.extend( $G, {
+			
+			getAddRows: function() {
 				
-				/** Generate an unique index */
-				var index = /^(?:\+\s)?(\d{1,})/.exec( adds.length ? adds[ adds.length - 1 ] : 0)[ 1 ];
+				var rows = [];
+
+				for ( var idx in $G.getAddRowsHash() ) {
+					
+					rows.push( dataView.getItemByIdx( idx ) );
+				}
+
+				return rows;
+			},
+
+			getAddRowsHash: function() {
+				
+				return $G.getCellCssStyles( settings.add.key ) || {};
+			},
+
+			setAddRows: function( row ) {
+
+				var columns = $G.getColumns()
+					
+				, hash = this.getAddRowsHash()
+				
+				, idx = dataView.getLength();
 
 				if ( !row ) {
 					
 					row = $.extend( {}, defaults, {
 						
-						rr: (index = "+ " + (+index + 1)),
-						_isNew: true
+						rr: "+ " + ++index,
+					    	_isNew: true
 					} );
 				}
 
 				dataView.beginUpdate();
 
-				if ( !adds.length ) {
+				if ( index === 1 ) {
 				
 					/** Add rows in current viewport */
 					dataView.setPagingOptions( { pageSize: 0 }, false );
 				} 
 
-				adds.push( index );
+				for ( var i = columns.length; --i >= 0; ) {
+				
+					var column = columns[ i ];
+
+					if ( column.defaultValue && !row[ column.field ] ) {
+
+						row[ column.field ] = column.defaultValue;
+					}
+
+					hash[ idx ] = hash[ idx ] || {};
+
+					hash[ idx ][ column.id ] = settings.add.cssClass;
+				}
+
 				$G.getData().addItem( row );
 
 				dataView.endUpdate();
 
-				$G.scrollRowIntoView( dataView.getLength() );
-				$G.onAddRowsChanged.notify( { rows: adds } );
-			}
-		} );
+				for ( var i = columns.length; --i >= 0; ) {
+					
+					var column = columns[ i ]
 
-		$.extend( $G, {
-			
-			onAddRowsChanged: new Slick.Event(),
+					, validator = column.validator;
 
-			getAddRows: function() {
-				
-				var rows = [];
+					inHandler = i === 0 ? true : false;
 
-				for ( var i = adds.length; --i >= 0; rows.push( dataView.getItemById( adds[ i ] ) ) );
+					if ( "function" === typeof validator ) {
+						
+						var validationResults = validator( row[ column[ "field" ] ], row, column );
 
-				return rows;
-			},
+						validationResults.valid || $G.onValidationError.notify( {
+							validationResults: validationResults,
+							row: $G.getDataLength() - 1,
+							cell: i,
+							column: column,
+							item: row
+						} );
+					}
+				}
 
-			getAddRowsIndexes: function() {
-				
-				return adds;
-			},
-
-			setAddRows: function( rows ) {
-
-				adds = rows;
-
-				this.onAddRowsChanged.notify( { rows: adds } );
+				$G.setCellCssStyles( settings.add.key, hash );
+				$G.scrollRowIntoView( idx );
+				$G.onAddNewRow.notify( { row: row } );
 			}
 		} );
 	};
 	
-	return function( $G ) {
+	return function( $G, options ) {
 
-		return new Add( $G );
+		var settings = $.extend( {}, defaults, options || {} );
+
+		$G.getData().syncGridCellCssStyles( $G, settings.add.key );
+		$G.getData().syncGridCellCssStyles( $G, settings.invalid.key );
+
+		return new Add( $G, settings );
 	};
 } );

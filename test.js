@@ -22,12 +22,12 @@ require( [ "slick/paging/Paging",
 	var $G
 	, dataView = new Slick.Data.DataView();
 
-	for ( var i = 0, data = []; i < 4444; ++i ) {
+	for ( var i = 0, data = []; i < 44; ++i ) {
 		
 		data[ i ] = {
 		
 			"rr": "# " + i,
-			"num1": Math.random() * 100,
+			"num1": i,
 			"num2": Math.random() * 1000,
 			"num3": Math.random() * 10000,
 			"num4": Math.random() * 100000,
@@ -71,14 +71,28 @@ require( [ "slick/paging/Paging",
 		field: "num1",
 		editor: Slick.Editors.Text,
 		filter: true,
-		sortable: true
+		sortable: true,
+
+		validator: function( value, item, column ) {
+			
+			var result = { valid: true };
+
+			if ( !value ) {
+				
+				result.valid = false;
+			}
+
+			return result;
+		}
 	}, {
 		id: "column3",
 		name: "No.2",
 		field: "num2",
 		editor: Slick.Editors.Text,
 		filter: true,
-		sortable: true
+		sortable: true,
+
+		require: true
 	}, {
 	
 		id: "column4",

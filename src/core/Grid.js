@@ -3181,7 +3181,7 @@ if (typeof Slick === "undefined") {
 
       if (currentEditor) {
         if (currentEditor.isValueChanged()) {
-          var validationResults = currentEditor.validate();
+          var validationResults = currentEditor.validate(item, column);
 
           if (validationResults.valid) {
             if (activeRow < getDataLength()) {
@@ -3241,7 +3241,8 @@ if (typeof Slick === "undefined") {
               validationResults: validationResults,
               row: activeRow,
               cell: activeCell,
-              column: column
+              column: column,
+              item: item
             });
 
             currentEditor.focus();

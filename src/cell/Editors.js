@@ -72,9 +72,9 @@
       return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
     };
 
-    this.validate = function () {
+    this.validate = function (item, column) {
       if (args.column.validator) {
-        var validationResults = args.column.validator($input.val());
+        var validationResults = args.column.validator($input.val(), item, column);
         if (!validationResults.valid) {
           return validationResults;
         }

@@ -39,7 +39,7 @@ define( function() {
 		$G.onHeaderRowCellRendered.subscribe( handleHeaderRowCellRendered );
 
 		/** Set the filter */
-		dataView.setFilter( function( row ) {
+		dataView.setFilter( function( row, args ) {
 			
 			var value;
 
@@ -56,6 +56,7 @@ define( function() {
 					return false;
 				}
 			}
+
 			return true;
 		} );
 
