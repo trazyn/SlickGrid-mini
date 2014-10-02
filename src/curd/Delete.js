@@ -75,13 +75,12 @@ define( function() {
 
 				, removeItem = function( rows ) {
 				
-					var selecteds = $G.getSelectedRows()
-					, updateds = $G.getUpdateRowsIndexes();
-
-					/** Sort array asc, don't interrupt the index */
-					rows = dataView.idToIdx( rows ).sort();
+					var selecteds, updateds;
 
 					if ( rows.length ) {
+
+						selecteds = dataView.idxToId( $G.getSelectedRows() );
+						updateds = $G.getUpdateRowsIndexes();
 					
 						dataView.beginUpdate();
 
@@ -89,13 +88,13 @@ define( function() {
 							
 							var index;
 
+							adds.splice( adds.indexOf( rows[ i ] ), 1 );
+
 							/** Update selection */
 							index = selecteds.indexOf( rows[ i ] );
 							index > -1 && selecteds.splice( index, 1 );
 
-							index = dataView.getIdByIdx( rows[ i ] );
-
-							adds.splice( adds.indexOf( index ), 1 );
+							index = rows[ i ];
 
 							updateds[ index ] && delete updateds[ index ];
 
@@ -106,8 +105,8 @@ define( function() {
 
 						$G.setAddRows( adds );
 						$G.setUpdateRows( updateds, true );
-						$G.setSelectedRows( selecteds );
-						$G.invalidate( rows );
+						$G.setSelectedRows( dataView.idToIdx( selecteds ) );
+						$G.invalidateRows( dataView.idToIdx( rows ) );
 						$G.render();
 					}
 				};
@@ -155,9 +154,9 @@ define( function() {
 
 				if ( !sync || !settings.sync ) {
 
-					var idx = dataView.idToIdx( deleteds );
-					
 					removeItem( immediate );
+
+					var idx = dataView.idToIdx( deleteds );
 
 					for ( var i = idx.length; --i >= 0; ) {
 						

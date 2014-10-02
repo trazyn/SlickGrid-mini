@@ -63,6 +63,7 @@ require( [ "slick/paging/Paging",
 		id: "column1",
 		name: "IDS",
 		field: "rr",
+		sortable: true,
 		width: 40
 	}, {
 		id: "column2",

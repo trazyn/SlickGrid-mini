@@ -4,15 +4,20 @@ define( function() {
 	var 
 	  handleSort = function( e, args ) {
 	  
-		var field = args.sortCol.field;
+		var field = args.sortCol.field
+		
+		, dataView = this.getData();
 
-		this.getData().sort( function( a, b ) {
+		dataView.beginUpdate();
+
+		dataView.sort( function( a, b ) {
 			var x = a[ field ], y = b[ field ];
 
 			return (x === y ? 0 : (x > y ? 1 : -1));
 		}, args.sortAsc );
 
-		this.getData().$G = this;
+		dataView.endUpdate();
+		//this.getData().$G = this;
 	  };
 
 	return function( $G, enable ) {
