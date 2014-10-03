@@ -48,7 +48,7 @@ define( function() {
 				
 					.subscribe( $G.onCellChange, function( e, args ) {
 					
-						var hash = $G.getCellCssStyles( settings.invalid.key );
+						var hash = $G.getCellCssStyles( settings.invalid.key ) || {};
 
 						if ( hash[ args.row ] ) {
 							

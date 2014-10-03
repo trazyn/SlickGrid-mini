@@ -63,26 +63,28 @@ define( [ "slick/curd/Delete",
 			
 				var self = $( this ).attr( "disabled", "disabled" )
 
-				, toggleSave = function() {
+				, plugin = Update( $G );
+				
+				$G.onCellCssStylesChanged.subscribe( function( e, args ) {
+
+					if ( !{ 
+						
+						"delete": 1,
+					   	"invalid": 1,
+					   	"add": 1,
+					   	"update": 1
+					}[ args.key ] ) { return; }
 				
 					var 
 					  adds = $G.getAddRows(),
-					  deleteds = $G.getDeleteRows(),
+					  deletes = $G.getDeleteRows(),
 					  updates = $G.getUpdateRows();
 
-					if ( adds.length || deleteds.length || updates.length ) {
+					if ( adds.length | deletes.length | updates.length ) {
 						
 						self.removeAttr( "disabled" );
 					} else self.attr( "disabled", "disabled" );
-				}
-				
-				, plugin = Update( $G );
-				
-				new Slick.EventHandler()
-					.subscribe( $G.onBeforeCellEditorDestroy, toggleSave )
-					.subscribe( $G.onDeleteRowsChanged, toggleSave )
-					.subscribe( $G.onUpdateRowsChanged, toggleSave )
-					.subscribe( $G.onAddNewRow, toggleSave );
+				} );
 
 				return plugin;
 			}

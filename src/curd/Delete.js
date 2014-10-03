@@ -63,7 +63,7 @@ define( function() {
 			},
 
 			getDeleteRowsHash: function() {
-				return $G.getCellCssStyles( settings.key );
+				return $G.getCellCssStyles( settings.key ) || {};
 			},
 
 			setDeleteRows: function( rows, sync ) {

@@ -23,7 +23,7 @@ define( function() {
 						var node = $( $G.getCellNode( args.row, args.cell ) );
 
 						node.is( "[data-original]" )
-							|| node.attr( "data-original", node.text().replace( /^\s+|\s+$/g, "" ) );
+							|| node.attr( "data-original", args.item[ args.column.field ] );
 					} )
 		
 					.subscribe( $G.onCellChange, function( e, args ) {
@@ -62,8 +62,8 @@ define( function() {
 			getUpdateRows: function() {
 				
 				var
-				  deletes = $G.getDeleteRowsHash ? $G.getDeleteRowsHash() : [],
-				  adds = $G.getAddRowsHash ? $G.getAddRowsHash() : [],
+				  deletes = $G.getDeleteRowsHash ? $G.getDeleteRowsHash() : {},
+				  adds = $G.getAddRowsHash ? $G.getAddRowsHash() : {};
 
 				  rows = [];
 
@@ -77,7 +77,7 @@ define( function() {
 
 			getUpdateRowsHash: function() {
 			
-				return $G.getCellCssStyles( settings.key );
+				return $G.getCellCssStyles( settings.key ) || {};
 			},
 
 			setUpdateRows: function( hash ) {
