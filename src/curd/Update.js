@@ -33,9 +33,13 @@ define( function() {
 						hash[ index ] = hash[ index ] || {};
 
 						if ( $( $G.getCellNode( args.row, args.cell ) )
-							.attr( "data-original" ) === $G.getCellEditor().getValue() ) {
+							.attr( "data-original" ) === args.item[ args.column.field ] ) {
 
-							--hash[ index ][ "_length_" ] || delete hash[ index ];
+							if ( 0 === --hash[ index ][ "_length_" ] ) {
+								
+								delete hash[ index ];
+								$G.invalidateRow( index );
+							}
 						} else {
 
 							hash[ index ][ args.column.id ] = settings.cssClass;

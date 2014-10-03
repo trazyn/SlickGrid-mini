@@ -72,23 +72,28 @@ define( function() {
 				  hash = $G.getCellCssStyles( settings.key ) || {},
 				  adds = $G.getAddRowsHash(),
 				  	  
-				  deletes = [];
+				  deletes = [], invalidateRows = [];
 
 				rows = (rows instanceof Array ? rows : [ rows ]).sort();
+
+				dataView.beginUpdate();
 
 				for ( var i = rows.length; --i >= 0; ) {
 					
 					var idx = rows[ i ];
 
-
 					if ( hash[ idx ] || adds[ idx ] ) {
 					
 						delete hash[ idx ];
+
+						invalidateRows.push( idx );
 
 						adds[ idx ] && dataView.deleteItem( $G.getDataItem( idx )[ "rr" ] );
 					}
 					else deletes.push( idx );
 				}
+
+				$G.invalidateRows( invalidateRows );
 
 				if ( !sync || !settings.sync ) {
 
@@ -111,6 +116,8 @@ define( function() {
 						dataView.deleteItem( $G.getDataItem( deletes[ i ] )[ "rr" ] );
 					}
 				}
+
+				dataView.endUpdate();
 
 				this.onDeleteRowsChanged.notify( { hash: hash } );
 			}

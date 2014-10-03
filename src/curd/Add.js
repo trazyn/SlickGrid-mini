@@ -22,24 +22,47 @@ define( function() {
 	
 		, dataView = $G.getData()
 
+		, handler = new Slick.EventHandler()
+
 		, inHandler;
 
-		$G.onValidationError.subscribe( function( e, args ) {
+		$.extend( this, {
+
+			init: function() {
 			
-			var hash = $G.getCellCssStyles( settings.invalid.key ) || {};
+				handler
+					.subscribe( $G.onValidationError, function( e, args ) {
+						
+						var hash = $G.getCellCssStyles( settings.invalid.key ) || {};
 
-			hash[ args.row ] = hash[ args.row ] || {};
+						hash[ args.row ] = hash[ args.row ] || {};
 
-			hash[ args.row ][ args.column.id ] = settings.invalid.cssClass;
+						hash[ args.row ][ args.column.id ] = settings.invalid.cssClass;
 
-			if ( !inHandler ) {
+						if ( !inHandler ) {
 
-				$G.setCellCssStyles( settings.invalid.key, hash );
+							$G.setCellCssStyles( settings.invalid.key, hash );
+						}
+
+					} )
+				
+					.subscribe( $G.onCellChange, function( e, args ) {
+					
+						var hash = $G.getCellCssStyles( settings.invalid.key );
+
+						if ( hash[ args.row ] ) {
+							
+							delete hash[ args.row ];
+							$G.invalidateRow( args.row );
+							$G.setCellCssStyles( settings.invalid.key, hash );
+						}
+					} );
+			},
+
+			destroy: function() {
+			
+				handler.unsbscribeAll();
 			}
-		} );
-
-		$G.onCellChange.subscribe( function( e, args ) {
-			
 		} );
 
 		$.extend( $G, {
@@ -135,11 +158,15 @@ define( function() {
 	
 	return function( $G, options ) {
 
-		var settings = $.extend( {}, defaults, options || {} );
+		var settings = $.extend( {}, defaults, options || {} )
+			
+		, plugin = new Add( $G, settings );
 
 		$G.getData().syncGridCellCssStyles( $G, settings.add.key );
 		$G.getData().syncGridCellCssStyles( $G, settings.invalid.key );
 
-		return new Add( $G, settings );
+		$G.registerPlugin( plugin );
+
+		return plugin;
 	};
 } );
