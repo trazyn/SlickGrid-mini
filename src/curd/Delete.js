@@ -12,7 +12,7 @@ define( function() {
 
 	, Delete = function( $G, settings ) {
 
-		var deletes = []
+		var deletes = {}
 
 		, dataView = $G.getData()
 		, handler = new Slick.EventHandler();
@@ -40,7 +40,7 @@ define( function() {
 					} )
 		
 					.subscribe( dataView.onRowsChanged, update )
-					.subscribe( dataView.onRowsCountChanged, update )
+					.subscribe( dataView.onRowCountChanged, update )
 					.subscribe( $G.onCellCssStylesChanged, update );
 			},
 
@@ -97,32 +97,27 @@ define( function() {
 
 					for ( var i = rows.length; --i >= 0; ) {
 						
-						var id = $G.getDataItem( rows[ i ] )[ "rr" ]
-							
-						, index4deletes = 0, index4adds = 0;
+						var id = $G.getDataItem( rows[ i ] )[ "rr" ];
 
-						/** Toggle deleted item */
-						index4deletes = deletes.indexOf( id );
-						index4deletes > -1 && deletes.splice( index4deletes, 1 );
-
-						index4adds = adds.indexOf( id );
-						if ( index4adds > -1 ) {
+						if ( deletes[ id ] || adds[ id ] ) {
 							
-							adds.splice( index4adds, 1 );
-							dataView.deleteItem( id );
+							invalidateRows.push( rows[ i ] );
+
+							adds[ id ] && dataView.deleteItem( id );
+
+							delete adds[ id ];
+							delete deletes[ id ];
+
 						}
 
-						(index4adds & index4deletes) === -1 
-							
-							? stash.push( rows[ i ] )
-							: invalidateRows.push( rows[ i ] );
+						else stash.push( rows[ i ] );
 					}
 
 					$G.invalidateRows( invalidateRows );
 
 					if ( !sync || !settings.sync ) {
 
-						var hash = {};
+						var hash = {}, id;
 
 						for ( var i = stash.length, columns = $G.getColumns(); --i >= 0; ) {
 							
@@ -133,7 +128,9 @@ define( function() {
 								hash[ stash[ i ] ][ column.id ] = settings.cssClass;
 							} );
 
-							deletes.push( $G.getDataItem( stash[ i ] )[ "rr" ] );
+							id = $G.getDataItem( stash[ i ] )[ "rr" ];
+
+							deletes[ id ] = id;
 						}
 
 						$G.setCellCssStyles( settings.key, hash );

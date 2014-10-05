@@ -11,9 +11,10 @@ define( function() {
 	
 	, Update = function( $G, settings ) {
 	
-		var handler = new Slick.EventHandler()
-		
-		, dataView = $G.getData();
+		var updates = {}
+
+		, dataView = $G.getData()
+		, handler = new Slick.EventHandler();
 
 		$.extend( this, {
 		
@@ -36,31 +37,30 @@ define( function() {
 					.subscribe( $G.onCellChange, function( e, args ) {
 						
 						var index = args.row
-						, hash = $G.getCellCssStyles( settings.key ) || {}
 						, item = args.item;
 
-						hash[ index ] = hash[ index ] || {};
+						updates[ index ] = updates[ index ] || {};
 
 						if ( item[ "_" ][ args.column.field ] === item[ args.column.field ] ) {
 
-							delete hash[ index ][ args.column.field ];
+							delete updates[ index ][ args.column.field ];
 						
-							if ( 0 === --hash[ index ][ "_length_" ] ) {
+							if ( 0 === --updates[ index ][ "_length_" ] ) {
 								
-								delete hash[ index ];
+								delete updates[ index ];
 								delete item[ "grid_action" ];
 								$G.invalidateRow( index );
 							}
 						}
 						else {
 
-							hash[ index ][ args.column.id ] = settings.cssClass;
-							hash[ index ][ "_length_" ] = (hash[ index ][ "_length_" ] || 0) + 1;
+							updates[ index ][ args.column.id ] = settings.cssClass;
+							updates[ index ][ "_length_" ] = (updates[ index ][ "_length_" ] || 0) + 1;
 
 							item[ "_isNew" ] || (item[ "grid_action" ] = "update");
 						}
 
-						$G.setCellCssStyles( settings.key, hash );
+						$G.setCellCssStyles( settings.key, updates );
 					} );
 			},
 
@@ -76,14 +76,17 @@ define( function() {
 			getUpdateRows: function() {
 				
 				var
-				  deletes = $G.getDeleteRowsHash ? $G.getDeleteRowsHash() : {},
-				  adds = $G.getAddRowsHash ? $G.getAddRowsHash() : {};
+				  deletes = $G.getDeleteRowsID ? $G.getDeleteRowsID() : {},
+				  adds = $G.getAddRowsID ? $G.getAddRowsID() : {},
 
 				  rows = [];
 
-				for ( var idx in this.getUpdateRowsHash() ) {
+				for ( var idx in updates ) {
 
-					if ( !deletes[ idx ] && !adds[ idx ] ) {
+					var id = $G.getDataItem( idx )[ "rr" ];
+
+					if ( !deletes[ id ] || !adds[ id ] ) {
+
 						rows.push( $G.getDataItem( idx ) );
 					}
 				}

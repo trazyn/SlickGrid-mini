@@ -18,7 +18,7 @@ define( function() {
 
 	, Add = function( $G, settings ) {
 		
-		var adds = [], index = 0
+		var adds = {}, index = 0
 
 		, dataView = $G.getData()
 		, handler = new Slick.EventHandler(), inHandler;
@@ -130,7 +130,7 @@ define( function() {
 				}
 
 				$G.getData().addItem( row );
-				adds.push( row[ "rr" ] );
+				adds[ row[ "rr" ] ] = row[ "rr" ];
 
 				dataView.endUpdate();
 
