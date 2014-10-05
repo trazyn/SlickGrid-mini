@@ -22,7 +22,7 @@ require( [ "slick/paging/Paging",
 	var $G
 	, dataView = new Slick.Data.DataView();
 
-	for ( var i = 0, data = []; i < 44; ++i ) {
+	for ( var i = 0, data = []; i < 4444; ++i ) {
 		
 		data[ i ] = {
 		
