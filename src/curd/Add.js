@@ -18,13 +18,10 @@ define( function() {
 
 	, Add = function( $G, settings ) {
 		
-		var index = 0
-	
+		var adds = [], index = 0
+
 		, dataView = $G.getData()
-
-		, handler = new Slick.EventHandler()
-
-		, inHandler;
+		, handler = new Slick.EventHandler(), inHandler;
 
 		$.extend( this, {
 
@@ -83,6 +80,11 @@ define( function() {
 				return $G.getCellCssStyles( settings.add.key ) || {};
 			},
 
+			getAddRowsID: function() {
+			
+				return adds;
+			},
+
 			setAddRows: function( row ) {
 
 				var columns = $G.getColumns()
@@ -101,9 +103,9 @@ define( function() {
 					};
 				}
 
-				idx = dataView.getLength();
-
 				dataView.beginUpdate();
+
+				idx = dataView.getLength();
 
 				if ( index === 1 ) {
 				
@@ -128,6 +130,7 @@ define( function() {
 				}
 
 				$G.getData().addItem( row );
+				adds.push( row[ "rr" ] );
 
 				dataView.endUpdate();
 

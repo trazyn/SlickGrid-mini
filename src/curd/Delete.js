@@ -1,5 +1,7 @@
 
 define( function() {
+
+	"use strict";
 	
 	var defaults = {
 		
@@ -10,15 +12,20 @@ define( function() {
 
 	, Delete = function( $G, settings ) {
 
-		var handler = new Slick.EventHandler()
+		var deletes = []
 
-		, dataView = $G.getData();
+		, dataView = $G.getData()
+		, handler = new Slick.EventHandler();
 
 		$.extend( this, {
 			
 			init: function() {
 
-				var self = this;
+				var self = this
+			
+				, update = function() {
+				
+				};
 			
 				handler
 					.subscribe( $G.onKeyDown, function( e, args ) {
@@ -30,7 +37,11 @@ define( function() {
 							e.preventDefault();
 							e.stopImmediatePropagation();
 						}
-					} );
+					} )
+		
+					.subscribe( dataView.onRowsChanged, update )
+					.subscribe( dataView.onRowsCountChanged, update )
+					.subscribe( $G.onCellCssStylesChanged, update );
 			},
 
 			destroy: function() {
@@ -53,11 +64,16 @@ define( function() {
 					
 					item = $G.getDataItem( idx );
 
-					item && !item[ "_isNew" ] 
+					item && !item[ "_isNew" ]
 						&& rows.push( (item[ "grid_action" ] = "delete", item) );
 				}
 
 				return rows;
+			},
+
+			getDeleteRowsID: function() {
+				
+				return deletes;
 			},
 
 			getDeleteRowsHash: function() {
@@ -66,11 +82,7 @@ define( function() {
 
 			setDeleteRows: function( rows, sync ) {
 			
-				var hash = this.getDeleteRowsHash()
-					
-				, deletes = [], invalidateRows = []
-
-				, adds, updates;
+				var stash = [], invalidateRows = [], adds;
 
 				if ( !rows.length ) {
 					
@@ -78,38 +90,50 @@ define( function() {
 					return void $G.setCellCssStyles( settings.key, {} );
 				} else {
 				
-					adds = $G.getAddRowsHash();
+					adds = $G.getAddRowsID();
 					rows = (rows instanceof Array ? rows : [ rows ]).sort();
 
 					dataView.beginUpdate();
 
 					for ( var i = rows.length; --i >= 0; ) {
 						
-						var idx = rows[ i ];
+						var id = $G.getDataItem( rows[ i ] )[ "rr" ]
+							
+						, index4deletes = 0, index4adds = 0;
 
-						if ( hash[ idx ] || adds[ idx ] ) {
-						
-							delete hash[ idx ];
+						/** Toggle deleted item */
+						index4deletes = deletes.indexOf( id );
+						index4deletes > -1 && deletes.splice( index4deletes, 1 );
 
-							invalidateRows.push( idx );
-
-							adds[ idx ] && dataView.deleteItem( $G.getDataItem( idx )[ "rr" ] );
+						index4adds = adds.indexOf( id );
+						if ( index4adds > -1 ) {
+							
+							adds.splice( index4adds, 1 );
+							dataView.deleteItem( id );
 						}
-						else deletes.push( idx );
+
+						(index4adds & index4deletes) === -1 
+							
+							? stash.push( rows[ i ] )
+							: invalidateRows.push( rows[ i ] );
 					}
 
 					$G.invalidateRows( invalidateRows );
 
 					if ( !sync || !settings.sync ) {
 
-						for ( var i = deletes.length, columns = $G.getColumns(); --i >= 0; ) {
+						var hash = {};
+
+						for ( var i = stash.length, columns = $G.getColumns(); --i >= 0; ) {
 							
-							hash[ deletes[ i ] ] = {};
+							hash[ stash[ i ] ] = {};
 
 							columns.forEach( function( column ) { 
 								
-								hash[ deletes[ i ] ][ column.id ] = settings.cssClass;
+								hash[ stash[ i ] ][ column.id ] = settings.cssClass;
 							} );
+
+							deletes.push( $G.getDataItem( stash[ i ] )[ "rr" ] );
 						}
 
 						$G.setCellCssStyles( settings.key, hash );
@@ -117,15 +141,15 @@ define( function() {
 					/** Remove item from viewport */
 					else {
 						
-						for ( var i = deletes.length; --i >= 0; ) {
-							dataView.deleteItem( $G.getDataItem( deletes[ i ] )[ "rr" ] );
+						for ( var i = stash.length; --i >= 0; ) {
+							dataView.deleteItem( $G.getDataItem( stash[ i ] )[ "rr" ] );
 						}
 					}
 
 					dataView.endUpdate();
 				}
 
-				this.onDeleteRowsChanged.notify( { hash: hash } );
+				this.onDeleteRowsChanged.notify( { rows: deletes } );
 			}
 		} );
 	};
@@ -135,8 +159,6 @@ define( function() {
 		var settings = $.extend( {}, defaults, options || {} )
 			
 		, plugin = new Delete( $G, settings );
-
-		$G.getData().syncGridCellCssStyles( $G, settings.key );
 
 		$G.registerPlugin( plugin );
 
