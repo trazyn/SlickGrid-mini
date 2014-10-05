@@ -46,20 +46,19 @@ define( function() {
 
 			getDeleteRows: function(){
 			
-				var result = []
-			
+				var rows = []
 				, hash = this.getDeleteRowsHash();
 
 				for ( var idx in hash ) {
 					
-					var item = dataView.getItemByIdx( idx );
+					var item = $G.getDataItem( idx );
 
 					item[ "grid_action" ] = "delete";
 
-					result.push( item );
+					rows.push( item );
 				}
 
-				return result;
+				return rows;
 			},
 
 			getDeleteRowsHash: function() {
