@@ -94,8 +94,8 @@ define( function() {
 					$( this ).val( "" );
 				} );
 
-			/** Reset filter */
-			dataView.setFilter();
+			filters = {};
+			dataView.refresh();
 
 			e.stopPropagation();
 			e.preventDefault();
