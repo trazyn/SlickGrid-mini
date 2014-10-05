@@ -2,8 +2,7 @@
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
 	"slick/paging/Conditions",
-	"self/common/util/Storage",
-	"slick/core/Dataview" ], function( Local, Remote, Conditions, Storage ) {
+	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
 
 	var html = 
 			"<div class='pager'>" +

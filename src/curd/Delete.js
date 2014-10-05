@@ -46,16 +46,15 @@ define( function() {
 
 			getDeleteRows: function(){
 			
-				var rows = []
+				var rows = [], item
 				, hash = this.getDeleteRowsHash();
 
 				for ( var idx in hash ) {
 					
-					var item = $G.getDataItem( idx );
+					item = $G.getDataItem( idx );
 
-					item[ "grid_action" ] = "delete";
-
-					rows.push( item );
+					item && !item[ "_isNew" ] 
+						&& rows.push( (item[ "grid_action" ] = "delete", item) );
 				}
 
 				return rows;
@@ -67,56 +66,64 @@ define( function() {
 
 			setDeleteRows: function( rows, sync ) {
 			
-				var 
-				  hash = $G.getCellCssStyles( settings.key ) || {},
-				  adds = $G.getAddRowsHash(),
-				  	  
-				  deletes = [], invalidateRows = [];
-
-				rows = (rows instanceof Array ? rows : [ rows ]).sort();
-
-				dataView.beginUpdate();
-
-				for ( var i = rows.length; --i >= 0; ) {
+				var hash = this.getDeleteRowsHash()
 					
-					var idx = rows[ i ];
+				, deletes = [], invalidateRows = []
 
-					if ( hash[ idx ] || adds[ idx ] ) {
+				, adds, updates;
+
+				if ( !rows.length ) {
 					
-						delete hash[ idx ];
+					/** Remove the class */
+					return void $G.setCellCssStyles( settings.key, {} );
+				} else {
+				
+					adds = $G.getAddRowsHash();
+					rows = (rows instanceof Array ? rows : [ rows ]).sort();
 
-						invalidateRows.push( idx );
+					dataView.beginUpdate();
 
-						adds[ idx ] && dataView.deleteItem( $G.getDataItem( idx )[ "rr" ] );
-					}
-					else deletes.push( idx );
-				}
-
-				$G.invalidateRows( invalidateRows );
-
-				if ( !sync || !settings.sync ) {
-
-					for ( var i = deletes.length, columns = $G.getColumns(); --i >= 0; ) {
+					for ( var i = rows.length; --i >= 0; ) {
 						
-						hash[ deletes[ i ] ] = {};
+						var idx = rows[ i ];
 
-						columns.forEach( function( column ) { 
+						if ( hash[ idx ] || adds[ idx ] ) {
+						
+							delete hash[ idx ];
+
+							invalidateRows.push( idx );
+
+							adds[ idx ] && dataView.deleteItem( $G.getDataItem( idx )[ "rr" ] );
+						}
+						else deletes.push( idx );
+					}
+
+					$G.invalidateRows( invalidateRows );
+
+					if ( !sync || !settings.sync ) {
+
+						for ( var i = deletes.length, columns = $G.getColumns(); --i >= 0; ) {
 							
-							hash[ deletes[ i ] ][ column.id ] = settings.cssClass;
-						} );
+							hash[ deletes[ i ] ] = {};
+
+							columns.forEach( function( column ) { 
+								
+								hash[ deletes[ i ] ][ column.id ] = settings.cssClass;
+							} );
+						}
+
+						$G.setCellCssStyles( settings.key, hash );
+					} 
+					/** Remove item from viewport */
+					else {
+						
+						for ( var i = deletes.length; --i >= 0; ) {
+							dataView.deleteItem( $G.getDataItem( deletes[ i ] )[ "rr" ] );
+						}
 					}
 
-					$G.setCellCssStyles( settings.key, hash );
-				} 
-				/** Remove item from viewport */
-				else {
-					
-					for ( var i = deletes.length; --i >= 0; ) {
-						dataView.deleteItem( $G.getDataItem( deletes[ i ] )[ "rr" ] );
-					}
+					dataView.endUpdate();
 				}
-
-				dataView.endUpdate();
 
 				this.onDeleteRowsChanged.notify( { hash: hash } );
 			}

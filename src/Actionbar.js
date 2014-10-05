@@ -63,10 +63,10 @@ define( [ "slick/curd/Delete",
 			
 				var self = $( this ).attr( "disabled", "disabled" )
 
-				, plugin = Update( $G );
+				, plugin = Update( $G )
 				
-				$G.onCellCssStylesChanged.subscribe( function( e, args ) {
-
+				, toggle = function( e, args ) {
+				
 					if ( !{ 
 						
 						"delete": 1,
@@ -84,7 +84,11 @@ define( [ "slick/curd/Delete",
 						
 						self.removeAttr( "disabled" );
 					} else self.attr( "disabled", "disabled" );
-				} );
+				};
+				
+				new Slick.EventHandler()
+					.subscribe( $G.onCellCssStylesChanged, toggle )
+					.subscribe( $G.onSelectedRowsChanged, toggle );
 
 				return plugin;
 			}

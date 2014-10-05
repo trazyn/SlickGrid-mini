@@ -89,7 +89,7 @@ define( function() {
 					
 				, hash = this.getAddRowsHash()
 				
-				, idx = dataView.getLength();
+				, idx;
 
 				if ( !row ) {
 					
@@ -101,12 +101,16 @@ define( function() {
 					};
 				}
 
+				idx = dataView.getLength();
+
 				dataView.beginUpdate();
 
 				if ( index === 1 ) {
 				
 					/** Add rows in current viewport */
 					dataView.setPagingOptions( { pageSize: 0 }, false );
+
+					idx = dataView.getItems().length;
 				} 
 
 				for ( var i = columns.length; --i >= 0; ) {
