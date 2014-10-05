@@ -72,8 +72,7 @@ define( function() {
 				var rows = [];
 
 				for ( var idx in $G.getAddRowsHash() ) {
-					
-					rows.push( dataView.getItemByIdx( idx ) );
+					rows.push( $G.getDataItem( idx ) );
 				}
 
 				return rows;
@@ -94,11 +93,12 @@ define( function() {
 
 				if ( !row ) {
 					
-					row = $.extend( {}, defaults, {
+					row = {
 						
 						rr: "+ " + ++index,
-					    	_isNew: true
-					} );
+					    	_isNew: true,
+					    	"grid_action": "add"
+					};
 				}
 
 				dataView.beginUpdate();
