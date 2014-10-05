@@ -2,7 +2,8 @@
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
 	"slick/paging/Conditions",
-	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
+	"self/common/util/Storage",
+	"slick/core/Dataview" ], function( Local, Remote, Conditions, Storage ) {
 
 	var html = 
 			"<div class='pager'>" +
@@ -84,7 +85,6 @@ define( [ "slick/paging/Local",
 		
 			$G.setDeleteRows && $G.setDeleteRows( [] );
 			$G.setUpdateRows && $G.setUpdateRows( [] );
-			$G.setAddRows && $G.setAddRows( [] );
 
 			$G.setSelectedRows( [] );
 		}
@@ -271,5 +271,28 @@ define( [ "slick/paging/Local",
 
 			}
 		} );
+
+	/**
+	var Entitys = Storage.get( "cahce.entityId" ) || {};
+
+	(window.entityId = Entitys[ wpf_current_roleid ])
+		|| $.ajax( {
+			data: {
+				name: "scm.common.entity.GetEntityId"
+			},
+
+			success: function( data ) {
+				
+				data = eval( "(" + data + ")" );
+
+				Entitys[ wpf_current_roleid ] = +data.result.entity_id;
+
+				window.entityId = Entitys[ wpf_current_roleid ];
+
+				Storage.set( "cahce.entityId", Entitys );
+			}
+		} );
+
+	*/
 	};
 } );
