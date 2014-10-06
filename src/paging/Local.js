@@ -1,6 +1,8 @@
 
 define( function() {
 	
+	"use strict";
+
 	var 
 	  handleSort = function( e, args ) {
 	  
