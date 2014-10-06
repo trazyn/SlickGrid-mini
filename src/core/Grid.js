@@ -470,8 +470,7 @@ if (typeof Slick === "undefined") {
     function bindAncestorScrollEvents() {
 
 			$boundAncestors = $viewport
-
-							.bind( "scroll." + uid, handleActiveCellPositionChange );
+					.bind( "scroll." + uid, handleActiveCellPositionChange );
     }
 
     function unbindAncestorScrollEvents() {
