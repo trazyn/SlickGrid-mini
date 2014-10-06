@@ -21,10 +21,31 @@ define( function() {
 			
 			init: function() {
 
-				var self = this
+				var inHandler = false
 			
-				, update = function() {
+				, syncStyle = function() {
 				
+					var idxById, hash = {};
+
+					if ( inHandler ) { return; }
+
+					inHandler = !inHandler;
+
+					idxById = dataView.getSnapshot();
+
+					for ( var id in deletes ) {
+						
+						hash[ idxById[ id ] ] = {};
+
+						$G.getColumns().forEach( function( column ) {
+							
+							hash[ idxById[ id ] ][ column.id ] = settings.cssClass;
+						} );
+					}
+
+					$G.setCellCssStyles( settings.key, hash );
+
+					inHandler = !handler;
 				};
 			
 				handler
@@ -39,9 +60,13 @@ define( function() {
 						}
 					} )
 		
-					.subscribe( dataView.onRowsChanged, update )
-					.subscribe( dataView.onRowCountChanged, update )
-					.subscribe( $G.onCellCssStylesChanged, update );
+					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
+						
+						!inHandler && args.key === settings.key && syncStyle();
+					} )
+
+					.subscribe( dataView.onRowsChanged, syncStyle )
+					.subscribe( dataView.onRowCountChanged, syncStyle );
 			},
 
 			destroy: function() {
@@ -57,12 +82,11 @@ define( function() {
 
 			getDeleteRows: function(){
 			
-				var rows = [], item
-				, hash = this.getDeleteRowsHash();
+				var rows = [], item;
 
-				for ( var idx in hash ) {
+				for ( var id in deletes ) {
 					
-					item = $G.getDataItem( idx );
+					item = dataView.getItemById( id );
 
 					item && !item[ "_isNew" ]
 						&& rows.push( (item[ "grid_action" ] = "delete", item) );
@@ -76,34 +100,39 @@ define( function() {
 				return deletes;
 			},
 
-			getDeleteRowsHash: function() {
-				return $G.getCellCssStyles( settings.key ) || {};
-			},
-
 			setDeleteRows: function( rows, sync ) {
 			
-				var stash = [], invalidateRows = [], adds;
+				var stash = [], invalidateRows = [], adds, invalids, preventMultipleEvent = false;
 
 				if ( !rows.length ) {
+
+					deletes = {};
 					
 					/** Remove the class */
-					return void $G.setCellCssStyles( settings.key, {} );
+					this.onCellCssStylesChanged.notify( { key: settings.key } );
 				} else {
 				
-					adds = $G.getAddRowsID();
+					adds = this.getAddRowsID();
+					invalids = this.getInvalidRowsID();
 					rows = (rows instanceof Array ? rows : [ rows ]).sort();
 
 					dataView.beginUpdate();
 
 					for ( var i = rows.length; --i >= 0; ) {
 						
-						var id = $G.getDataItem( rows[ i ] )[ "rr" ];
+						var id = this.getDataItem( rows[ i ] )[ "rr" ];
 
 						if ( deletes[ id ] || adds[ id ] ) {
 							
-							invalidateRows.push( rows[ i ] );
+							deletes[ id ] && invalidateRows.push( rows[ i ] );
 
-							adds[ id ] && dataView.deleteItem( id );
+							/** Trigger 'RowsChanged' */
+							if ( adds[ id ] ) {
+
+								dataView.deleteItem( id );
+								preventMultipleEvent = !1;
+								invalids[ id ] && delete invalids[ id ];
+							}
 
 							delete adds[ id ];
 							delete deletes[ id ];
@@ -113,37 +142,35 @@ define( function() {
 						else stash.push( rows[ i ] );
 					}
 
-					$G.invalidateRows( invalidateRows );
+					this.invalidateRows( invalidateRows );
 
 					if ( !sync || !settings.sync ) {
 
-						var hash = {}, id;
+						var hash = {}, id, i = stash.length;
 
-						for ( var i = stash.length, columns = $G.getColumns(); --i >= 0; ) {
-							
-							hash[ stash[ i ] ] = {};
-
-							columns.forEach( function( column ) { 
+						/** Don't trigger multiple event */
+						if ( i | invalidateRows.length ) {
+						
+							for ( var columns = this.getColumns(); --i >= 0; ) {
 								
-								hash[ stash[ i ] ][ column.id ] = settings.cssClass;
-							} );
+								id = this.getDataItem( stash[ i ] )[ "rr" ];
 
-							id = $G.getDataItem( stash[ i ] )[ "rr" ];
+								deletes[ id ] = id;
+							}
 
-							deletes[ id ] = id;
+							!preventMultipleEvent && this.onCellCssStylesChanged.notify( { key: settings.key } );
 						}
-
-						$G.setCellCssStyles( settings.key, hash );
 					} 
 					/** Remove item from viewport */
 					else {
 						
 						for ( var i = stash.length; --i >= 0; ) {
-							dataView.deleteItem( $G.getDataItem( stash[ i ] )[ "rr" ] );
+							dataView.deleteItem( this.getDataItem( stash[ i ] )[ "rr" ] );
 						}
 					}
 
 					dataView.endUpdate();
+					$G.render();
 				}
 
 				this.onDeleteRowsChanged.notify( { rows: deletes } );
@@ -162,3 +189,4 @@ define( function() {
 		return plugin;
 	};
 } );
+
