@@ -20,6 +20,27 @@ define( function() {
 		
 			init: function() {
 			
+				var inHandler = false
+				, syncStyle = function( e, args ) {
+				
+					var hash = {}, idxById;
+
+					if ( inHandler ) { return; }
+
+					idxById = dataView.getSnapshot();
+					inHandler = !inHandler;
+
+					for ( var id in updates ) {
+					
+						hash[ idxById[ id ] ] = updates[ id ];
+					}
+
+					$G.setCellCssStyles( settings.key, hash );
+					$G.onUpdateRowsChanged.notify( { rows: updates } );
+
+					inHandler = !inHandler;
+				};
+
 				handler
 					.subscribe( $G.onBeforeEditCell, function( e, args ) {
 						
@@ -36,32 +57,47 @@ define( function() {
 		
 					.subscribe( $G.onCellChange, function( e, args ) {
 						
-						var index = args.row
-						, item = args.item;
+						var item = args.item
+						, id = item[ "rr" ];
 
-						updates[ index ] = updates[ index ] || {};
+						/** Ignore new item */
+						if ( $G.getAddRowsID()[ id ] ) { return; }
 
-						if ( item[ "_" ][ args.column.field ] === item[ args.column.field ] ) {
+						updates[ id ] = updates[ id ] || {};
 
-							delete updates[ index ][ args.column.field ];
+						/** Use '==' fuzzy match */
+						if ( item[ "_" ][ args.column.field ] == item[ args.column.field ] ) {
+
+							delete updates[ id ][ args.column.id ];
 						
-							if ( 0 === --updates[ index ][ "_length_" ] ) {
+							if ( 0 === --updates[ id ][ "_length_" ] ) {
 								
-								delete updates[ index ];
+								delete updates[ id ];
 								delete item[ "grid_action" ];
-								$G.invalidateRow( index );
 							}
-						}
-						else {
+						
+						} else {
+							var length = updates[ id ][ "_length_" ] || 0;
 
-							updates[ index ][ args.column.id ] = settings.cssClass;
-							updates[ index ][ "_length_" ] = (updates[ index ][ "_length_" ] || 0) + 1;
+							updates[ id ][ args.column.id ] || ++length;
+							updates[ id ][ args.column.id ] = settings.cssClass;
+							updates[ id ][ "_length_" ] = length;
 
 							item[ "_isNew" ] || (item[ "grid_action" ] = "update");
 						}
 
-						$G.setCellCssStyles( settings.key, updates );
-					} );
+						$G.invalidateRow( args.row );
+						$G.onCellCssStylesChanged.notify( { key: settings.key } );
+						$G.render();
+					} )
+
+					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
+						
+						args.key === settings.key && syncStyle();
+					} )
+
+					.subscribe( dataView.onRowsChanged, syncStyle )
+					.subscribe( dataView.onRowCountChanged, syncStyle );
 			},
 
 			destroy: function() {
@@ -76,34 +112,31 @@ define( function() {
 			getUpdateRows: function() {
 				
 				var
-				  deletes = $G.getDeleteRowsID ? $G.getDeleteRowsID() : {},
-				  adds = $G.getAddRowsID ? $G.getAddRowsID() : {},
-
+				  deletes = this.getDeleteRowsID ? this.getDeleteRowsID() : {},
 				  rows = [];
 
-				for ( var idx in updates ) {
+				for ( var id in updates ) {
 
-					var id = $G.getDataItem( idx )[ "rr" ];
+					if ( !deletes[ id ] ) {
 
-					if ( !deletes[ id ] || !adds[ id ] ) {
-
-						rows.push( $G.getDataItem( idx ) );
+						rows.push( dataView.getItemById( id ) );
 					}
 				}
 
 				return rows;
 			},
 
-			getUpdateRowsHash: function() {
+			getUpdateRowsID: function() {
 			
-				return $G.getCellCssStyles( settings.key ) || {};
+				return updates;
 			},
 
 			setUpdateRows: function( hash ) {
 
-				$G.setCellCssStyles( settings.key, hash );
+				updates = hash;
 
-				this.onUpdateRowsChanged.notify( { hash: hash } );
+				this.onCellCssStylesChanged.notify( { key: settings.key } );
+				this.onUpdateRowsChanged.notify( { rows: updates } );
 			}
 		} );
 	};
@@ -114,8 +147,6 @@ define( function() {
 			
 		, plugin = new Update( $G, settings );
 
-		$G.getData().syncGridCellCssStyles( $G, settings.key );
-		
 		$G.registerPlugin( plugin );
 
 		return plugin;
