@@ -1,7 +1,10 @@
 
 define( [ "slick/curd/Delete", 
 	"slick/curd/Update",
-	"slick/curd/Add" ], function( Delete, Update, Add ) {
+	"slick/curd/Add",
+	"slick/curd/Validation" ], function( Delete, Update, Add, Validation ) {
+
+	"use strict";
 
 	var defaults = {
 
@@ -29,16 +32,20 @@ define( [ "slick/curd/Delete",
 
 			init: function( $G ) {
 
-				var self = $( this ).attr( "disabled", "disabled" );
-
-				$G.getData().onRowsChanged.subscribe( function() {
-					self.attr( "disabled", "disabled" );
-				} );
-
-				$G.onSelectedRowsChanged.subscribe( function( e, args ) {
+				var self = $( this ).attr( "disabled", "disabled" )
 					
-					args.rows.length ? self.removeAttr( "disabled" ) : self.attr( "disabled", "disabled" );
-				} );
+				, toggle = function() {
+					
+					$G.getSelectedRows().length
+						
+						? self.removeAttr( "disabled" )
+						: self.attr( "disabled", "disabled" );
+				};
+
+				new Slick.EventHandler()
+					
+					.subscribe( $G.getData().onRowsChanged, toggle )
+					.subscribe( $G.onCellCssStylesChanged, toggle );
 
 				return Delete( $G );
 			}
@@ -68,9 +75,7 @@ define( [ "slick/curd/Delete",
 				, toggle = function( e, args ) {
 				
 					if ( !{ 
-						
 						"delete": 1,
-					   	"invalid": 1,
 					   	"add": 1,
 					   	"update": 1
 					}[ args.key ] ) { return; }
@@ -150,18 +155,8 @@ define( [ "slick/curd/Delete",
 
 		$G.getData().syncGridSelection( $G );
 
-		$G.onCellCssStylesChanged.subscribe( function( e, args ) {
-			
-			var rows = [];
-
-			for ( var idx in args.hash ) {
-				
-				rows.push( idx );
-			}
-
-			$G.invalidateRows( rows );
-			$G.render();
-		} );
+		/** Add validation ability */
+		Validation( $G );
 
 		for ( var action in settings ) {
 			
