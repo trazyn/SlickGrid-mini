@@ -1,16 +1,9 @@
 
 define( function() {
 
-	var handleHeaderRowCellRendered = function( e, args ) {
-	
-		if ( args.column.filter ) {
-			$( args.node ).html( "<input type='text' data-column-field='" + args.column.field + "' placeholder='Search...' >" );
-		} else if ( args.column.id === "_checkbox_selector" ) {
-			$( args.node ).html( "<button class='slick-filter-clear'></button>" );
-		}
-	}
-	
-	, getSort = function() {
+	"use strict";
+
+	var getSort = function() {
 		
 		var sortColumn = this.getSortColumns()[ 0 ], column;
 
@@ -35,8 +28,14 @@ define( function() {
 
 		, filters = {};
 	
-		$G.onHeaderRowCellRendered.unsubscribe( handleHeaderRowCellRendered );
-		$G.onHeaderRowCellRendered.subscribe( handleHeaderRowCellRendered );
+		$G.onHeaderRowCellRendered.subscribe( function( e, args ) {
+		
+			if ( args.column.filter ) {
+				$( args.node ).html( "<input type='text' data-column-field='" + args.column.field + "' placeholder='Search...' >" );
+			} else if ( args.column.id === "_checkbox_selector" ) {
+				$( args.node ).html( "<button class='slick-filter-clear'></button>" );
+			}
+		} );
 
 		/** Set the filter */
 		dataView.setFilter( function( row, args ) {
@@ -62,15 +61,10 @@ define( function() {
 
 		bar
 
-		/** Remove all keyup handler */
-		.undelegate( "input:visible", "keyup" )	
-
 		.delegate( "input:visible", "keyup", function( e ) {
 			
 			var self = $( this )
 			, field = self.attr( "data-column-field" );
-
-			e.stopPropagation();
 
 			if ( field ) {
 				
