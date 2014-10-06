@@ -46,8 +46,8 @@ require( [ "slick/paging/Paging",
 		/** Fast keybord navigation */
 		asyncEditorLoading: true,
 
-		/** Auto align the columns */
-		forceFitColumns: true,
+		/** No horizontal scorllbar */
+		forceFitColumns: false,
 
 		syncColumnCellResize: true,
 
@@ -71,6 +71,7 @@ require( [ "slick/paging/Paging",
 		field: "num1",
 		editor: Slick.Editors.Text,
 		filter: true,
+		width: 200,
 		sortable: true,
 
 		validator: function( value, item, column ) {
@@ -92,6 +93,7 @@ require( [ "slick/paging/Paging",
 		filter: true,
 		sortable: true,
 
+		width: 200,
 		require: true
 	}, {
 	
@@ -100,6 +102,7 @@ require( [ "slick/paging/Paging",
 		field: "num4",
 		editor: Slick.Editors.Text,
 		filter: true,
+		width: 200,
 		sortable: true
 	}, {
 	
@@ -108,6 +111,7 @@ require( [ "slick/paging/Paging",
 		field: "num5",
 		editor: Slick.Editors.Text,
 		filter: true,
+		width: 200,
 		sortable: true
 	}, {
 	
@@ -116,6 +120,7 @@ require( [ "slick/paging/Paging",
 		field: "num6",
 		editor: Slick.Editors.Text,
 		filter: true,
+		width: 200,
 		sortable: true
 	}, {
 	
@@ -124,6 +129,7 @@ require( [ "slick/paging/Paging",
 		field: "num7",
 		editor: Slick.Editors.Text,
 		filter: true,
+		width: 200,
 		sortable: true
 	} ] );
 
@@ -151,8 +157,6 @@ require( [ "slick/paging/Paging",
 	} );
 
 	Actionbar( $G, $G.getContainerNode().previousElementSibling );
-
-	Highlight( $G );
 
 	$G.init();
 } );

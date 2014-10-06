@@ -468,19 +468,10 @@ if (typeof Slick === "undefined") {
 
     // TODO:  this is static.  need to handle page mutation.
     function bindAncestorScrollEvents() {
-      var elem = $canvas[0];
-      while ((elem = elem.parentNode) != document.body && elem != null) {
-        // bind to scroll containers only
-        if (elem == $viewport[0] || elem.scrollWidth != elem.clientWidth || elem.scrollHeight != elem.clientHeight) {
-          var $elem = $(elem);
-          if (!$boundAncestors) {
-            $boundAncestors = $elem;
-          } else {
-            $boundAncestors = $boundAncestors.add($elem);
-          }
-          $elem.bind("scroll." + uid, handleActiveCellPositionChange);
-        }
-      }
+
+			$boundAncestors = $viewport
+
+							.bind( "scroll." + uid, handleActiveCellPositionChange );
     }
 
     function unbindAncestorScrollEvents() {
@@ -1627,8 +1618,10 @@ if (typeof Slick === "undefined") {
         autosizeColumns();
       }
 
-      updateRowCount();
-      handleScroll();
+			updateRowCount();
+
+			// At init time is not necessary
+			$boundAncestors && handleScroll();
       // Since the width has changed, force the render() to reevaluate virtually rendered cells.
       lastRenderedScrollLeft = -1;
       render();
