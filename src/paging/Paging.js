@@ -4,6 +4,8 @@ define( [ "slick/paging/Local",
 	"slick/paging/Conditions",
 	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
 
+	"use strict";
+
 	var html = 
 			"<div class='pager'>" +
 			"<div class='pager-nav'>" +
@@ -62,7 +64,7 @@ define( [ "slick/paging/Local",
 			  prev = container.find( ".pager-prev" ), 
 			  next = container.find( ".pager-next" ),
 
-			  value = pagingInfo.pageNum >= 0 ? ++pagingInfo.pageNum : 1;
+			  value = pagingInfo.pageNum >= 0 ? ++pagingInfo.pageNum : 1,
 			  max = pagingInfo.totalPages || 1;
 
 			/** Clear the last state, prevent has been disabled after the size change */
@@ -82,8 +84,10 @@ define( [ "slick/paging/Local",
 
 		, reset = function() {
 		
+			$G.setAddRows && $G.setAddRows( {} );
 			$G.setDeleteRows && $G.setDeleteRows( [] );
-			$G.setUpdateRows && $G.setUpdateRows( [] );
+			$G.setUpdateRows && $G.setUpdateRows( {} );
+			$G.setInvalidRows && $G.setInvalidRows( {} );
 
 			$G.setSelectedRows( [] );
 		}
@@ -261,37 +265,18 @@ define( [ "slick/paging/Local",
 					}
 				};
 			
-				reset();
-
 				return pager( pagingInfo || {
 					pageSize: +size.val(),
 					pageNum: 0
-				}, uiRefresh, args );
-
-			}
-		} );
-
-	/**
-	var Entitys = Storage.get( "cahce.entityId" ) || {};
-
-	(window.entityId = Entitys[ wpf_current_roleid ])
-		|| $.ajax( {
-			data: {
-				name: "scm.common.entity.GetEntityId"
-			},
-
-			success: function( data ) {
+				}, uiRefresh, args )
 				
-				data = eval( "(" + data + ")" );
+				.done( function() {
+					
+					reset();
+					$G.scrollRowToTop( 0 );
+				} );
 
-				Entitys[ wpf_current_roleid ] = +data.result.entity_id;
-
-				window.entityId = Entitys[ wpf_current_roleid ];
-
-				Storage.set( "cahce.entityId", Entitys );
 			}
 		} );
-
-	*/
 	};
 } );
