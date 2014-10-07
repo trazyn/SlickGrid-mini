@@ -275,7 +275,6 @@ define( [ "slick/paging/Local",
 					reset();
 					$G.scrollRowToTop( 0 );
 				} );
-
 			}
 		} );
 	};

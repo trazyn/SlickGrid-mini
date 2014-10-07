@@ -10,7 +10,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 	}
 
 	/** CLASS */
-	, CheckboxSelectColumn = function( $G, dataView, settings ) {
+	, CheckboxSelectColumn = function( $G, settings ) {
 	
 		var handler = new Slick.EventHandler()
 
@@ -150,11 +150,11 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 		$.extend( this, instance );
 	};
 
-	return function( $G, dataView, options ) {
+	return function( $G, options ) {
 	
 		var
 		  settings = $.extend( {}, defaults, options || {} ),
-		  plugin = new CheckboxSelectColumn( $G, dataView, settings );
+		  plugin = new CheckboxSelectColumn( $G, settings );
 
 		/** Enable rows selected ability */
 		$G.setSelectionModel( RowsModel( $G ) );
