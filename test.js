@@ -15,9 +15,11 @@ require( [ "slick/paging/Paging",
 	"slick/curd/Update",
 	"slick/Actionbar",
 	"slick/plugins/Highlight",
+	"slick/editors/TextEditor",
+	"slick/editors/SelectEditor",
+	"slick/editors/TextareaEditor",
 	"slick/core/Core", 
-	"slick/core/Grid", 
-	"slick/cell/Editors" ], function( Paging, Checkboxcolumn, Delete, Update, Actionbar, Highlight ) {
+	"slick/core/Grid" ], function( Paging, Checkboxcolumn, Delete, Update, Actionbar, Highlight, TextEditor, SelectEditor, TextareaEditor ) {
 
 	var $G
 	, dataView = new Slick.Data.DataView();
@@ -33,7 +35,8 @@ require( [ "slick/paging/Paging",
 			"num4": Math.random() * 100000,
 			"num5": Math.random() * 100000,
 			"num6": Math.random() * 100000,
-			"num7": Math.random() * 100000,
+			"yesNo": Math.floor( Math.random() * 100000 ) & 1 ? "Y" : "N",
+			"desc": "Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 		};
 	}
 
@@ -69,7 +72,7 @@ require( [ "slick/paging/Paging",
 		id: "column2",
 		name: "No.1",
 		field: "num1",
-		editor: Slick.Editors.Text,
+		editor: TextEditor,
 		filter: true,
 		width: 200,
 		sortable: true,
@@ -89,7 +92,7 @@ require( [ "slick/paging/Paging",
 		id: "column3",
 		name: "No.2",
 		field: "num2",
-		editor: Slick.Editors.Text,
+		editor: TextEditor,
 		filter: true,
 		sortable: true,
 
@@ -100,8 +103,16 @@ require( [ "slick/paging/Paging",
 		id: "column4",
 		name: "No.4",
 		field: "num4",
-		editor: Slick.Editors.Text,
+		editor: TextEditor,
 		filter: true,
+		width: 200,
+		sortable: true
+	}, {
+		id: "column8",
+		name: "Description",
+		field: "desc",
+		editor: TextareaEditor,
+		editorArgs: { max: 500 },
 		width: 200,
 		sortable: true
 	}, {
@@ -109,7 +120,7 @@ require( [ "slick/paging/Paging",
 		id: "column5",
 		name: "No.5",
 		field: "num5",
-		editor: Slick.Editors.Text,
+		editor: TextEditor,
 		filter: true,
 		width: 200,
 		sortable: true
@@ -118,16 +129,17 @@ require( [ "slick/paging/Paging",
 		id: "column6",
 		name: "No.6",
 		field: "num6",
-		editor: Slick.Editors.Text,
+		editor: TextEditor,
 		filter: true,
 		width: 200,
 		sortable: true
 	}, {
 	
 		id: "column7",
-		name: "No.7",
-		field: "num7",
-		editor: Slick.Editors.Text,
+		name: "Yes No",
+		field: "yesNo",
+		editor: SelectEditor,
+		eidtorArgs: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ],
 		filter: true,
 		width: 200,
 		sortable: true
