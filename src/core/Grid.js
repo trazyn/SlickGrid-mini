@@ -1669,7 +1669,7 @@ if (typeof Slick === "undefined") {
 
       if (h !== oldH) {
         $canvas.css("height", h);
-        scrollTop = $viewport[0].scrollTop;
+        scrollTop = oldH === undefined ? 0 : $viewport[0].scrollTop;
       }
 
       var oldScrollTopInRange = (scrollTop + offset <= th - viewportH);
