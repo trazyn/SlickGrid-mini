@@ -6,10 +6,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 		columnId : "_checkbox_selector",
 		toolTip: "Select/Deselect All",
 		cssClass: "slick-cell-checkbox",
-		width: 35,
-		
-		/** TODO: Max selected */
-		max: 0
+		width: 35
 	}
 
 	/** CLASS */
@@ -38,7 +35,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 			
 				return {
 					id: settings.columnId,
-					name: settings.max ? "" :"<input type='checkbox'><label class='toggle'></label>",
+					name: "<input type='checkbox'><label class='toggle'></label>",
 					toolTip: settings.toolTip,
 					width: settings.width,
 					resizable: false,
@@ -88,7 +85,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 			$G.render();
 
 			$G.updateColumnHeader( settings.columnId
-						, settings.max ? "" : (rows.length && rows.length === $G.getDataLength() ? "<input type='checkbox' checked='checked'><label class='toggle'></label>" : "<input type='checkbox'><label class='toggle'></label>")
+						, rows.length && rows.length === $G.getDataLength() ? "<input type='checkbox' checked='checked'><label class='toggle'></label>" : "<input type='checkbox'><label class='toggle'></label>"
 						, settings.toolTip );
 		}
 
