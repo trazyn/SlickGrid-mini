@@ -61,16 +61,17 @@ define( function() {
 					input.val( "" ).focus();
 				} )
 				
-				.delegate( "textarea", "keyUp", function( e ) {
+				.delegate( "textarea", "keyup keydown", function( e ) {
 					
+
 					if ( e.keyCode === 13 && e.ctrlKey ) {
 						save();
-					} else if ( e.keyCode === "ESC" ) {
+					} else if ( e.keyCode === 27 ) {
 						cancel();
-					} else if ( e.keyCode === "TAB" && e.shiftKey ) {
+					} else if ( e.keyCode === 9 && e.shiftKey ) {
 						e.preventDefault();
 						args.grid.navigatePrev();
-					} else if ( e.keyCode === "TAB" ) {
+					} else if ( e.keyCode === 9 ) {
 						e.preventDefault();
 						args.grid.navigateNext();
 					}

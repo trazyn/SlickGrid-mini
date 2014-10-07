@@ -250,7 +250,7 @@ define( [ "slick/paging/Local",
 
 		$.extend( $G, {
 			
-			search: function( pagingInfo, VO ) {
+			search: function( pagingInfo ) {
 
 				var args = Conditions.getConditions();
 
