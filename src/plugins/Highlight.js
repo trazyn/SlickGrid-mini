@@ -22,19 +22,19 @@ define( function() {
 					
 					var hash = {}, columns = $G.getColumns();
 
-					hash[ key ] = {};
-
 					for ( var i = rows.length; --i >= 0; ) {
 						
-						hash[ i ] = {};
+						hash[ rows[ i ] ] = {};
 
 						columns.forEach( function( column ) {
 							
-							hash[ i ][ column.id ] = cssClass;
+							hash[ rows[ i ] ][ column.id ] = cssClass;
 						} );
 					}
 
 					$G.setCellCssStyles( key, hash );
+					$G.invalidateRows( rows );
+					$G.render();
 				} 
 				else this.removeRowsClass( rows, key );
 			},

@@ -21,15 +21,9 @@ define( function() {
 			
 			init: function() {
 
-				var inHandler = false
-			
-				, syncStyle = function() {
+				var syncStyle = function() {
 				
 					var idxById, hash = {};
-
-					if ( inHandler ) { return; }
-
-					inHandler = !inHandler;
 
 					idxById = dataView.getSnapshot();
 
@@ -43,9 +37,7 @@ define( function() {
 						} );
 					}
 
-					$G.setCellCssStyles( settings.key, hash );
-
-					inHandler = !handler;
+					$G.setCellCssStyles( settings.key, hash, true );
 				};
 			
 				handler
@@ -62,7 +54,7 @@ define( function() {
 		
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
 						
-						!inHandler && args.key === settings.key && syncStyle();
+						args.key === settings.key && syncStyle();
 					} )
 
 					.subscribe( dataView.onRowsChanged, syncStyle )

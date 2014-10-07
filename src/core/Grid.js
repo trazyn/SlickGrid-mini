@@ -2121,13 +2121,13 @@ if (typeof Slick === "undefined") {
       trigger(self.onCellCssStylesChanged, { "key": key, "hash": null });
     }
 
-    function setCellCssStyles(key, hash) {
+    function setCellCssStyles(key, hash, quiet) {
       var prevHash = cellCssClasses[key];
 
       cellCssClasses[key] = hash;
       updateCellCssStylesOnRenderedRows(hash, prevHash);
 
-      trigger(self.onCellCssStylesChanged, { "key": key, "hash": hash });
+      quiet || trigger(self.onCellCssStylesChanged, { "key": key, "hash": hash });
     }
 
     function getCellCssStyles(key) {

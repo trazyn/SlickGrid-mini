@@ -17,15 +17,9 @@ define( function() {
 			
 			init: function() {
 
-				var inHandler = false
-			
-				, syncStyle = function() {
+				var syncStyle = function() {
 				
 					var idxById, hash = {};
-
-					if ( inHandler ) { return; }
-
-					inHandler = !inHandler;
 
 					idxById = dataView.getSnapshot();
 
@@ -36,9 +30,7 @@ define( function() {
 						hash[ idxById[ id ] ] = invalid[ id ];
 					}
 
-					$G.setCellCssStyles( settings.key, hash );
-
-					inHandler = !handler;
+					$G.setCellCssStyles( settings.key, hash, true );
 				};
 			
 				handler

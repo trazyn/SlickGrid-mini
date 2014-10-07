@@ -20,24 +20,18 @@ define( function() {
 
 			init: function() {
 			
-				var inHandler = false
-				, syncStyle = function( e, args ) {
+				var syncStyle = function( e, args ) {
 				
 					var hash = {}, idxById;
 
-					if ( inHandler ) { return; }
-
 					idxById = dataView.getSnapshot();
-					inHandler = !inHandler;
 
 					for ( var id in adds ) {
 					
 						hash[ idxById[ id ] ] = adds[ id ];
 					}
 
-					$G.setCellCssStyles( settings.key, hash );
-
-					inHandler = !inHandler;
+					$G.setCellCssStyles( settings.key, hash, true );
 				};
 
 				handler

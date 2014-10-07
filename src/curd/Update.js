@@ -20,25 +20,19 @@ define( function() {
 		
 			init: function() {
 			
-				var inHandler = false
-				, syncStyle = function( e, args ) {
+				var syncStyle = function( e, args ) {
 				
 					var hash = {}, idxById;
 
-					if ( inHandler ) { return; }
-
 					idxById = dataView.getSnapshot();
-					inHandler = !inHandler;
 
 					for ( var id in updates ) {
 					
 						hash[ idxById[ id ] ] = updates[ id ];
 					}
 
-					$G.setCellCssStyles( settings.key, hash );
+					$G.setCellCssStyles( settings.key, hash, true );
 					$G.onUpdateRowsChanged.notify( { rows: updates } );
-
-					inHandler = !inHandler;
 				};
 
 				handler

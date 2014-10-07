@@ -19,7 +19,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 
 		, instance = {
 		
-			init: function( grid ) {
+			init: function() {
 
 				handler
 					.subscribe( $G.onSelectedRowsChanged, handleSelectedRowsChanged )
