@@ -139,7 +139,7 @@ require( [ "slick/paging/Paging",
 		name: "Yes No",
 		field: "yesNo",
 		editor: SelectEditor,
-		eidtorArgs: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ],
+		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
 		filter: true,
 		width: 200,
 		sortable: true
