@@ -12,7 +12,7 @@ define( function() {
 			return {};
 		}
 		
-		column = $G.getColumns()[ $G.getColumnIndex( sortColumn.columnId ) ];
+		column = this.getColumns()[ this.getColumnIndex( sortColumn.columnId ) ];
 
 		return {
 			remoteSortField: column.field,
