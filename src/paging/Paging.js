@@ -56,6 +56,8 @@ define( [ "slick/paging/Local",
 
 		, ajaxOptions = options.ajaxOptions
 
+		, conditions
+
 		/** Update the paging info to UI */
 		, uiRefresh = function( pagingInfo ) {
 		
@@ -89,7 +91,7 @@ define( [ "slick/paging/Local",
 			$G.setUpdateRows && $G.setUpdateRows( {} );
 			$G.setInvalidRows && $G.setInvalidRows( {} );
 
-			$G.setSelectedRows( [] );
+			$G.getSelectionModel() && $G.setSelectedRows( [] );
 		}
 		
 		/** A function that implement for paging */
@@ -145,7 +147,7 @@ define( [ "slick/paging/Local",
 						pageSize: +size.val(),
 						/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
 						pageNum: +current.val() + 1
-					}, uiRefresh, Conditions.getConditions() );
+					}, uiRefresh, conditions.getConditions() );
 					
 				} else e.stopImmediatePropagation();
 			} );
@@ -154,7 +156,7 @@ define( [ "slick/paging/Local",
 		}
 
 		/** This function will be cause a refresh */
-		Conditions = Conditions( $G, container.find( ":checkbox.slick-fast-query" ) );
+		conditions = Conditions( $G, container.find( ":checkbox.slick-fast-query" ) );
 
 		/** Refresh dataview */
 		dataView.endUpdate();
@@ -252,7 +254,7 @@ define( [ "slick/paging/Local",
 			
 			search: function( pagingInfo ) {
 
-				var args = Conditions.getConditions();
+				var args = conditions.getConditions();
 
 				args.result = {
 
