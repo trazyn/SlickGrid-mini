@@ -6,6 +6,7 @@ define( function() {
 		var
 		  wrapper,
 		  input,
+		  max,
 		  defaultValue;
 
 		$.extend( this, {
@@ -22,9 +23,9 @@ define( function() {
 					input.val( defaultValue );
 					args.cancelChanges();
 					max && max.html( input.val().length );
-				}
+				};
 				
-				, max = (args.column.editorArgs || {}).max;
+				max = (args.column.editorArgs || {}).max;
 			
 				wrapper = "<div class='slick-textarea-wrapper' style='display: none; position: absolute; z-index: 999; padding: 10px;'>" +
 							
@@ -104,6 +105,8 @@ define( function() {
 					input
 					.val( defaultValue = item[ args.column.field ] )
 					.focus().select();
+
+					max && max.html( defaultValue.length );
 				} );
 			},
 
