@@ -20,7 +20,7 @@ define( function() {
 
 			init: function() {
 			
-				var syncStyle = function( e, args ) {
+				var sync = function( e, args ) {
 				
 					var hash = {}, idxById;
 
@@ -28,7 +28,7 @@ define( function() {
 
 					for ( var id in adds ) {
 					
-						hash[ idxById[ id ] ] = adds[ id ];
+						hash[ idxById[ id ] ] = adds[ id ][ "hash" ];
 					}
 
 					$G.setCellCssStyles( settings.key, hash, true );
@@ -37,11 +37,11 @@ define( function() {
 				handler
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
 						
-						args.key === settings.key && syncStyle();
+						args.key === settings.key && sync();
 					} )
 
-					.subscribe( dataView.onRowsChanged, syncStyle )
-					.subscribe( dataView.onRowCountChanged, syncStyle );
+					.subscribe( dataView.onRowsChanged, sync )
+					.subscribe( dataView.onRowCountChanged, sync );
 			},
 
 			destroy: function() {
@@ -105,8 +105,11 @@ define( function() {
 						}
 
 						adds[ id ] = adds[ id ] || {};
-						adds[ id ][ column.id ] = settings.cssClass;
+						adds[ id ][ "hash" ] = adds[ id ][ "hash" ] || {};
+						adds[ id ][ "hash" ][ column.id ] = settings.cssClass;
 					}
+
+					adds[ id ][ "item" ] = row;
 
 					this.getData().addItem( row );
 

@@ -9,7 +9,7 @@ define( function() {
 
 	, Validation = function( $G, settings ) {
 
-		var invalid = {}
+		var invalids = {}
 	
 		, handler = new Slick.EventHandler();
 	
@@ -17,17 +17,17 @@ define( function() {
 			
 			init: function() {
 
-				var syncStyle = function() {
+				var sync = function() {
 				
 					var idxById, hash = {};
 
 					idxById = dataView.getSnapshot();
 
-					for ( var id in invalid ) {
+					for ( var id in invalids ) {
 						
 						hash[ idxById[ id ] ] = {};
 
-						hash[ idxById[ id ] ] = invalid[ id ];
+						hash[ idxById[ id ] ] = invalids[ id ][ "hash" ];
 					}
 
 					$G.setCellCssStyles( settings.key, hash, true );
@@ -38,13 +38,15 @@ define( function() {
 
 						var id = args.item[ "rr" ], length;
 
-						invalid[ id ] = invalid[ id ] || {};
+						invalids[ id ] = invalids[ id ] || {};
+						invalids[ id ][ "hash" ] = invalids[ id ][ "hash" ] || {};
 
-						length = invalid[ id ][ "_length_" ] || 0;
+						length = invalids[ id ][ "hash" ][ "_length_" ] || 0;
 
-						invalid[ id ][ "_length_" ] || ++length;
-						invalid[ id ][ args.column.id ] = settings.cssClass;
-						invalid[ id ][ "_length_" ]  = length;
+						invalids[ id ][ "hash" ][ "_length_" ] || ++length;
+						invalids[ id ][ "hash" ][ args.column.id ] = settings.cssClass;
+						invalids[ id ][ "hash" ][ "_length_" ]  = length;
+						invalids[ id ][ "item" ] = args.item;
 
 						$G.onCellCssStylesChanged.notify( { key: settings.key } );
 					} )
@@ -53,12 +55,12 @@ define( function() {
 					
 						var id = args.item[ "rr" ];
 
-						if ( invalid[ id ] && invalid[ id ][ args.column.id ] ) {
+						if ( invalids[ id ] && invalids[ id ][ "hash" ][ args.column.id ] ) {
 							
-							delete invalid[ id ][ args.column.id ];
+							delete invalids[ id ][ "hash" ][ args.column.id ];
 
-							if ( 0 === --invalid[id ][ "_length_" ] ) {
-								delete invalid[ id ];
+							if ( 0 === --invalids[id ][ "hash" ][ "_length_" ] ) {
+								delete invalids[ id ];
 							}
 
 							$G.invalidateRow( args.row );
@@ -69,11 +71,11 @@ define( function() {
 
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
 						
-						args.key === settings.key && syncStyle();
+						args.key === settings.key && sync();
 					} )
 
-					.subscribe( dataView.onRowsChanged, syncStyle )
-					.subscribe( dataView.onRowCountChanged, syncStyle );
+					.subscribe( dataView.onRowsChanged, sync )
+					.subscribe( dataView.onRowCountChanged, sync );
 			},
 
 			destroy: function() {
@@ -88,8 +90,8 @@ define( function() {
 			
 				var rows = [];
 
-				for ( var id in invalid ) {
-					rows.push( dataView.getItemById( id ) );
+				for ( var id in invalids ) {
+					rows.push( invalids[ id ][ "item" ] );
 				}
 
 				return rows;
@@ -104,7 +106,7 @@ define( function() {
 
 			getInvalidRowsID: function() {
 				
-				return invalid;
+				return invalids;
 			}
 		} );
 	};

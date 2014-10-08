@@ -20,7 +20,7 @@ define( function() {
 		
 			init: function() {
 			
-				var syncStyle = function( e, args ) {
+				var sync = function( e, args ) {
 				
 					var hash = {}, idxById;
 
@@ -28,7 +28,7 @@ define( function() {
 
 					for ( var id in updates ) {
 					
-						hash[ idxById[ id ] ] = updates[ id ];
+						hash[ idxById[ id ] ] = updates[ id ][ "hash" ];
 					}
 
 					$G.setCellCssStyles( settings.key, hash, true );
@@ -58,26 +58,28 @@ define( function() {
 						if ( $G.getAddRowsID()[ id ] ) { return; }
 
 						updates[ id ] = updates[ id ] || {};
+						updates[ id ][ "hash" ] = updates[ id ][ "hash" ] || {};
 
 						/** Use '==' fuzzy match */
 						if ( item[ "_" ][ args.column.field ] == item[ args.column.field ] ) {
 
-							delete updates[ id ][ args.column.id ];
+							delete updates[ id ][ "hash" ][ args.column.id ];
 						
-							if ( 0 === --updates[ id ][ "_length_" ] ) {
+							if ( 0 === --updates[ id ][ "hash" ][ "_length_" ] ) {
 								
 								delete updates[ id ];
 								delete item[ "grid_action" ];
 							}
 						
 						} else {
-							var length = updates[ id ][ "_length_" ] || 0;
+							var length = updates[ id ][ "hash" ][ "_length_" ] || 0;
 
-							updates[ id ][ args.column.id ] || ++length;
-							updates[ id ][ args.column.id ] = settings.cssClass;
-							updates[ id ][ "_length_" ] = length;
+							updates[ id ][ "hash" ][ args.column.id ] || ++length;
+							updates[ id ][ "hash" ][ args.column.id ] = settings.cssClass;
+							updates[ id ][ "hash" ][ "_length_" ] = length;
 
-							item[ "_isNew" ] || (item[ "grid_action" ] = "update");
+							item[ "grid_action" ] = "update";
+							updates[ id ][ "item" ] = item;
 						}
 
 						$G.invalidateRow( args.row );
@@ -87,11 +89,11 @@ define( function() {
 
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
 						
-						args.key === settings.key && syncStyle();
+						args.key === settings.key && sync();
 					} )
 
-					.subscribe( dataView.onRowsChanged, syncStyle )
-					.subscribe( dataView.onRowCountChanged, syncStyle );
+					.subscribe( dataView.onRowsChanged, sync )
+					.subscribe( dataView.onRowCountChanged, sync );
 			},
 
 			destroy: function() {
@@ -113,7 +115,7 @@ define( function() {
 
 					if ( !deletes[ id ] ) {
 
-						rows.push( dataView.getItemById( id ) );
+						rows.push( updates[ id ][ "item" ] );
 					}
 				}
 

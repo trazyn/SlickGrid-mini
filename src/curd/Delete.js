@@ -21,7 +21,7 @@ define( function() {
 			
 			init: function() {
 
-				var syncStyle = function() {
+				var sync = function() {
 				
 					var idxById, hash = {};
 
@@ -54,11 +54,11 @@ define( function() {
 		
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
 						
-						args.key === settings.key && syncStyle();
+						args.key === settings.key && sync();
 					} )
 
-					.subscribe( dataView.onRowsChanged, syncStyle )
-					.subscribe( dataView.onRowCountChanged, syncStyle );
+					.subscribe( dataView.onRowsChanged, sync )
+					.subscribe( dataView.onRowCountChanged, sync );
 			},
 
 			destroy: function() {
@@ -78,7 +78,7 @@ define( function() {
 
 				for ( var id in deletes ) {
 					
-					item = dataView.getItemById( id );
+					item = deletes[ id ];
 
 					item && !item[ "_isNew" ]
 						&& rows.push( (item[ "grid_action" ] = "delete", item) );
@@ -138,16 +138,17 @@ define( function() {
 
 					if ( !sync || !settings.sync ) {
 
-						var hash = {}, id, i = stash.length;
+						var hash = {}, id, item;
 
 						/** Don't trigger multiple event */
 						if ( i | invalidateRows.length ) {
 						
-							for ( var columns = this.getColumns(); --i >= 0; ) {
+							for ( var i = stash.length; --i >= 0; ) {
 								
-								id = this.getDataItem( stash[ i ] )[ "rr" ];
+								item = this.getDataItem( stash[ i ] );
+								id = item[ "rr" ];
 
-								deletes[ id ] = id;
+								deletes[ id ] = item;
 							}
 
 							!preventMultipleEvent && this.onCellCssStylesChanged.notify( { key: settings.key } );

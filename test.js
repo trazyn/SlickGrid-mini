@@ -14,13 +14,12 @@ require( [ "slick/paging/Paging",
 	"slick/plugins/Radiocolumn",
 	"slick/curd/Delete",
 	"slick/curd/Update",
-	"slick/Actionbar",
-	"slick/plugins/Highlight",
+	"slick/plugins/Actionbar",
 	"slick/editors/Text",
 	"slick/editors/Select",
 	"slick/editors/Textarea",
 	"slick/core/Core", 
-	"slick/core/Grid" ], function( Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, Highlight, Text, Select, Textarea ) {
+	"slick/core/Grid" ], function( Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, Text, Select, Textarea ) {
 
 	var $G
 	, dataView = new Slick.Data.DataView();
