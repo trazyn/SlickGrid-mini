@@ -58,7 +58,7 @@ define( function() {
 
 					data: {
 						name: ajaxOptions.serviceName,
-						params: JSON.stringify( $.extend( {}, VO, args.params || {} ) )
+						params: JSON.stringify( $.extend( {}, VO, ajaxOptions.params || {}, args.params || {} ) )
 					}
 				} )
 					
@@ -78,6 +78,7 @@ define( function() {
 
 					/** Render all rows */
 					$G.invalidate();
+					$G.resizeCanvas();
 
 					with ( data.pageVO ) {
 						callback( { pageNum: curPage - 1, pageSize: pageSize, totalPages: totalPages } );
