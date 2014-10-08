@@ -27,9 +27,9 @@ define( function() {
 				
 				max = (args.column.editorArgs || {}).max;
 			
-				wrapper = "<div class='slick-textarea-wrapper' style='display: none; position: absolute; z-index: 999; padding: 10px;'>" +
+				wrapper = "<div class='slick-textarea-wrapper' style='display: none; position: absolute; z-index: 999; background: #fff;'>" +
 							
-						"<textarea rows=5 style='backround:white;width:250px;height:80px;border:0;outline:0'></textarea>" +
+						"<textarea rows=5 style='padding:13px;width:250px;height:80px;border:0;outline:0px;'></textarea>" +
 
 						"<div>" +
 		
