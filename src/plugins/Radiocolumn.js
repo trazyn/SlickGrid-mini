@@ -7,11 +7,11 @@ define( function( Highlight ) {
 	var defaults = {
 		
 		columnId: "_radio_selector",
-		cssClass: "slick-cell-checkbox",
+		cssClass: "slick-cell-radio",
 		width: 35,
 		
 		key: "radio-select",
-		cssCellClass: "slick-radio-select"
+		cssCellClass: "slick-radio-radio"
 	}
 
 	, RadioSelectColumn = function( $G, settings ) {
@@ -59,7 +59,7 @@ define( function( Highlight ) {
 						
 							/** Clear */
 							current.row !== undefined && $G.invalidateRow( current );
-							current = void 0;
+							current = {};
 						}
 					} )
 		
@@ -71,7 +71,7 @@ define( function( Highlight ) {
 
 							editor = $G.getEditorLock();
 
-							editor.isActive() && editor.commitCurrentEdit();
+							editor.isActive( $G.getEditController() ) && editor.commitCurrentEdit();
 							
 							current.row !== undefined && $G.invalidateRow( current.row );
 
