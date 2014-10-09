@@ -11,7 +11,9 @@ define( function() {
 
 		var invalids = {}
 	
-		, handler = new Slick.EventHandler();
+		, handler = new Slick.EventHandler()
+	
+		, dataView = $G.getData();
 	
 		$.extend( this, {
 			
@@ -28,15 +30,19 @@ define( function() {
 						hash[ idxById[ id ] ] = {};
 
 						hash[ idxById[ id ] ] = invalids[ id ][ "hash" ];
+
+						$.extend( dataView.getItemById( id ), invalids[ id ][ "item" ] );
 					}
 
 					$G.setCellCssStyles( settings.key, hash, true );
-				};
+				}
+				
+				, idProperty = dataView.getIdProperty();
 			
 				handler
 					.subscribe( $G.onValidationError, function( e, args ) {
 
-						var id = args.item[ "rr" ], length;
+						var id = args.item[ idProperty ], length;
 
 						invalids[ id ] = invalids[ id ] || {};
 						invalids[ id ][ "hash" ] = invalids[ id ][ "hash" ] || {};
@@ -53,7 +59,7 @@ define( function() {
 				
 					.subscribe( $G.onCellChange, function( e, args ) {
 					
-						var id = args.item[ "rr" ];
+						var id = args.item[ idProperty ];
 
 						if ( invalids[ id ] && invalids[ id ][ "hash" ][ args.column.id ] ) {
 							
