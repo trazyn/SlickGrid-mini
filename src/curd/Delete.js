@@ -35,6 +35,8 @@ define( function() {
 							
 							hash[ idxById[ id ] ][ column.id ] = settings.cssClass;
 						} );
+
+						$.extend( dataView.getItemById( id ), deletes[ id ] );
 					}
 
 					$G.setCellCssStyles( settings.key, hash, true );
@@ -94,7 +96,9 @@ define( function() {
 
 			setDeleteRows: function( rows, sync ) {
 			
-				var stash = [], invalidateRows = [], adds, invalids, preventMultipleEvent = false;
+				var stash = [], invalidateRows = [], adds, invalids, preventMultipleEvent = false
+					
+				, idProperty = dataView.getIdProperty();
 
 				if ( !rows.length ) {
 
@@ -112,7 +116,7 @@ define( function() {
 
 					for ( var i = rows.length; --i >= 0; ) {
 						
-						var id = this.getDataItem( rows[ i ] )[ "rr" ];
+						var id = this.getDataItem( rows[ i ] )[ idProperty ];
 
 						if ( deletes[ id ] || adds[ id ] ) {
 							
@@ -146,7 +150,7 @@ define( function() {
 							for ( var i = stash.length; --i >= 0; ) {
 								
 								item = this.getDataItem( stash[ i ] );
-								id = item[ "rr" ];
+								id = item[ idProperty ];
 
 								deletes[ id ] = item;
 							}
@@ -158,7 +162,7 @@ define( function() {
 					else {
 						
 						for ( var i = stash.length; --i >= 0; ) {
-							dataView.deleteItem( this.getDataItem( stash[ i ] )[ "rr" ] );
+							dataView.deleteItem( this.getDataItem( stash[ i ] )[ idProperty ] );
 						}
 					}
 
