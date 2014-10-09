@@ -78,7 +78,7 @@ define( function( Highlight ) {
 							syncStyle( current = {
 								
 								row: args.row,
-								id: $G.getDataItem( args.row )[ "rr" ]
+								id: $G.getDataItem( args.row )[ dataView.getIdProperty() ]
 							} );
 						}
 					} )
@@ -109,7 +109,7 @@ define( function( Highlight ) {
 					cssClass: settings.cssClass,
 					formatter: function( row, cell, value, column, dataContext ) {
 						
-						return current.id === dataContext[ "rr" ]
+						return current.id === dataContext[ dataView.getIdProperty() ]
 							
 							? "<input type='checkbox' checked='checked'><label class='toggle'></label>"
 							: "<input type='checkbox'><label class='toggle'></label>";
