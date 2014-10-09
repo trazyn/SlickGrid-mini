@@ -57,7 +57,7 @@ define( function() {
 				var rows = [];
 
 				for ( var id in adds ) {
-					rows.push( dataView.getItemById( id ) );
+					rows.push( adds[ id ][ "item" ] );
 				}
 
 				return rows;
@@ -70,7 +70,7 @@ define( function() {
 
 			setAddRows: function( hash ) {
 
-				var columns, id, row;
+				var columns, id, row, idProperty = dataView.getIdProperty();
 
 				if ( hash ) {
 
@@ -78,16 +78,18 @@ define( function() {
 				} else {
 				
 					row = {
-						
-						rr: "+ " + ++index,
+						"rr": "+ " + ++index,
 						_isNew: true,
 						"grid_action": "add"
 					};
+
+					row[ idProperty ] = row[ "rr" ];
+
 					columns = this.getColumns();
 
 					dataView.beginUpdate();
 
-					id = row[ "rr" ];
+					id = row[ idProperty ];
 
 					if ( index === 1 ) {
 					
