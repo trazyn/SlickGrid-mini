@@ -74,7 +74,7 @@ define( function() {
 						throw "Call the service '" + ajaxOptions.serviceName + "' failed:\n" + ex;
 					}
 
-					dataView.setItems( data.result );
+					dataView.setItems( data.result.concat( $G.getAddRows ? $G.getAddRows() : [] ) );
 
 					/** Render all rows */
 					$G.invalidate();
