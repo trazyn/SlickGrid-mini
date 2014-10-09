@@ -29,6 +29,9 @@ define( function() {
 					for ( var id in updates ) {
 					
 						hash[ idxById[ id ] ] = updates[ id ][ "hash" ];
+
+						/** Restore data */
+						$.extend( dataView.getItemById( id ), updates[ id ][ "item" ] );
 					}
 
 					$G.setCellCssStyles( settings.key, hash, true );
@@ -52,7 +55,7 @@ define( function() {
 					.subscribe( $G.onCellChange, function( e, args ) {
 						
 						var item = args.item
-						, id = item[ "rr" ];
+						, id = item[ dataView.getIdProperty() ];
 
 						/** Ignore new item */
 						if ( $G.getAddRowsID()[ id ] ) { return; }
@@ -148,3 +151,4 @@ define( function() {
 		return plugin;
 	};
 } );
+
