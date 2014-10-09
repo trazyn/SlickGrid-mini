@@ -8,28 +8,32 @@ define( [ "slick/paging/Local",
 
 	var html = 
 			"<div class='pager'>" +
-			"<div class='pager-nav'>" +
-				"<button class='pager-prev' disabled='disabled'></button>" +
-				"<button class='pager-next' disabled='disabled'></button>" +
-			"</div>" +
+				"<div class='pager-left'>" +
+					"<div class='pager-nav'>" +
+						"<button class='pager-prev' disabled='disabled'></button>" +
+						"<button class='pager-next' disabled='disabled'></button>" +
+					"</div>" +
 
-			"<div class='pager-info'>" +
-				"<input type='text' class='pager-current' maxlength='5' value='1'>" +
-				"<button disabled='disabled' class='pager-total'>1</button>" +
-			"</div>" +
+					"<div class='pager-info'>" +
+						"<input type='text' class='pager-current' maxlength='5' value='1'>" +
+						"<button disabled='disabled' class='pager-total'>1</button>" +
+					"</div>" +
+				"</div>" +
 
-			"<div style='display: inline-block; margin-left: 74%;'>" +
-				"<input type='checkbox' class='slick-fast-query' id='slick-fast-query' checked='checked'>" +
-				"<label for='slick-fast-query'></label>" +
-			"</div>" +
+				"<div class='pager-right'>" +
+					"<div style='display: inline-block;'>" +
+						"<input type='checkbox' class='slick-fast-query' id='slick-fast-query' checked='checked'>" +
+						"<label for='slick-fast-query'></label>" +
+					"</div>" +
 
-			"<div class='pager-refresh'></div>" +
+					"<div class='pager-refresh'></div>" +
 
-			"<div class='pager-size'>" +
-				"<label class='custom-select'>" +
-					"<select></select>" +
-				"</label>" +
-			"</div>" +
+					"<div class='pager-size'>" +
+						"<label class='custom-select'>" +
+							"<select></select>" +
+						"</label>" +
+					"</div>" +
+				"</div>" +
 			"</div>"
 			
 	, defaults = {
