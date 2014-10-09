@@ -401,7 +401,7 @@ input[type=checkbox]:checked + .toggle:after{
 .pager-nav .pager-next{margin-left:-3px;margin-right:5px;}
 .pager-nav .pager-prev:after,.pager-nav .pager-next:after{border-width: 2px;border-style:solid;border-color:#333;width: 7px;display: block;height: 7px;content:'';-webkit-transform: rotate(-45deg);border-bottom: none;border-right: none;}
 .pager-nav .pager-next:after{border:none;border-right:2px solid #333;border-bottom:2px solid #333;}
-.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;height: 24px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;-webkit-transition:all .2s linear;}
+.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;height: 22px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;-webkit-transition:all .2s linear;}
 .pager-nav .pager-prev:hover,.pager-nav .pager-next:hover,.pager-count button[name="record-count"]:hover{background:#333;color: #fff;}
 .pager-nav .pager-prev:hover:after,.pager-nav .pager-next:hover:after{border-color:white;}
 .pager-nav .pager-prev[disabled],.pager-nav .pager-next[disabled]{background:#eee;color:#bbb;cursor: default;}
@@ -511,7 +511,7 @@ input[type=checkbox]:checked + .toggle:after{
 .slick-actionbar-save:before{content:'\e116';}
 .slick-actionbar-filter:before{content:'\e607';}
 .slick-actionbar-fullscreen:before{content:'\e6ca';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
-.slick-actionbar-genius:before{content:"\e6ce";position: absolute;left: 50%;text-indent: 0;margin-left: -11px;font-size:22px;}
+.slick-actionbar-genius:before{content:"\e6ce";position: absolute;left: 50%;text-indent: 0;margin-left: -9px;font-size: 17px;}
 .slick-actionbar-fullscreen-min:before{content:'\e6cb'}
 .slick-actionbar-lab:before{content:'\e654';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
 .slick-actionbar-fullscreen,.slick-actionbar-lab,.slick-actionbar-genius{text-indent: -999px;position:relative;width: 24px;}
@@ -568,3 +568,10 @@ button.buttonStyle:hover{box-shadow:-1px 0px 9px rgba(0, 0, 0, 0.16) inset;}
 .calendar-trigger{width:20px;position:relative;display:inline-block;height:20px;margin-left:-20px;cursor:pointer;}
 .calendar-trigger:after{font-family:"icomoon";content:"\e626";position:absolute;left:0;font-size:14px;}
 .calendar-trigger:hover:after{color:#0794E4;}
+
+.slick-genius-wrapper {
+	position: absolute;
+	background: #fff;
+	box-shadow: 1px 1px 5px rgba(0,0,0,.3);
+	border: 1px solid rgba(39, 91, 255, 0.48);
+}

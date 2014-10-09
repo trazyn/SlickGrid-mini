@@ -2,11 +2,22 @@
 define( [ "slick/curd/Delete", 
 	"slick/curd/Update",
 	"slick/curd/Add",
-	"slick/curd/Validation" ], function( Delete, Update, Add, Validation ) {
+	"slick/curd/Validation",
+	"slick/plugins/Genius" ], function( Delete, Update, Add, Validation, Genius ) {
 
 	"use strict";
 
 	var defaults = {
+
+		genius: {
+			
+			enable: true,
+
+			selector: ".slick-actionbar-genius",
+			type: "click",
+
+			callback: Genius
+		},
 
 		add: {
 			enable: true,

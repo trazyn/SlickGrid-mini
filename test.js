@@ -62,7 +62,7 @@ require( [ "slick/paging/Paging",
 	;;window.$G = $G;
 	;;window.dataView = dataView;
 	
-	$G.setColumns( [ Checkboxcolumn( $G ), Radiocolumn( $G ), {
+	$G.setColumns( [ Checkboxcolumn( $G ), /** Radiocolumn( $G ), */ {
 		id: "column1",
 		name: "IDS",
 		field: "rr",

@@ -20,7 +20,7 @@
    *
    * Relies on the data item having an "id" property uniquely identifying it.
    */
-  function DataView(options) {
+  function DataView(options, key) {
     var self = this;
 
     var defaults = {
@@ -30,7 +30,7 @@
 
 
     // private
-    var idProperty = "rr";  // property holding a unique row id
+    var idProperty; 				// property holding a unique row id
     var items = [];         // data by index
     var rows = [];          // data by row
     var idxById = {};       // indexes by id
@@ -77,7 +77,12 @@
     var onRowsChanged = new Slick.Event();
     var onPagingInfoChanged = new Slick.Event();
 
-    options = $.extend(true, {}, defaults, options);
+    if ( "string" === typeof options ) {
+      idProperty = options;
+    } else {
+      options = $.extend(true, {}, defaults, options);
+      idProperty = key || "rr";
+    }
 
 
     function beginUpdate() {
@@ -736,7 +741,10 @@
         var batchFilter = options.inlineFilters ? compiledFilter : uncompiledFilter;
         var batchFilterWithCaching = options.inlineFilters ? compiledFilterWithCaching : uncompiledFilterWithCaching;
 
-        if (refreshHints.isFilterNarrowing) {
+	if (typeof refreshHints.isFilterByCallback === "function") {
+          filteredItems = refreshHints.isFilterByCallback( items, filterArgs );
+          delete refreshHints.isFilterByCallback;
+	} else if (refreshHints.isFilterNarrowing) {
           filteredItems = batchFilter(filteredItems, filterArgs);
         } else if (refreshHints.isFilterExpanding) {
           filteredItems = batchFilterWithCaching(items, filterArgs, filterCache);
@@ -1015,6 +1023,9 @@
       "deleteItem": deleteItem,
       "syncGridSelection": syncGridSelection,
       "syncGridCellCssStyles": syncGridCellCssStyles,
+      "getIdProperty": function() {
+      	return idProperty;
+      },
 
       // data provider methods
       "getLength": getLength,
