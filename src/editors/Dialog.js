@@ -19,22 +19,22 @@ define( [ "slick/paging/Paging",
 				var $G;
 
 				this
-				.html( "<section>" + 
+				.html( "<section class='slick-dialog-head'>" + 
 						"<input type='text' name='sometext' placeholder='Please enter search keywrods'>" +
 						"<button name='search'>Search</button>" +
 						"<button name='filter'>Filter</button>" +
 					"</section>" +
-					"<section>" +
-						"<div class='slick-wrap fade out' style='width:100%;height: 480px;'>" +
-							"<div style='width:100%;height:100%;'></div>" +
+					"<section class='slick-dialog-body'>" +
+						"<div class='slick-wrap fade out' style='width:100%;'>" +
+							"<div style='width:100%;height:410px;'></div>" +
 						"</div>" +
 					"</section>" +
 					"<sction class='slick-dialog-tail'>" + 
 						"<button name='amodal-ok'>Ok</button>" +
-						"<button name='amodal-cacnel'>Cancel</button>" +
+						"<button name='amodal-cancel'>Cancel</button>" +
 					"</section>" );
 				
-				$G = new Slick.Grid( this.find( ".slick-wrap > div:first" ), new Slick.Data.DataView(), [], {
+				window.$DG = $G = new Slick.Grid( this.find( ".slick-wrap > div:first" ), new Slick.Data.DataView(), [], {
 					
 					/** Enable keybord navigation */
 					enableCellNavigation: true,
@@ -43,7 +43,7 @@ define( [ "slick/paging/Paging",
 					asyncEditorLoading: true,
 
 					/** No horizontal scroll */
-					forceFitColumns: true,
+					forceFitColumns: false,
 
 					/** Filter bar */
 					showHeaderRow: true,
@@ -52,15 +52,15 @@ define( [ "slick/paging/Paging",
 					explicitInitialization: true
 				} );
 
-				$G.setColumns( (options.columns.unshift( Radiocolumn( $G ) ), options.columns) );
+				$G.setColumns( [ Radiocolumn( $G ) ].concat( options.columns ) );
 
 				Paging( $G, $G.getData(), {
 				
 					pagingInfo: {
-						pageSize: 500,
+						pageSize: 1000,
 						pageNum: 0,
 
-						sizes: [ 100, 500, 1000, 5000, 10000 ]
+						sizes: [ 1000, 5000, 10000, 50000 ]
 					},
 
 					ajaxOptions: options.ajaxOptions || {
@@ -120,7 +120,7 @@ define( [ "slick/paging/Paging",
 			
 			init: function() {
 
-				var options = $.extend( true, {}, args.column.editorArgs || {}, {
+				var options = $.extend( {}, args.column.editorArgs || {}, {
 					
 					_onOk: function( item ) {
 						this.onOk.apply( input, arguments );
