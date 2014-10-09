@@ -16,51 +16,6 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, 
   outline: 0px;
 }
 
-input[type="checkbox"].switch, input[type="radio"].switch {
-	display:none;
-}
-input[type="checkbox"].switch + label, input[type="radio"].switch + label {
-	display:inline-block;
-	position:relative;
-	width:50px;
-	height:30px;
-	vertical-align:middle;
-	background-color:white;
-	border:1px solid #dfdfdf;
-	border-radius:20.0px;
-	cursor:pointer;
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	box-sizing:border-box;
-	-webkit-transition:border 0.4s, box-shadow 0.4s;
-	-moz-transition:border 0.4s, box-shadow 0.4s;
-	transition:border 0.4s, box-shadow 0.4s;
-}
-input[type="checkbox"].switch + label:after, input[type="radio"].switch + label:after {
-	content:"";
-	width:28px;
-	height:28px;
-	background:white;
-	border-radius:100%;
-	box-shadow:0 1px 3px rgba(0, 0, 0, 0.4);
-	position:absolute;
-	top:0;
-	left:0;
-	-webkit-transition:left 0.2s ease-in-out;
-	-moz-transition:left 0.2s ease-in-out;
-	transition:left 0.2s ease-in-out;
-}
-input[type="checkbox"].switch:checked + label, input[type="radio"].switch:checked + label {
-	background-color:#2ecc71;
-	border-color:#2ecc71;
-	box-shadow:inset 0px 0px 0px 15.999px #2ecc71;
-	-webkit-transition:background-color 1.2s, border 0.4s, box-shadow 0.4s;
-	-moz-transition:background-color 1.2s, border 0.4s, box-shadow 0.4s;
-	transition:background-color 1.2s, border 0.4s, box-shadow 0.4s;
-}
-input[type="checkbox"].switch:checked + label:after, input[type="radio"].switch:checked + label:after {
-	left:20px;
-}
 input[type="checkbox"].switch:checked.switch-warning + label, input[type="radio"].switch:checked.switch-warning + label {
 	background-color:#e67e22;
 	border-color:#e67e22;
@@ -152,6 +107,27 @@ In order to preserve the uniform grid appearance, all cell styles need to have p
 No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS
 classes should alter those!
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 body{font:12px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
 
 .slick-cell input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;padding-left: 5px;  padding-right: 5px;}
@@ -171,7 +147,7 @@ border:1px solid white;
 
 .slick-header { box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4); z-index: 100; }
 .ui-widget{border:1px solid #ddd;}
-.slick-cell input[type="text"]{width: 95%;height: 33px;border:none;}
+.slick-cell input[type="text"]{width: 100%;height: 35px;border:none;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;
@@ -290,13 +266,11 @@ border:1px solid white;
   margin: 0;
   white-space: nowrap;
   cursor: default;
-  line-height: 33px;
-  text-indent:5px;
-  padding: 0;
+  line-height: 35px;
+  text-indent: 5px; 
 }
-.slick-cell.editable { 
-	text-indent: 0;
-}
+
+.slick-cell.editable { text-indent: 0px; }
 
 .slick-group {
 }
@@ -318,7 +292,7 @@ border:1px solid white;
   border: 1px solid red !important;
 }
 
-.slick-cell.editable input:focus, .slick-cell.editable select:focus {
+.slick-cell.editable input:focus, .slick-cell.editable select:focus{
    outline: none;
    border: 1px solid rgba(39, 91, 255, 0.48);
    box-shadow: 0 0 5px rgba(27, 91, 255, 0.5);
@@ -327,7 +301,10 @@ border:1px solid white;
    background:white;
    padding-left: 5px;
    padding-right: 5px;
-   text-index: 0;
+}
+
+.slick-cell.editable input.dialog {
+	padding-right: 27px;
 }
 
 .slick-cell:focus {
@@ -420,17 +397,17 @@ input[type=checkbox]:checked + .toggle:after{
 .pager{font-size:11px;margin: 5px 0;/* display: none; */}
 .pager-info,.pager-nav,.pager-count{display:inline-block;vertical-align: middle;}
 .pager-info{width:100px;}
-.pager-nav .pager-prev,.pager-nav .pager-next{padding: 0 10px;cursor:pointer;vertical-align: top;height: 20px;background: #E0E0E0;border: none;margin: 0;text-indent: -999px;}
+.pager-nav .pager-prev,.pager-nav .pager-next{padding: 0 10px;cursor:pointer;vertical-align: top;height: 24px;background: #E0E0E0;border: none;margin: 0;text-indent: -999px;}
 .pager-nav .pager-next{margin-left:-3px;margin-right:5px;}
 .pager-nav .pager-prev:after,.pager-nav .pager-next:after{border-width: 2px;border-style:solid;border-color:#333;width: 7px;display: block;height: 7px;content:'';-webkit-transform: rotate(-45deg);border-bottom: none;border-right: none;}
 .pager-nav .pager-next:after{border:none;border-right:2px solid #333;border-bottom:2px solid #333;}
-.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;height: 21px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;-webkit-transition:all .2s linear;}
+.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;height: 24px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;-webkit-transition:all .2s linear;}
 .pager-nav .pager-prev:hover,.pager-nav .pager-next:hover,.pager-count button[name="record-count"]:hover{background:#333;color: #fff;}
 .pager-nav .pager-prev:hover:after,.pager-nav .pager-next:hover:after{border-color:white;}
 .pager-nav .pager-prev[disabled],.pager-nav .pager-next[disabled]{background:#eee;color:#bbb;cursor: default;}
 .pager-nav .pager-prev[disabled]:after,.pager-nav .pager-next[disabled]:after{border-color:#bbb;}
 .pager-size{float: right;}
-.pager-info .pager-total{border:none;background:none;margin: 0;padding: 0;color: #Aaa;border: 1px solid #ccc;height:21px;border-left: none;border-radius: 0 50px 50px 0;padding-right: 8px;position: relative;padding-left: 5px;}
+.pager-info .pager-total{border:none;background:none;margin: 0;padding: 0;color: #Aaa;border: 1px solid #ccc;height: 24px;border-left: none;border-radius: 0 50px 50px 0;padding-right: 8px;position: relative;padding-left: 5px;}
 .pager-info .pager-total:before{content:'/';background: white;width: 8px;position: absolute;left: -5px;}
 .pager-info .pager-current:focus{border-radius:0;border-color: rgba(39, 91, 255, 0.6);box-shadow: 0 1px 5px rgba(27, 91, 255, 0.3),-1px 0 5px rgba(27, 91, 255, 0.3),0 -1px 5px rgba(27, 91, 255, 0.3);width:60px;}
 .pager-info .pager-current:focus + .pager-total{border-radius:0;border-color: rgba(39, 91, 255, 0.6);box-shadow: 0 1px 5px rgba(27, 91, 255, 0.3),1px 0 5px rgba(27, 91, 255, 0.3),0 -1px 5px rgba(27, 91, 255, 0.3);-webkit-transition:all .2s linear;}
@@ -439,25 +416,20 @@ input[type=checkbox]:checked + .toggle:after{
   position: relative;
 }
 .custom-select select {
-    height:20px;
-  
+    height: 24px;
     width: auto;
     margin: 0;
-  
     padding: 0 0 0 5px;
-  outline: none;
-  cursor: pointer;
-  
+    outline: none;
+    cursor: pointer;
     border: none;
-  
     background: #e0e0e0;
     border-radius: 0;
-  
-  /* Styling the select text color */
-  color: #333;
-  /* removes the fucking native down arrow */
-  -webkit-appearance: none;
-  -moz-appearance: window;
+    /* Styling the select text color */
+    color: #333;
+    /* removes the fucking native down arrow */
+    -webkit-appearance: none;
+    -moz-appearance: window;
 }
 .custom-select select::-ms-expand {
   display: none;
@@ -465,7 +437,7 @@ input[type=checkbox]:checked + .toggle:after{
 .custom-select select option{background:white;border-bottom:1px solid #eee;}
 .custom-select:after {
   position: absolute;
-  top: 7px;
+  top: 10px;
   right: 8px;
   /* Styling the down arrow */
   width: 0;
@@ -516,8 +488,9 @@ input[type=checkbox]:checked + .toggle:after{
 	margin: 0px;
 }
 
-.slick-invalid:after{position:absolute;content:'';border-width:6px;border-color: rgba(0, 0, 0, 0) #f00 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);border-style:solid;-webkit-transform:rotate(-135deg);right:-6px;bottom:-6px;}
-
+.slick-update {
+	/*background: #2ECC71;*/
+}
 .slick-update:after{position:absolute;content:'';border-width:6px;border-color: rgba(0, 0, 0, 0) #028F07 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);border-style:solid;-webkit-transform:rotate(-135deg);right:-6px;bottom:-6px;}
 .slick-actionbar-left { 
 	float: left;
@@ -538,52 +511,60 @@ input[type=checkbox]:checked + .toggle:after{
 .slick-actionbar-save:before{content:'\e116';}
 .slick-actionbar-filter:before{content:'\e607';}
 .slick-actionbar-fullscreen:before{content:'\e6ca';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
+.slick-actionbar-genius:before{content:"\e6ce";position: absolute;left: 50%;text-indent: 0;margin-left: -11px;font-size:22px;}
 .slick-actionbar-fullscreen-min:before{content:'\e6cb'}
 .slick-actionbar-lab:before{content:'\e654';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
-.slick-actionbar-fullscreen,.slick-actionbar-lab, .slick-actionbar-genius{text-indent: -999px;position:relative;width: 24px;}
-.slick-actionbar-genius:before{content:'\e6cf';position:absolute;left: 50%;text-indent: 0;margin-left: -7px;}
+.slick-actionbar-fullscreen,.slick-actionbar-lab,.slick-actionbar-genius{text-indent: -999px;position:relative;width: 24px;}
 .slick-actionbar-left button:hover,.slick-actionbar-right button:hover{
 	box-shadow: -1px 0px 9px rgba(0, 0, 0, 0.16) inset;
 }
-.slick-filter-clear{background:none;border: none;margin: 10px 0 0 8px;cursor:pointer;}
-.slick-filter-clear:before{content: '\e681';font-size: 16px;color: #333;}
+.slick-filter-clear{background:none;border: none;margin: 10px 0 0 7px;cursor:pointer;}
+.slick-filter-clear:before{content: '\e681';font-size: 18px;color: #333;}
 .slick-filter-clear:hover:before{color:#66A1EB;}
 .slick-actionbar-left button[disabled],.slick-actionbar-right button[disabled]{background:none;border-color: #ccc;color:#ccc;cursor: default;box-shadow: none;}
 .slick-actionbar-right { 
 	float: right;
 	letter-spacing: -5px;
 }
-.slick-fullscreen{width: 100%;position: fixed;height: 100%;top: 0;left: 0;background: #FFF;padding-top: 5px;transition: all .3s linear;}
+.slick-fullscreen{width: 100%;position: fixed;height: 90%;top: 0;left: 0;background: #FFF;padding-top: 5px;transition:none;}
 .slick-cell label.custom-select, .slick-cell label.custom-select select { width: 100%; height: 100%; }
 .slick-cell label.custom-select::after{ top: 15px; right: 15px; }
-
-.slick-textarea-wrapper > div {
-	line-height: 28px;
-}
-
-.slick-textarea-wrapper > div button {
-	outline: 0px;
-	border:0px;
-	border-left: 1px solid #e5e5e5;
-	float: right;
-	height: 28px;
-}
-
-.slick-textarea-wrapper {
-	outline: none;
-	border: 1px solid rgba(39, 91, 255, 0.48);
-	box-shadow: 0 0 5px rgba(27, 91, 255, 0.5);
-	-webkit-transition: all .2s linear;
-	z-index: 2;
-	background: white;
-}
-
-.slick-textarea-wrapper textarea {
-	background: #e5e5e5;
-}
-
-
-.slick-textarea-wrapper textarea:focus {
-	background: rgba(50, 197, 180, 0.3);
-}
-
+.slick-cell-radio .toggle:before{border-radius:35px;}
+.slick-cell-radio .toggle:after{border:none;width:7px;height:7px;background:#333;border-radius:8px;left:50%;margin-left:-5px;top:50%;margin-top:-5px;}
+.slick-textarea-wrapper{background: #E0E0E0;box-shadow:1px 1px 5px rgba(0,0,0,.3);padding:0 !important;border: 1px solid rgba(39, 91, 255, 0.48);}
+.slick-textarea-wrapper textarea{padding:3px;}
+.slick-textarea-wrapper >div{text-align:right;padding-left: 10px;background: #eee;border: 1px solid #ddd;}
+.slick-textarea-wrapper >div small{float:left;color:#888;line-height: 30px;}
+.slick-textarea-wrapper >div button{background:white;border:none;text-indent:-999px;position:relative;width: 50px;text-align: center;height: 30px;cursor:pointer;border:1px solid #ccc;margin-right:-1px;border-top: none;border-bottom: none;}
+.slick-textarea-wrapper >div button:after{text-indent:0;font-family:"icomoon";position:absolute;left: 50%;margin-left: -6px;}
+.slick-textarea-wrapper >div button[name="save"]:after{content:'\e116';color: #039E09;}
+.slick-textarea-wrapper >div button[name="clear"]:after{content:'\e115';color: #DD7878;}
+.slick-textarea-wrapper >div button[name="cancel"]:after{content:'\e117';color:#333;}
+.dialog-trigger{position:relative;width:20px;height:20px;display:inline-block;z-index:2;margin-left:-20px;cursor:pointer;}
+.dialog-trigger:after{font-family:"icomoon";content:"\e60a";position:absolute;color: #333;}
+.dialog-trigger:hover:after{color:#0794E4}
+.slick-dialog-head{margin-bottom:5px;}
+button.buttonStyle{background:none;border:1px solid #ccc;padding:0px 8px;margin-left:-1px;height:30px;cursor:pointer;}
+button.buttonStyle:hover{box-shadow:-1px 0px 9px rgba(0, 0, 0, 0.16) inset;}
+.slick-dialog-head button{background:none;border:1px solid #ccc;padding:0px 8px;margin-left:-1px;height:30px;cursor:pointer;color:#66A1EB;}
+.slick-dialog-head button:hover,.slick-textarea-wrapper >div button:hover{box-shadow:-1px 0px 9px rgba(0, 0, 0, 0.16) inset;}
+.slick-dialog-head button:before{font-family:"icomoon";margin-right:5px;}
+.slick-dialog-head button[name="search"]:before{content:"\e60a"}
+.slick-dialog-head button[name="filter"]:before{content:"\e607"}
+.slick-dialog-head input{height:30px;width:250px;border:1px solid #ccc;padding-left:5px;}
+.slick-dialog-tail{text-align:center;display:block;margin-top:60px;background: #E4E4E4;margin: 33px -40px -30px;padding: 10px 0;}
+.slick-dialog-tail button{background:none;border: none;height:30px;width:80px;padding:0 8px;margin-left: 30px;cursor:pointer;}
+.slick-dialog-tail button[name="amodal-ok"]{color: #FFFFFF;background: #0DB694;}
+.slick-dialog-tail button[name="amodal-cancel"]{background: #838383;color: white;}
+.slick-dialog-tail button:hover{opacity:0.8;filter:alpha(opacity:80);}
+.slick-dialog-tail button:before{font-family:"icomoon";margin-right:5px;}
+.slick-dialog-tail button[name="amodal-ok"]:before{content:"\e116"}
+.slick-dialog-tail button[name="amodal-cancel"]:before{content:"\e117"}
+.slick-invalid input{text-decoration: line-through;background: #ECEEC4;}
+.slick-invalid:after{border-width:6px;border-style:solid;border-color:transparent transparent transparent #cf0000;content:'';position:absolute;right:-6px;bottom:-6px;-webkit-transform:rotate(45deg);}
+.slick-radio-radio{background: #EFF0D7;}
+.pager-left{float:left;}
+.pager-right{float:right;}
+.calendar-trigger{width:20px;position:relative;display:inline-block;height:20px;margin-left:-20px;cursor:pointer;}
+.calendar-trigger:after{font-family:"icomoon";content:"\e626";position:absolute;left:0;font-size:14px;}
+.calendar-trigger:hover:after{color:#0794E4;}
