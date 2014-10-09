@@ -106,7 +106,7 @@ define( function() {
 					.val( defaultValue = item[ args.column.field ] )
 					.focus().select();
 
-					max && max.html( defaultValue.length );
+					max && max.html( (defaultValue || "").length );
 				} );
 			},
 
