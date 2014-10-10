@@ -16,13 +16,13 @@ define( [ "slick/curd/Delete",
 			selector: ".slick-actionbar-genius",
 			type: "click",
 
-			callback: function( $G, plugin ) {
+			callback: function( $G, plugin, e ) {
 			
-				plugin.call( this );
+				plugin.call( this, e );
 			},
 
 			init: function( $G ) {
-				return Genius( $G );
+				return Genius( $G, this );
 			}
 		},
 
@@ -80,8 +80,21 @@ define( [ "slick/curd/Delete",
 				var self = $( this ).attr( "disabled", "disabled" );
 
 				$G.search()
-					.done( function() { self.attr( "disabled", "disabled" ); } )
-					.fail( function() { self.removeAttr( "disabled" ); } );
+
+					.done( function() { 
+						self.attr( "disabled", "disabled" ); 
+
+						/** RESET CURD DATA */
+
+						$G.setAddRows && $G.setAddRows( {} );
+						$G.setDeleteRows && $G.setDeleteRows( [] );
+						$G.setUpdateRows && $G.setUpdateRows( {} );
+						$G.setInvalidRows && $G.setInvalidRows( {} );
+					} )
+
+					.fail( function() { 
+						self.removeAttr( "disabled" ); 
+					} );
 			},
 
 			init: function( $G ) {
