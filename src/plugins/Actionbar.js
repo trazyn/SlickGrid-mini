@@ -16,7 +16,14 @@ define( [ "slick/curd/Delete",
 			selector: ".slick-actionbar-genius",
 			type: "click",
 
-			callback: Genius
+			callback: function( $G, plugin ) {
+			
+				plugin.call( this );
+			},
+
+			init: function( $G ) {
+				return Genius( $G );
+			}
 		},
 
 		add: {
