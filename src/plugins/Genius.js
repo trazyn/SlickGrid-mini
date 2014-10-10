@@ -1,25 +1,34 @@
 
 define( function() {
 
-	var Genius = function( $G, trigger ) {
+	var Genius = function( $G ) {
 	
 		var dataView = $G.getData()
 	
-		, original
+		, original, trigger
 	
 		/**
 		 * ADD: 	0000 0001
 		 * UPDATE: 	0000 0010
 		 * DELETE: 	0000 0100
-		 * INVALID: 	0000 1000
 		 * */
 		, settings = 0x0;
 
-		/** Reset all flags */
-		$G.resetGenius = function() {
+		$.extend( $G, {
 			
-			settings = 0;
-		};
+			/** Reset all flags */
+			resetGenius: function() {
+				
+				if ( trigger ) {
+					settings = 0;
+					trigger.removeClass( "active" );
+				}
+			},
+
+			isGenius: function() {
+				return !!settings;
+			}
+		} );
 
 		return function( e ) {
 			
@@ -32,16 +41,23 @@ define( function() {
 								$G.getUpdateRows().length + "'>" + $G.getUpdateRows().length + " Updates</li>" +
 						"<li data-type='4' " + ((4 !== (settings & 4)) || "class='selected'") + " data-value='" + 
 								$G.getDeleteRows().length + "'>" + $G.getDeleteRows().length + " Deletes</li>" +
+
+						/**
 						"<li data-type='8' " + ((8 !== (settings & 8)) || "class='selected'") + " data-value='" + 
 								$G.getInvalidRows().length + "'>" + $G.getInvalidRows().length + " Invalids</li>" +
 						"</ul>" +
+						*/
+
 					"</div>"
 
-			, trigger = $( this )
-			, offset = trigger.offset();
+			, offset;
+
+			trigger = $( this );
+			offset = trigger.offset();
 
 			if ( trigger.is( ".open" ) ) { 
 
+				trigger.data( "dropdown" ).focus();
 				return e.preventDefault(); 
 			}
 
@@ -83,7 +99,6 @@ define( function() {
 					1 === (settings & 1) && (items = items.concat( $G.getAddRows() ));
 					2 === (settings & 2) && (items = items.concat( $G.getUpdateRows() ));
 					4 === (settings & 4) && (items = items.concat( $G.getDeleteRows() ));
-					8 === (settings & 8) && (items = items.concat( $G.getInvalidRows() ));
 
 					if ( settings ) {
 						
@@ -101,7 +116,7 @@ define( function() {
 					
 					if ( e.relatedTarget !== trigger.get( 0 ) ) {
 					
-						trigger.removeClass( "open" );
+						trigger.removeClass( "open" ).removeData( "dropdown" );
 						dropdown.removeClass( "slide-down" );
 
 						setTimeout( function() {
@@ -111,6 +126,8 @@ define( function() {
 				} )
 			
 				.appendTo( document.body );
+
+			trigger.data( "dropdown", dropdown );
 
 			/** After dom change hold the focus */
 			setTimeout( function( e ) { dropdown.addClass( "slide-down" ).focus(); } );
@@ -122,4 +139,3 @@ define( function() {
 		return new Genius( $G );
 	};
 } );
-	
