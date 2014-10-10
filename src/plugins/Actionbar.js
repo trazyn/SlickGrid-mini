@@ -79,6 +79,8 @@ define( [ "slick/curd/Delete",
 				
 				var self = $( this ).attr( "disabled", "disabled" );
 
+				$G.setAddRows && $G.setAddRows( {} );
+
 				$G.search()
 
 					.done( function() { 
@@ -86,7 +88,6 @@ define( [ "slick/curd/Delete",
 
 						/** RESET CURD DATA */
 
-						$G.setAddRows && $G.setAddRows( {} );
 						$G.setDeleteRows && $G.setDeleteRows( [] );
 						$G.setUpdateRows && $G.setUpdateRows( {} );
 						$G.setInvalidRows && $G.setInvalidRows( {} );

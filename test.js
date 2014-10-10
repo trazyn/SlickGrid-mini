@@ -19,7 +19,8 @@ require( [ "slick/paging/Paging",
 	"slick/editors/Select",
 	"slick/editors/Textarea",
 	"slick/core/Core", 
-	"slick/core/Grid" ], function( Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, Text, Select, Textarea ) {
+	"slick/core/Grid",
+	"slick/core/DataView" ], function( Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, Text, Select, Textarea ) {
 
 	var $G
 	, dataView = new Slick.Data.DataView();
