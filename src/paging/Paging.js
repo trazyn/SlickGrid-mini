@@ -1,8 +1,7 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions",
-	"slick/core/Dataview" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
 
 	"use strict";
 
@@ -94,6 +93,8 @@ define( [ "slick/paging/Local",
 			$G.setDeleteRows && $G.setDeleteRows( [] );
 			$G.setUpdateRows && $G.setUpdateRows( {} );
 			$G.setInvalidRows && $G.setInvalidRows( {} );
+
+			$G.resetGenius && $G.resetGenius();
 
 			$G.getSelectionModel() && $G.setSelectedRows( [] );
 		}
