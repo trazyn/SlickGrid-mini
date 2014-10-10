@@ -151,4 +151,3 @@ define( function() {
 		return plugin;
 	};
 } );
-
