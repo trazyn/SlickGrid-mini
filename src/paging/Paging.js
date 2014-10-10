@@ -89,11 +89,6 @@ define( [ "slick/paging/Local",
 
 		, reset = function() {
 		
-			$G.setAddRows && $G.setAddRows( {} );
-			$G.setDeleteRows && $G.setDeleteRows( [] );
-			$G.setUpdateRows && $G.setUpdateRows( {} );
-			$G.setInvalidRows && $G.setInvalidRows( {} );
-
 			$G.resetGenius && $G.resetGenius();
 
 			$G.getSelectionModel() && $G.setSelectedRows( [] );
