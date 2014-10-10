@@ -2,7 +2,24 @@
 define( function() {
 
 	var handleSort = function( e, args ) {
-		this.getData().onPagingInfoChanged.notify( { doSearch: 1 } );
+
+		if ( this.isGenius && this.isGenius() ) {
+		
+			var field = args.sortCol.field
+			
+			, dataView = this.getData();
+
+			dataView.beginUpdate();
+
+			dataView.sort( function( a, b ) {
+				var x = a[ field ], y = b[ field ];
+
+				return (x === y ? 0 : (x > y ? 1 : -1));
+			}, args.sortAsc );
+
+			dataView.endUpdate();
+		}
+		else this.getData().onPagingInfoChanged.notify( { doSearch: 1 } );
 	};
 	
 	return function( $G, ajaxOptions, enable ) {
@@ -104,4 +121,3 @@ define( function() {
 		return pager;
 	};
 } );
-
