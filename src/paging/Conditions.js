@@ -73,7 +73,7 @@ define( function() {
 
 				if ( fastQuery.is( ":checked" ) && 13 === e.keyCode ) {
 					
-					dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
+					$G.search();
 
 					e.stopPropagation();
 				}
