@@ -121,3 +121,4 @@ define( function() {
 		return pager;
 	};
 } );
+
