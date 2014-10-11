@@ -35,23 +35,15 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			}
 
 			columns.length && $G.setColumns( columns );
-		};
+		}
 
-		$G.onColumnsResized.subscribe( function( e, args ) {
-			
-			for ( var id in args.hash ) {
-				mapping[ id ][ "width" ] = args.hash[ id ];
-			}
+		, updateMapping = function() {
+		
+			mapping = {};
 
-			Storage.set( settings.key, mapping, { "session": false, "local": true }[ settings.scope ] );
-		} );
-
-		if ( !mapping ) {
 			for ( var i = 0, length = original.length; i < length; ++i ) {
 				
 				var column = original[ i ];
-
-				mapping = mapping || {};
 
 				mapping[ column.id ] = {
 					name: column.name,
@@ -63,7 +55,18 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 					index: i
 				};
 			}
-		} 
+		};
+
+		$G.onColumnsResized.subscribe( function( e, args ) {
+			
+			for ( var id in args.hash ) {
+				mapping[ id ][ "width" ] = args.hash[ id ];
+			}
+
+			Storage.set( settings.key, mapping, { "session": false, "local": true }[ settings.scope ] );
+		} );
+
+		if ( !mapping ) updateMapping(); 
 		else applyColumns( mapping );
 
 		$( settings.trigger ).on( "click", function() {
@@ -119,6 +122,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 							}
 
 							close();
+							updateMapping();
 							$G.setColumns( original );
 							Storage.remove( settings.key, { "session": false, "local": true }[ settings.scope ] );
 						} )
