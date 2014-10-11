@@ -859,12 +859,14 @@ if (typeof Slick === "undefined") {
                 applyColumnWidths();
               }
             })
-            .bind("dragend", function (e, dd) {
-              var newWidth;
+	    .bind("dragend", function (e, dd) {
+              var newWidth, hash = {};
               $(this).parent().removeClass("slick-header-column-active");
               for (j = 0; j < columnElements.length; j++) {
                 c = columns[j];
                 newWidth = $(columnElements[j]).outerWidth();
+
+								c.previousWidth !== newWidth && (hash[ c.id ] = newWidth);
 
                 if (c.previousWidth !== newWidth && c.rerenderOnResize) {
                   invalidateAllRows();
@@ -872,7 +874,7 @@ if (typeof Slick === "undefined") {
               }
               updateCanvasWidth(true);
               render();
-              trigger(self.onColumnsResized, {});
+              trigger(self.onColumnsResized, { hash: hash });
             });
       });
     }
