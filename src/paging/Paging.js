@@ -142,12 +142,14 @@ define( [ "slick/paging/Local",
 			dataView.onPagingInfoChanged.subscribe( function( e, args ) {
 
 				if ( args.doSearch ) {
-				
+
 					pager( args.pagingInfo || {
 						pageSize: +size.val(),
 						/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
 						pageNum: +current.val() + 1
-					}, uiRefresh, conditions.getConditions() );
+					}, uiRefresh, conditions.getConditions() )
+					
+					.done( reset );
 					
 				} else e.stopImmediatePropagation();
 			} );
@@ -240,8 +242,6 @@ define( [ "slick/paging/Local",
 		.delegate( "div.pager-refresh", "click", function( e ) {
 
 			dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
-
-			reset();
 
 			e.stopPropagation();
 		} );
