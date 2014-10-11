@@ -164,24 +164,3 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 	};
 } );
 
-
-	/**
-            .bind("dragend", function (e, dd) {
-              var newWidth, hash = {};
-              $(this).parent().removeClass("slick-header-column-active");
-              for (j = 0; j < columnElements.length; j++) {
-                c = columns[j];
-                newWidth = $(columnElements[j]).outerWidth();
-
-								c.previousWidth !== newWidth && (hash[ c.id ] = newWidth);
-
-                if (c.previousWidth !== newWidth && c.rerenderOnResize) {
-                  invalidateAllRows();
-                }
-              }
-              updateCanvasWidth(true);
-              render();
-              trigger(self.onColumnsResized, { hash: hash });
-            });
-
-	*/

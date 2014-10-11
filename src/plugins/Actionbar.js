@@ -4,7 +4,7 @@ define( [ "slick/curd/Delete",
 	"slick/curd/Add",
 	"slick/curd/Validation",
 	"slick/plugins/Genius",
-	"slick/plugins/MyColumns" ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
+	/** "slick/plugins/MyColumns" */ ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
 
 	"use strict";
 
@@ -35,10 +35,12 @@ define( [ "slick/curd/Delete",
 
 			init: function( $G ) {
 
+				/**
 				MyColumns( $G, {
 					
 					trigger: this
 				} )
+				*/
 			}
 		},
 
