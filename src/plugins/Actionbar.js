@@ -3,7 +3,8 @@ define( [ "slick/curd/Delete",
 	"slick/curd/Update",
 	"slick/curd/Add",
 	"slick/curd/Validation",
-	"slick/plugins/Genius" ], function( Delete, Update, Add, Validation, Genius ) {
+	"slick/plugins/Genius",
+	"slick/plugins/MyColumns" ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
 
 	"use strict";
 
@@ -23,6 +24,21 @@ define( [ "slick/curd/Delete",
 
 			init: function( $G ) {
 				return Genius( $G, this );
+			}
+		},
+
+		lab: {
+			
+			enable: true,
+
+			selector: ".slick-actionbar-lab",
+
+			init: function( $G ) {
+
+				MyColumns( $G, {
+					
+					trigger: this
+				} )
 			}
 		},
 
@@ -79,8 +95,6 @@ define( [ "slick/curd/Delete",
 				
 				var self = $( this ).attr( "disabled", "disabled" );
 
-				$G.setAddRows && $G.setAddRows( {} );
-
 				$G.search()
 
 					.done( function() { 
@@ -88,6 +102,7 @@ define( [ "slick/curd/Delete",
 
 						/** RESET CURD DATA */
 
+						$G.setAddRows && $G.setAddRows( {} );
 						$G.setDeleteRows && $G.setDeleteRows( [] );
 						$G.setUpdateRows && $G.setUpdateRows( {} );
 						$G.setInvalidRows && $G.setInvalidRows( {} );
@@ -205,7 +220,7 @@ define( [ "slick/curd/Delete",
 				&& (plugin = action.init.call( container.find( action.selector ), $G ));
 
 			container
-				.delegate( action.selector, action.type, (function( callback, $G, plugin ) {
+				.delegate( action.selector, action.type || "SKIP THIS", (function( callback, $G, plugin ) {
 					return function( e ) {
 						
 						callback instanceof Function && callback.call( this, $G, plugin, e );
