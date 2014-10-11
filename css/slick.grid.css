@@ -100,34 +100,6 @@ input[type="checkbox"].slick-fast-query:disabled + label, input[type="checkbox"]
 	box-shadow:none;
 }
 
-
-/*
-IMPORTANT:
-In order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.
-No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) or user-specified CSS
-classes should alter those!
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 body{font:12px/14px Tahoma,"Microsoft YaHei",arial,sans-serif;color: #333;}
 
 .slick-cell input[type="text"]{border:1px solid #ccc;line-height:20px;padding: 0;margin: 0;padding-left: 5px;  padding-right: 5px;}
