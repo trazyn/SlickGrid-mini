@@ -9,7 +9,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		ignore: [ "_checkbox_selector", "_radio_selector", "idx" ]
 	};
 
-	var MyColumns = function( $G, settings ) {
+	var Lab = function( $G, settings ) {
 		
 		var mapping = Storage.get( settings.key, !!{ "session": 0, "local": 1 }[ settings.scope ] )
 	
@@ -80,7 +80,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 					var self = this;
 
-					self.load( window.wpf_context_path + "/huawei/wpf/clientjavascript/scmresource/clienthtml/mycolumns.html", function() {
+					self.load( window.wpf_context_path + "/huawei/wpf/clientjavascript/scmresource/clienthtml/lab.html", function() {
 
 						var html = "";
 
@@ -102,7 +102,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 								"</li>");
 						}
 						
-						self.find( "div.slick-mycolumns-list" ).html( "<ul>" + html + "</ul>" );
+						self.find( "div.slick-lab-list" ).html( "<ul>" + html + "</ul>" );
 
 						ready.resolve();
 					} );
@@ -160,7 +160,6 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 		var settings = $.extend( {}, defaults, options || {} );
 		
-		new MyColumns( $G, settings );
+		new Lab( $G, settings );
 	};
 } );
-
