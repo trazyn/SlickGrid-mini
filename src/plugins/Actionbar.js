@@ -205,8 +205,6 @@ define( [ "slick/curd/Delete",
 
 		container = $( container );
 
-		$G.getData().syncGridSelection( $G );
-
 		/** Add validation ability */
 		Validation( $G );
 

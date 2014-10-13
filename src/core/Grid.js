@@ -3366,6 +3366,10 @@ if (typeof Slick === "undefined") {
       "setSelectedRows": setSelectedRows,
       "getContainerNode": getContainerNode,
 
+      "getUid": function() {
+      	return uid;
+      },
+
       "render": render,
       "invalidate": invalidate,
       "invalidateRow": invalidateRow,

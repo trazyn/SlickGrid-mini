@@ -26,6 +26,8 @@ define( function() {
 		
 		, bar = $( $G.getHeaderRow() )
 
+		, options = $G.getOptions()
+
 		, filters = {};
 	
 		$G.onHeaderRowCellRendered.subscribe( function( e, args ) {
@@ -40,10 +42,16 @@ define( function() {
 		/** Set the filter */
 		dataView.setFilter( function( row, args ) {
 			
-			var value;
+			var value, idProperty = dataView.getIdProperty();
 
 			/** Skip the new line */
 			if ( row[ "_isNew" ] ) { return true; }
+
+			if ( ( options.alwaysUpdateRows && $G.getUpdateRowsID && $G.getUpdateRowsID()[ row[ idProperty ] ] ) 
+				|| ( options.alwaysDeleteRows && $G.getDeleteRowsID && $G.getDeleteRowsID()[ row[ idProperty ] ] ) ) {
+					
+					return true;
+				}
 
 			for ( var field in filters ) {
 

@@ -5,37 +5,7 @@ define( [ "slick/paging/Local",
 
 	"use strict";
 
-	var html = 
-			"<div class='pager'>" +
-				"<div class='pager-left'>" +
-					"<div class='pager-nav'>" +
-						"<button class='pager-prev' disabled='disabled'></button>" +
-						"<button class='pager-next' disabled='disabled'></button>" +
-					"</div>" +
-
-					"<div class='pager-info'>" +
-						"<input type='text' class='pager-current' maxlength='5' value='1'>" +
-						"<button disabled='disabled' class='pager-total'>1</button>" +
-					"</div>" +
-				"</div>" +
-
-				"<div class='pager-right'>" +
-					"<div style='display: inline-block;'>" +
-						"<input type='checkbox' class='slick-fast-query' id='slick-fast-query' checked='checked'>" +
-						"<label for='slick-fast-query'></label>" +
-					"</div>" +
-
-					"<div class='pager-refresh'></div>" +
-
-					"<div class='pager-size'>" +
-						"<label class='custom-select'>" +
-							"<select></select>" +
-						"</label>" +
-					"</div>" +
-				"</div>" +
-			"</div>"
-			
-	, defaults = {
+	var defaults = {
 		
 		container: undefined,
 
@@ -51,7 +21,35 @@ define( [ "slick/paging/Local",
 
 		var settings = $.extend( {}, defaults, options || {} )
 	
-		, container = $( html )
+		, container = $( 
+			"<div class='pager'>" +
+				"<div class='pager-left'>" +
+					"<div class='pager-nav'>" +
+						"<button class='pager-prev' disabled='disabled'></button>" +
+						"<button class='pager-next' disabled='disabled'></button>" +
+					"</div>" +
+
+					"<div class='pager-info'>" +
+						"<input type='text' class='pager-current' maxlength='5' value='1'>" +
+						"<button disabled='disabled' class='pager-total'>1</button>" +
+					"</div>" +
+				"</div>" +
+
+				"<div class='pager-right'>" +
+					"<div style='display: inline-block;'>" +
+						"<input type='checkbox' class='slick-fast-query' id='slick-fast-query-" + $G.getUid() + "' checked='checked'>" +
+						"<label for='slick-fast-query-" + $G.getUid() + "'></label>" +
+					"</div>" +
+
+					"<div class='pager-refresh'></div>" +
+
+					"<div class='pager-size'>" +
+						"<label class='custom-select'>" +
+							"<select></select>" +
+						"</label>" +
+					"</div>" +
+				"</div>" +
+			"</div>" )
 
 		, current = container.find( "input.pager-current" )
 		, size = container.find( "select:first" )
@@ -91,7 +89,7 @@ define( [ "slick/paging/Local",
 		
 			$G.resetGenius && $G.resetGenius();
 
-			$G.getSelectionModel() && $G.setSelectedRows( [] );
+			!$G.getOptions().keepSelection && $G.getSelectionModel() && $G.setSelectedRows( [] );
 		}
 		
 		/** A function that implement for paging */
@@ -158,7 +156,7 @@ define( [ "slick/paging/Local",
 		}
 
 		/** This function will be cause a refresh */
-		conditions = Conditions( $G, container.find( ":checkbox.slick-fast-query" ) );
+		conditions = Conditions( $G, container.find( ":checkbox.slick-fast-query-" + $G.getUid() + "" ) );
 
 		/** Refresh dataview */
 		dataView.endUpdate();
@@ -227,7 +225,7 @@ define( [ "slick/paging/Local",
 			e.stopImmediatePropagation();
 		} )
 
-		.delegate( ":checkbox.slick-fast-query", "click", function( e ) {
+		.delegate( ":checkbox.slick-fast-query-" + $G.getUid(), "click", function( e ) {
 			
 			if ( $( this ).is( ":checked" ) ) {
 				
@@ -245,6 +243,13 @@ define( [ "slick/paging/Local",
 
 			e.stopPropagation();
 		} );
+
+		if ( $G.getOptions().keepSelection ) {
+		
+			$G.onCellCssStylesChnage.subscribe( function( e, args ) {
+				$G.onSelectedRowsChanged.notify();
+			} );
+		} else $G.getData().syncGridSelection( $G );
 
 		$( $G.getContainerNode() )
 
