@@ -38,7 +38,7 @@ define( [ "slick/curd/Delete",
 				MyColumns( $G, {
 					
 					trigger: this
-				} )
+				} );
 			}
 		},
 
