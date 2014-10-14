@@ -156,7 +156,7 @@ define( [ "slick/paging/Local",
 		}
 
 		/** This function will be cause a refresh */
-		conditions = Conditions( $G, container.find( ":checkbox.slick-fast-query-" + $G.getUid() + "" ) );
+		conditions = Conditions( $G, container.find( ":checkbox#slick-fast-query-" + $G.getUid() + "" ) );
 
 		/** Refresh dataview */
 		dataView.endUpdate();
@@ -225,7 +225,7 @@ define( [ "slick/paging/Local",
 			e.stopImmediatePropagation();
 		} )
 
-		.delegate( ":checkbox.slick-fast-query-" + $G.getUid(), "click", function( e ) {
+		.delegate( ":checkbox[id^=slick-fast-query-]", "click", function( e ) {
 			
 			if ( $( this ).is( ":checked" ) ) {
 				
@@ -249,7 +249,7 @@ define( [ "slick/paging/Local",
 			$G.onCellCssStylesChnage.subscribe( function( e, args ) {
 				$G.onSelectedRowsChanged.notify();
 			} );
-		} else $G.getData().syncGridSelection( $G );
+		} else $G.getSelectionModel() && $G.getData().syncGridSelection( $G );
 
 		$( $G.getContainerNode() )
 
