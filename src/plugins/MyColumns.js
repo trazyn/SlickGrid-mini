@@ -14,7 +14,11 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		var mapping = Storage.get( settings.key, !!{ "session": 0, "local": 1 }[ settings.scope ] )
 	
 		, original = $G.getColumns()
-	
+
+		, options = $G.getOptions()
+		, _alwaysUpdateRows = options.alwaysUpdateRows
+		, _alwaysDeleteRows = options.alwaysDeleteRows
+
 		, applyColumns = function() {
 		
 			var columns = [];
@@ -104,6 +108,9 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 						
 						self.find( "div.slick-lab-list" ).html( "<ul>" + html + "</ul>" );
 
+						self.find( "#show-hide-alwaysDeleted" ).attr( "checked", !!options.alwaysDeleteRows );
+						self.find( "#show-hide-alwaysUpdated" ).attr( "checked", !!options.alwaysUpdateRows );
+
 						ready.resolve();
 					} );
 
@@ -120,6 +127,9 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 									
 									&& (original[ item.index ][ "width" ] = item.originalWidth);
 							}
+
+							options.alwaysUpdateRows = _alwaysUpdateRows;
+							options.alwaysDeleteRows = _alwaysDeleteRows;
 
 							close();
 							updateMapping();
@@ -148,6 +158,16 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 							, item = mapping[ self.parents( "li[data-id]" ).attr( "data-id" ) ];
 
 							item[ "tooltip" ] = self.val();
+						} )
+						
+						.delegate( "#show-hide-alwaysUpdate", "click", function() {
+							
+							options.alwaysUpdateRows = !options.alwaysUpdateRows;
+						} )
+
+						.delegate( "#show-hide-alwaysDeleted", "click", function() {
+							
+							options.alwaysDeleteRows = !options.alwaysDeleteRows;
 						} );
 
 					ready.resolve();
