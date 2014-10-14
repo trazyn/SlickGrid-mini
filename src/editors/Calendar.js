@@ -1,221 +1,85 @@
 
-(function( $, undefined ) {
+define( [ "self/common/ui/Calendar" ], function() {
 
-	var defaults = {
+	var CalendarEditor = function( args ) {
 	
-		key: "calendar",
+		var
+		  input,
+		  trigger,
+		  defaultValue;
 
-		months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
-
-		format: "yyyy-MM-dd"
-	},
-
-	calc = function( date ) {
-
-		var 
-		  prev = new Date( date.getFullYear(), date.getMonth(), 0 ),
-		  next = new Date( date.getFullYear(), date.getMonth() + 1, 1 ),
-
-		  now = new Date(),
-
-		  range = {
-			  prev: [ prev.getDate() - prev.getDay(), prev.getDate() ],
-			  current: [ 1, new Date( date.getFullYear(), date.getMonth() + 1, 0 ).getDate() ],
-			  next: [ 1, 6 - next.getDay() + 1 ]
-		  }
-
-		  , html = "<div class='headers'>" +
-		  	  	"<div class='day-header'>S</div>" +
-		  	  	"<div class='day-header'>M</div>" +
-		  	  	"<div class='day-header'>T</div>" +
-		  	  	"<div class='day-header'>W</div>" +
-		  	  	"<div class='day-header'>T</div>" +
-		  	  	"<div class='day-header'>F</div>" +
-		  	  	"<div class='day-header'>S</div>" +
-		  	  "</div>";
-		
-		for ( var start = range.prev[ 0 ], end = range.prev[ 1 ]; end - start !== 6 && start <= end; ++start ) {
+		$.extend( this, {
 			
-			html += "<div class='day past adjacent-month last-month' data-date='" + [ prev.getFullYear(), prev.getMonth() + 1, start ].join( "-" ) + "'>" +
-				start +
-				"</div>";
-		}
+			init: function() {
 
-		for ( var start = range.current[ 0 ], end = range.current[ 1 ]; start <= end; ++start ) {
+				var options, offset;
 
-			var clazz = "";
+				input = $( "<INPUT type=text class='editor-text dialog' /><small class='calendar-trigger' />" )
+					.appendTo( args.container ).first().focus();
 
-			switch ( true ) {
-				
-				case start < now.getDate():
-					clazz = " past ";
-					break;
+				offset = input.offset();
+				options = $.extend( {}, {
 
-				case date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && start ===  now.getDate():
-					clazz = " today ";
-					break;
-			}
-			
-			html += "<div class='day " + clazz + "' data-date='" + [ date.getFullYear(), prev.getMonth() + 2, start ].join( "-" ) + "'>" +
-				start +
-				"</div>";
-		}
-
-		for ( var start = range.next[ 0 ], end = range.next[ 1 ]; start <= end; ++start ) {
-		
-			html += "<div class='day adjacent-month next-month' data-date='" + [ next.getFullYear(), next.getMonth(), start ].join( "-" ) + "'>" +
-				start +
-				"</div>";
-		}
-
-		return "<div class='days'>" + html + "</div>";
-	},
-	
-	Calendar = function( settings ) {
-	
-		var defaultValue
-
-		, now, current
-		, show = function( offset ) {
-
-			offset = offset || 0;
-		
-			switch ( offset ) {
-			
-				case 0:
-					now = new Date();
-					current = [ now.getFullYear(), now.getMonth() + 1, 1 ];
-					break;
-
-				case -1:
-					if ( 1 === current[ 1 ] ) {
-
-						--current[ 0 ];
-						current[ 1 ] = 12;
-					} else 
-						--current[ 1 ];
-					break;
-
-				case 1:
-					if ( 12 === current[ 1 ] ) {
-						
-						++current[ 0 ];
-						current[ 1 ] = 1;
-					} 
-					else ++current[ 1 ];
-					break;
-			}
-
-			calendar.find( ".clndr-month" ).html( settings.months[ current[ 1 ] - 1 ] + " , " + current[ 0 ] );
-			calendar.find( ".days-container" ).html( calc( new Date( current.join( "-" ) ) ) );
-		}
-			
-		, calendar = "<div tabindex=-1 class='clndr' style='top:" + settings.position.top + "; left:" + settings.position.left + "'>" +
-					"<div class='controls'>" + 
-					"<div class='clndr-previous-button'>Prev</div>" +
-					"<div class='clndr-month'>Today</div>" +
-					"<div class='clndr-next-button'>Next</div>" +
-				"</div>" +
-				
-				"<div class='days-container'></div>";
-
-		if ( settings.defaultValue instanceof Date ) {
-			defaultValue = settings.defaultValue;
-		} else if ( "string" === typeof settings.defaultValue ) {
-			defaultValue = new Date( settings.defaultValue );
-		} else
-			defaultValue = new Date();
-
-		calendar = $( calendar );
-		show( 0 );
-		calendar.appendTo( document.body )
-			
-			.delegate( ".clndr-previous-button", "click", function( e ) {
-
-				show( -1 );
-				e.preventDefault();
-			} )
-		
-			.delegate( ".clndr-next-button", "click", function( e ) {
-
-				show( 1 );
-				e.preventDefault();
-			} )
-			
-			.delegate( ".clndr-month", "click", function() {
-			
-				show( 0 );
-			} )
-			
-			.delegate( ".days-container div.day", "click", function() {
-			
-				var date = new Date( this.getAttribute( "data-date" ) )
-
-				, value = settings.format.replace( /(yyyy|MM|dd|HH|mm|ss)/g, function( match, post, originalText ) {
+					format: "yyyy-MM-dd HH:mm:ss",
 					
-					switch ( match ) {
-						
-						case "yyyy":
-							return date.getFullYear();
+					callback: function( value ) {
+						input.val( value ).focus();
+					},
 
-						case "MM":
-							return date.getMonth() + 1;
+					defaultValue: function() {
+						return input.val() ? new Date( input.val() ) : new Date();
+					},
 
-						case "dd":
-							return date.getDate();
-
-						case "HH":
-							return date.getHours();
-
-						case "mm":
-							return date.getMinutes();
-
-						case "ss":
-							return date.getSeconds();
+					position: {
+						top: offset.top + input.height(),
+						left : offset.left
 					}
-				} );
+				}, args.column.editorArgs || {} );
 
-				"function" === typeof settings.callback
+				trigger = input.next().calendar( options );
+			},
 
-					&& settings.callback( value );
-
-				setTimeout( function() { calendar.remove(); } ); } )
-			
-			.on( "focusout", function() {
-				calendar.remove();
-			} )
-			
-			.focus();
-	};
-
-	$.fn.calendar = function( options ) {
-	
-		var settings = $.extend( {}, defaults, options || {} );
-
-		this.each( function() {
-			
-			settings.trigger = this;
-
-			$( this ).on( "click", function() {
+			destroy: function() {
 				
-				var self, offset;
+				input.add( trigger ).remove();
+			},
 
-				if ( !settings.position ) {
+			loadValue: function( item ) {
+			
+				input.val( defaultValue = item[ args.column.field ] ).focus();
+			},
+
+			serializeValue: function() {
+				return input.val();
+			},
+
+			applyValue: function( item, state ) {
+				item[ args.column.field ] = state;
+			},
+
+			isValueChanged: function() {
 				
-					self = $( this );
-					offset = self.offset();
+				/** Fuzzy match */
+				return defaultValue != input.val();
+			},
 
-					settings.position = {
+			validate: function( item, column ) {
+			
+				if ( args.column.validator ) {
 					
-						top: offset.top + self.height(),
-						left: offset.left
-					};
+					return args.column.validator( input.val(), item, column );
 				}
 
-				new Calendar( settings );
-			} );
+				return {
+					
+					valid: true,
+					msg: ""
+				};
+			}
 		} );
+
+		this.init();
 	};
 
-})( window.jQuery );
-
+	return CalendarEditor;
+} );
