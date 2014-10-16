@@ -14,7 +14,7 @@ define( [ "self/common/ui/Calendar" ], function() {
 
 				var options, offset;
 
-				input = $( "<INPUT type=text class='editor-text dialog' /><small class='calendar-trigger' />" )
+				input = $( "<INPUT type=text disabled='disabled' class='editor-text dialog' /><small class='calendar-trigger' />" )
 					.appendTo( args.container ).first().focus();
 
 				offset = input.offset();
