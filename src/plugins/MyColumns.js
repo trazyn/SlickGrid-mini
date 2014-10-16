@@ -11,15 +11,15 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 	var Lab = function( $G, settings ) {
 		
-		var mapping = Storage.get( settings.key, !!{ "session": 0, "local": 1 }[ settings.scope ] )
+		var config = Storage.get( settings.key, !!{ "session": 0, "local": 1 }[ settings.scope ] )
 	
 		, original = $G.getColumns()
-
 		, options = $G.getOptions()
-		, _alwaysUpdateRows = options.alwaysUpdateRows
-		, _alwaysDeleteRows = options.alwaysDeleteRows
 
-		, applyColumns = function() {
+		, mapping
+		, miscellaneous
+
+		, applyConfig = function() {
 		
 			var columns = [];
 
@@ -39,9 +39,14 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			}
 
 			columns.length && $G.setColumns( columns );
+
+			if ( miscellaneous ) {
+				options.alwaysUpdateRows = miscellaneous.alwaysUpdateRows;
+				options.alwaysDeleteRows = miscellaneous.alwaysDeleteRows;
+			}
 		}
 
-		, updateMapping = function() {
+		, updateConfig = function() {
 		
 			mapping = {};
 
@@ -59,6 +64,11 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 					index: i
 				};
 			}
+
+			miscellaneous = {
+				alwaysDeleteRows: options.alwaysDeleteRows,
+				alwaysUpdateRows: options.alwaysUpdateRows
+			};
 		};
 
 		$G.onColumnsResized.subscribe( function( e, args ) {
@@ -67,11 +77,23 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 				mapping[ id ][ "width" ] = args.hash[ id ];
 			}
 
-			Storage.set( settings.key, mapping, { "session": false, "local": true }[ settings.scope ] );
+			Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 		} );
 
-		if ( !mapping ) updateMapping(); 
-		else applyColumns( mapping );
+		if ( !config ) {
+
+			updateConfig(); 
+
+			config = {
+				mapping: mapping,
+				miscellaneous: miscellaneous
+			};
+		} else {
+			mapping = config[ "mapping" ];
+			miscellaneous = config[ "miscellaneous" ];
+
+			applyConfig();
+		}
 
 		$( settings.trigger ).on( "click", function() {
 		
@@ -108,8 +130,8 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 						
 						self.find( "div.slick-lab-list" ).html( "<ul>" + html + "</ul>" );
 
-						self.find( "#show-hide-alwaysDeleted" ).attr( "checked", !!options.alwaysDeleteRows );
-						self.find( "#show-hide-alwaysUpdated" ).attr( "checked", !!options.alwaysUpdateRows );
+						self.find( "#show-hide-alwaysDeleted" ).attr( "checked", !!miscellaneous.alwaysDeleteRows );
+						self.find( "#show-hide-alwaysUpdated" ).attr( "checked", !!miscellaneous.alwaysUpdateRows );
 
 						ready.resolve();
 					} );
@@ -128,11 +150,11 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 									&& (original[ item.index ][ "width" ] = item.originalWidth);
 							}
 
-							options.alwaysUpdateRows = _alwaysUpdateRows;
-							options.alwaysDeleteRows = _alwaysDeleteRows;
+							miscellaneous.alwaysUpdateRows = options.alwaysUpdateRows = false;
+							miscellaneous.alwaysDeleteRows = options.alwaysDeleteRows = false;
 
 							close();
-							updateMapping();
+							updateConfig();
 							$G.setColumns( original );
 							Storage.remove( settings.key, { "session": false, "local": true }[ settings.scope ] );
 						} )
@@ -140,8 +162,8 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 						.delegate( "button[name=save]", "click", function() {
 						
 							close();
-							applyColumns( mapping );
-							Storage.set( settings.key, mapping, { "session": false, "local": true }[ settings.scope ] );
+							applyConfig();
+							Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 						} )
 						
 						.delegate( "li[data-id] :checkbox", "click", function( e ) {
@@ -160,14 +182,16 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 							item[ "tooltip" ] = self.val();
 						} )
 						
-						.delegate( "#show-hide-alwaysUpdate", "click", function() {
+						.delegate( "#show-hide-alwaysUpdated", "click", function() {
 							
-							options.alwaysUpdateRows = !options.alwaysUpdateRows;
+							options.alwaysUpdateRows = miscellaneous.alwaysUpdateRows = !miscellaneous.alwaysUpdateRows;
+							Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 						} )
 
 						.delegate( "#show-hide-alwaysDeleted", "click", function() {
 							
-							options.alwaysDeleteRows = !options.alwaysDeleteRows;
+							options.alwaysDeleteRows = miscellaneous.alwaysDeleteRows = !miscellaneous.alwaysDeleteRows;
+							Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 						} );
 
 					ready.resolve();
