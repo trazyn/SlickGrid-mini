@@ -257,11 +257,13 @@ define( [ "slick/paging/Local",
 
 		$.extend( $G, {
 			
-			search: function( pagingInfo ) {
+			search: function( args ) {
 
-				var args = conditions.getConditions();
+				var input = conditions.getConditions();
 
-				args.result = {
+				args = args || {};
+
+				input.result = {
 
 					result: {
 					
@@ -271,11 +273,13 @@ define( [ "slick/paging/Local",
 						items2Selected: JSON.stringify( $G.getSelectedRow ? $G.getSelectedRows() : [] )
 					}
 				};
+
+				$.extend( input.params, args.params || {} );
 			
-				return pager( pagingInfo || {
+				return pager( args.pagingInfo || {
 					pageSize: +size.val(),
 					pageNum: 0
-				}, uiRefresh, args )
+				}, uiRefresh, input )
 				
 				.done( function() {
 					
