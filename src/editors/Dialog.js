@@ -5,7 +5,6 @@ define( [ "slick/paging/Paging",
 
 	var openDialog = function( options ) {
 
-	
 		$.amodal( {
 			
 			title: options.title || "Dialog",
@@ -34,7 +33,7 @@ define( [ "slick/paging/Paging",
 						"<button name='amodal-cancel'>Cancel</button>" +
 					"</section>" );
 				
-				window.$DG = $G = new Slick.Grid( this.find( ".slick-wrap > div:first" ), new Slick.Data.DataView(), [], {
+				$G = new Slick.Grid( this.find( ".slick-wrap > div:first" ), new Slick.Data.DataView(), [], {
 					
 					/** Enable keybord navigation */
 					enableCellNavigation: true,
@@ -84,7 +83,10 @@ define( [ "slick/paging/Paging",
 				this
 
 				.delegate( "button[name=search]", "click", function() {
-					$G.search();
+
+					$G.search( {
+						params: { "find": $( this ).prev().val() }
+					} );
 				} )
 
 				.delegate( "button[name=filter]", "click", function() {
