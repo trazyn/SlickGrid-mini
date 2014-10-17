@@ -104,6 +104,15 @@ define( [ "slick/paging/Paging",
 					close();
 				} )
 
+				.delegate( ":text[name=sometext]", "keyup", function( e ) {
+					
+					e.keyCode === 13 && $G.search( {
+						params: { "find": this.value }
+					} );
+
+					e.preventDefault();
+				} )
+
 				.find( ".slick-wrap" ).removeClass( "out" );
 
 				ready.resolve();
@@ -179,7 +188,6 @@ define( [ "slick/paging/Paging",
 				};
 			}
 		} );
-
 
 		this.init();
 	};
