@@ -65,7 +65,7 @@ if (typeof Slick === "undefined") {
       enableCellNavigation: true,
 
       /** Need jQuery-ui */
-      enableColumnReorder: false,
+      enableColumnReorder: true,
       asyncEditorLoading: false,
       asyncEditorLoadDelay: 100,
       forceFitColumns: false,
@@ -211,11 +211,6 @@ if (typeof Slick === "undefined") {
         if (m.maxWidth && m.width > m.maxWidth) {
           m.width = m.maxWidth;
         }
-      }
-
-      // validate loaded JavaScript modules against requested options
-      if (options.enableColumnReorder && !$.fn.sortable) {
-        throw new Error("SlickGrid's 'enableColumnReorder = true' option requires jquery-ui.sortable module to be loaded");
       }
 
       editController = {
@@ -672,40 +667,33 @@ if (typeof Slick === "undefined") {
     }
 
     function setupColumnReorder() {
-      $headers.filter(":ui-sortable").sortable("destroy");
-      $headers.sortable({
-        containment: "parent",
-        distance: 3,
-        axis: "x",
-        cursor: "default",
-        tolerance: "intersection",
-        helper: "clone",
-        placeholder: "slick-sortable-placeholder ui-state-default slick-header-column",
-        start: function (e, ui) {
-          ui.placeholder.width(ui.helper.outerWidth() - headerColumnWidthDiff);
-          $(ui.helper).addClass("slick-header-column-active");
-        },
-        beforeStop: function (e, ui) {
-          $(ui.helper).removeClass("slick-header-column-active");
-        },
-        stop: function (e) {
-          if (!getEditorLock().commitCurrentEdit()) {
-            $(this).sortable("cancel");
-            return;
-          }
 
-          var reorderedIds = $headers.sortable("toArray");
-          var reorderedColumns = [];
-          for (var i = 0; i < reorderedIds.length; i++) {
-            reorderedColumns.push(columns[getColumnIndex(reorderedIds[i].replace(uid, ""))]);
-          }
-          setColumns(reorderedColumns);
+    	    $headers.find( "div.slick-header-column" ).each( function() {
 
-          trigger(self.onColumnsReordered, {});
-          e.stopPropagation();
-          setupColumnResize();
-        }
-      });
+    	    	    var self = $( this );
+
+		    self
+    	    	    	.drag( "start", function( e, dd ) {
+
+    	    	    		return self.clone()
+    	    	    			.css( { 
+    	    	    				"position": "absolute",
+    	    	    				"background": "#f00",
+						"opacity": 0.75,
+    	    	    				"z-index": 999,
+    	    	    				"cursor": "move",
+    	    	    				"left": dd.left,
+    	    	    				"top": dd.top
+    	    	    			} )
+    	    	    			.appendTo( document.body );
+    	    	    	} )
+    	    	    	.drag( function( e, dd ) {
+    	    	    		$( dd ).css( { left: dd.offsetX } );
+    	    	    	} )
+    	    	    	.drag( "end", function( e, dd ) {
+				//$( dd.proxy ).remove();
+    	    	    	} );
+    	    } );
     }
 
     function setupColumnResize() {
@@ -994,10 +982,6 @@ if (typeof Slick === "undefined") {
       var i = plugins.length;
       while(i--) {
         unregisterPlugin(plugins[i]);
-      }
-
-      if (options.enableColumnReorder) {
-          $headers.filter(":ui-sortable").sortable("destroy");
       }
 
       unbindAncestorScrollEvents();

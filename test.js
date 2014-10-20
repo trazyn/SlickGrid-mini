@@ -143,7 +143,7 @@ require( [ "slick/paging/Paging",
 		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
 		filter: true,
 		width: 200,
-		sortable: true
+		sortable: false
 	} ] );
 
 	Paging( $G, dataView, {
@@ -172,6 +172,16 @@ require( [ "slick/paging/Paging",
 	Actionbar( $G, $G.getContainerNode().previousElementSibling );
 
 	$G.init();
+
+	$( ".slick-header-column" )
+
+		.each( function() {
+			
+			this.addEventListener( "dragstart", function( e ) {
+			
+				e.dataTransfer.setImage( this, 0, 0 );
+			} );
+		} );
 } );
 
 //$.get( "/scm/scmui/ajax2?bst_model=huawei/wpf/Framework&nodeID=DC00000000091301" )
