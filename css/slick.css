@@ -48,7 +48,7 @@ classes should alter those!
 
 .slick-header { box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.4); z-index: 100; }
 .ui-widget{border:1px solid #ddd;}
-.slick-cell input[type="text"]{width: 100%;height: 35px;border:none;}
+.slick-cell input[type="text"]{width: 100%;height: 35px;border:none;box-sizing: border-box;}
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default { width: 100%; overflow: hidden; border-left: 0px; font-weight: 300; }
 .slick-row.odd{background: #F5F5F5;}
 .slick-row:hover{transition: all .2s linear; background: #E7F0F7;}
@@ -106,7 +106,7 @@ input[type=checkbox]:checked + .toggle:after{ opacity: 1; }
 .pager-nav .pager-next{margin-left:-3px;margin-right:5px;}
 .pager-nav .pager-prev:after,.pager-nav .pager-next:after{border-width: 2px;border-style:solid;border-color:#333;width: 7px;display: block;height: 7px;content:'';-webkit-transform: rotate(-45deg);border-bottom: none;border-right: none;}
 .pager-nav .pager-next:after{border:none;border-right:2px solid #333;border-bottom:2px solid #333;}
-.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;height: 24px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;-webkit-transition:all .2s linear;}
+.pager-info .pager-current{width: 30px;padding:0;color: #06F;margin:0;height: 22px;background: none;text-align: center;border: 1px solid #ccc;border-radius: 50px 0 0 50px;border-right: none;-webkit-transition:all .2s linear;}
 .pager-nav .pager-prev:hover,.pager-nav .pager-next:hover,.pager-count button[name="record-count"]:hover{background:#333;color: #fff;}
 .pager-nav .pager-prev:hover:after,.pager-nav .pager-next:hover:after{border-color:white;}
 .pager-nav .pager-prev[disabled],.pager-nav .pager-next[disabled]{background:#eee;color:#bbb;cursor: default;}
@@ -250,4 +250,3 @@ button.buttonStyle:hover{box-shadow:-1px 0px 9px rgba(0, 0, 0, 0.16) inset;}
 #slick-mycolumns .su-inline{text-align:right;margin-top:15px;}
 #slick-mycolumns .progress-button[name="save"]:hover{background:#35B369;}
 #slick-mycolumns .progress-button[name="cancel"]:hover{background:#666;}
-
