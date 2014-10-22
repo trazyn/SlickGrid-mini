@@ -4,7 +4,7 @@ define( [ "slick/curd/Delete",
 	"slick/curd/Add",
 	"slick/curd/Validation",
 	"slick/plugins/Genius",
-	/** "slick/plugins/MyColumns" */ ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
+	"slick/plugins/MyColumns" ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
 
 	"use strict";
 
@@ -33,14 +33,11 @@ define( [ "slick/curd/Delete",
 
 			selector: ".slick-actionbar-lab",
 
-			init: function( $G ) {
+			init: function( $G, options ) {
 
-				/**
-				MyColumns( $G, {
-					
+				MyColumns( $G, $.extend( {
 					trigger: this
-				} );
-				*/
+				}, options || {} ) );
 			}
 		},
 
@@ -199,9 +196,9 @@ define( [ "slick/curd/Delete",
 		}
 	};
 	
-	return function( $G, container, selectors ) {
+	return function( $G, container, options ) {
 
-		var settings = $.extend( {}, selectors || {}, defaults );
+		var settings = $.extend( true, {}, options || {}, defaults );
 
 		container = $( container );
 
@@ -217,7 +214,7 @@ define( [ "slick/curd/Delete",
 			if ( !action.enable ) { continue; }
 			
 			"function" === typeof action.init 
-				&& (plugin = action.init.call( container.find( action.selector ), $G ));
+				&& (plugin = action.init.call( container.find( action.selector ), $G, action[ "options" ] ));
 
 			container
 				.delegate( action.selector, action.type || "SKIP THIS", (function( callback, $G, plugin ) {
