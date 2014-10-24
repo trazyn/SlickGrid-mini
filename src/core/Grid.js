@@ -934,10 +934,10 @@ if (typeof Slick === "undefined") {
 
     function getColumnCssRules(idx) {
       if (!stylesheet) {
-        var sheets = document.styleSheets;
-        for (var i = 0; i < sheets.length; i++) {
-          if ((sheets[i].ownerNode || sheets[i].owningElement) == $style[0]) {
-            stylesheet = sheets[i];
+        var styles = document.querySelectorAll( "style" );
+        for (var i = 0; i < styles.length; i++) {
+          if (styles[i] == $style[0]) {
+            stylesheet = styles[i]["sheet"];
             break;
           }
         }
