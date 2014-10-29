@@ -154,7 +154,7 @@ define( [ "slick/curd/Delete",
 			selector: ".slick-actionbar-filter",
 			type: "click",
 			callback: function( $G ) {
-				$G.setHeaderRowVisibility( !$( $G.getHeaderRow() ).is( ":visible" ) );
+				$G.toggleHeaderRow();
 			},
 
 			enable: true

@@ -55,7 +55,9 @@ require( [ "slick/paging/Paging",
 
 		syncColumnCellResize: true,
 
-		showHeaderRow: true,
+		enableHeaderRow: true,
+
+		headerRowVisibility: false,
 
 		explicitInitialization: true
 	} );
