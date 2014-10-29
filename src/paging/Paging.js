@@ -9,6 +9,10 @@ define( [ "slick/paging/Local",
 		
 		container: undefined,
 
+		autoSearch: true,
+		switcher: true,
+		fastMode: true,
+
 		pagingInfo: {
 			pageSize: 50,
 			pageNum: 0,
@@ -36,10 +40,13 @@ define( [ "slick/paging/Local",
 				"</div>" +
 
 				"<div class='pager-right'>" +
-					"<div style='display: inline-block;'>" +
-						"<input type='checkbox' class='slick-fast-query' id='slick-fast-query-" + $G.getUid() + "' checked='checked'>" +
+
+					(settings.switcher
+					? ("<div style='display: inline-block;'>" +
+						"<input type='checkbox' class='slick-fast-query' id='slick-fast-query-" + $G.getUid() + "' " + (settings.fastMode ? "" : "checked='checked'") + ">" +
 						"<label for='slick-fast-query-" + $G.getUid() + "'></label>" +
-					"</div>" +
+					"</div>")  
+					: "") +
 
 					"<div class='pager-refresh'></div>" +
 
@@ -148,15 +155,23 @@ define( [ "slick/paging/Local",
 					}, uiRefresh, conditions.getConditions() )
 					
 					.done( reset );
-					
 				} else e.stopImmediatePropagation();
 			} );
 
-			(pager = Remote( $G, settings.ajaxOptions, true ))( settings.pagingInfo, uiRefresh );
+			pager = Remote( $G, settings.ajaxOptions, true );
+			
+			if ( true === settings.autoSearch ) {
+				pager( settings.pagingInfo, uiRefresh );
+			}
+		}
+
+		if ( ajaxOptions && settings.fastMode ) {
+			Local( $G, true );
+			Remote( $G, ajaxOptions, false );
 		}
 
 		/** This function will be cause a refresh */
-		conditions = Conditions( $G, container.find( ":checkbox#slick-fast-query-" + $G.getUid() + "" ) );
+		conditions = Conditions( $G, settings.switcher ? container.find( ":checkbox#slick-fast-query-" + $G.getUid() + "" ) : false );
 
 		/** Refresh dataview */
 		dataView.endUpdate();
@@ -264,9 +279,7 @@ define( [ "slick/paging/Local",
 				args = args || {};
 
 				input.result = {
-
 					result: {
-					
 						items2Create: JSON.stringify( $G.getAddRows ? $G.getAddRows() : [] ),
 						items2Update: JSON.stringify( $G.getUpdateRows ? $G.getUpdateRows() : [] ),
 						items2Delete: JSON.stringify( $G.getDeleteRows ? $G.getDeleteRows() : [] ),
@@ -282,7 +295,6 @@ define( [ "slick/paging/Local",
 				}, uiRefresh, input )
 				
 				.done( function() {
-					
 					reset();
 					$G.scrollRowToTop( 0 );
 				} );
