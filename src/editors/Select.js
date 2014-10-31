@@ -32,7 +32,10 @@ define( function() {
 
 				select = wrapper.children().html( options );
 				wrapper.appendTo( args.container );
-				select.focus();
+				select.focus()
+					.on( "change", function() {
+						args.commitChanges();
+					} );
 			},
 
 			destroy: function() {
