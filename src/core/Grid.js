@@ -3271,6 +3271,20 @@ if (typeof Slick === "undefined") {
       selectionModel.setSelectedRanges(rowsToRanges(rows));
     }
 
+    function getSelectedRowsData() {
+      var res = [];
+
+      if (!selectionModel) {
+        throw "Selection model is not set";
+      }
+
+      for (var i = 0, length = selectedRows.length; i < length; ++i) {
+        res.push(getDataItem(i));
+      }
+
+      return res;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Debug
@@ -3358,6 +3372,7 @@ if (typeof Slick === "undefined") {
       "setSelectionModel": setSelectionModel,
       "getSelectedRows": getSelectedRows,
       "setSelectedRows": setSelectedRows,
+      "getSelectedRowsData": getSelectedRowsData,
       "getContainerNode": getContainerNode,
 
       "getUid": function() {

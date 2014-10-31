@@ -1,5 +1,4 @@
 
-
 define( function( Highlight ) {
 	
 	"use strict";
@@ -17,9 +16,7 @@ define( function( Highlight ) {
 	, RadioSelectColumn = function( $G, settings ) {
 	
 		var handler = new Slick.EventHandler()
-
 		, dataView = $G.getData()
-
 		, current = {
 			
 			row: undefined,
@@ -29,28 +26,6 @@ define( function( Highlight ) {
 		$.extend( this, {
 			
 			init: function() {
-
-				var syncStyle = function() {
-				
-					var idxById, id, hash = {};
-
-					if ( current.id !== undefined ) {
-					
-						idxById = dataView.getSnapshot();
-						id = idxById[ current.id ];
-						
-						$G.getColumns().forEach( function( column ) {
-							
-							hash[ id ] = hash[ id ] || {};
-							hash[ id ][ column.id ] = settings.cssCellClass;
-						} );
-
-						/** Don't trigger 'onCellCssStylesChanged' */
-						$G.setCellCssStyles( settings.key, hash, true );
-						$G.invalidateRow( current.row );
-						$G.render();
-					}
-				};
 
 				handler
 					.subscribe( $G.getData().onPagingInfoChanged, function( e, args ) {
@@ -64,32 +39,15 @@ define( function( Highlight ) {
 					} )
 		
 					.subscribe( $G.onClick, function( e, args ) {
-
-						var editor;
-
-						if ( current.row !== args.row ) {
-
-							editor = $G.getEditorLock();
-
-							editor.isActive( $G.getEditController() ) && editor.commitCurrentEdit();
-							
-							current.row !== undefined && $G.invalidateRow( current.row );
-
-							syncStyle( current = {
-								
-								row: args.row,
-								id: $G.getDataItem( args.row )[ dataView.getIdProperty() ]
-							} );
-						}
+						setRadioRow( args.row );
 					} )
 					
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
-						
-						args.key === settings.key && syncStyle();
+						args.key === settings.key && sync();
 					} )
 
-					.subscribe( dataView.onRowsChanged, syncStyle )
-					.subscribe( dataView.onRowCountChanged, syncStyle );
+					.subscribe( dataView.onRowsChanged, sync )
+					.subscribe( dataView.onRowCountChanged, sync );
 			},
 
 			destroy: function() {
@@ -126,8 +84,52 @@ define( function( Highlight ) {
 				if ( current.id ) {
 					return dataView.getItemById( current.id );
 				}
-			}
+			},
+			setRadioRow: setRadioRow
 		} );
+
+		function setRadioRow( row ) {
+		
+			var editor;
+
+			if ( row < $G.getDataLength() && current.row !== row ) {
+
+				editor = $G.getEditorLock();
+
+				editor.isActive( $G.getEditController() ) && editor.commitCurrentEdit();
+				
+				current.row !== undefined && $G.invalidateRow( current.row );
+
+				sync( current = {
+					
+					row: row,
+					id: $G.getDataItem( row )[ dataView.getIdProperty() ]
+				} );
+			}
+		};
+
+                function sync() {
+                
+                        var idxById, id, hash = {};
+
+                        if ( current.id !== undefined ) {
+                        
+                                idxById = dataView.getSnapshot();
+                                id = idxById[ current.id ];
+                                
+                                $G.getColumns().forEach( function( column ) {
+                                        
+                                        hash[ id ] = hash[ id ] || {};
+                                        hash[ id ][ column.id ] = settings.cssCellClass;
+                                } );
+
+                                /** Don't trigger 'onCellCssStylesChanged' */
+                                $G.setCellCssStyles( settings.key, hash, true );
+                                $G.invalidateRow( current.row );
+                                $G.render();
+                        }
+                };
+
 	};
 
 	return function( $G, options ) {
