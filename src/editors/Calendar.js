@@ -12,40 +12,25 @@ define( [ "self/common/ui/Calendar" ], function() {
 			
 			init: function() {
 
-				var options, offset;
-
 				input = $( "<INPUT type=text disabled='disabled' class='editor-text dialog' /><small class='calendar-trigger' />" )
 					.appendTo( args.container ).first().focus();
 
-				offset = input.offset();
-				options = $.extend( {}, {
+				trigger = input.next();
 
-					format: "yyyy-MM-dd HH:mm:ss",
-					
+				this.loadValue( args.item );
+
+				$( args.container ).calendar( $.extend( {}, args.column.editorArgs, {
 					callback: function( value ) {
-						input.val( value ).focus();
-					},
-
-					defaultValue: function() {
-						return input.val() ? new Date( input.val() ) : new Date();
-					},
-
-					position: {
-						top: offset.top + input.height(),
-						left : offset.left
+						args.commitChanges();
 					}
-				}, args.column.editorArgs || {} );
-
-				trigger = input.next().calendar( options );
+				} ), true );
 			},
 
 			destroy: function() {
-				
 				input.add( trigger ).remove();
 			},
 
 			loadValue: function( item ) {
-			
 				input.val( defaultValue = item[ args.column.field ] ).focus();
 			},
 
@@ -58,7 +43,6 @@ define( [ "self/common/ui/Calendar" ], function() {
 			},
 
 			isValueChanged: function() {
-				
 				/** Fuzzy match */
 				return defaultValue != input.val();
 			},
