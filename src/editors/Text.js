@@ -19,7 +19,10 @@ define( function() {
 							e.stopImmediatePropagation();
 						}
 					} )
-					.focus();
+					.focus()
+					.on( "change", function() {
+						args.commitChanges();
+					} );
 			},
 
 			destroy: function() {
