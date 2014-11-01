@@ -66,6 +66,8 @@ define( [ "slick/paging/Local",
 
 		, conditions
 
+		, lastInput
+
 		/** Update the paging info to UI */
 		, uiRefresh = function( pagingInfo ) {
 		
@@ -152,7 +154,7 @@ define( [ "slick/paging/Local",
 						pageSize: +size.val(),
 						/** In SCM the 'pageNum' start from 1, so you should specify an offset to patch it */
 						pageNum: +current.val() + 1
-					}, uiRefresh, conditions.getConditions() )
+					}, uiRefresh, $.extend( {}, conditions.getConditions(), lastInput || {} ) )
 					
 					.done( reset );
 				} else e.stopImmediatePropagation();
@@ -276,7 +278,7 @@ define( [ "slick/paging/Local",
 
 				var input = conditions.getConditions();
 
-				args = args || {};
+				lastInput = args = args || {};
 
 				input.result = {
 					result: {
