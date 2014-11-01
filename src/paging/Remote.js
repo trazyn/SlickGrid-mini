@@ -37,7 +37,7 @@ define( function() {
 			}
 
 			dataView = $G.getData();
-			loading = $( "<div class='slick-loading' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
+			loading = $( "<div class='slick-loading fade' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
 
 			$( $G.getContainerNode() ).append( loading );
 
@@ -103,7 +103,8 @@ define( function() {
 				} )
 				
 				.always( function() { 
-					loading.removeData( "data-request" ).fadeOut( 100 ); 
+					loading.is( ":visible" ) ? loading.fadeOut( 100 ) : loading.css( "display", "none" );
+					loading.removeData( "data-request" );
 				} );
 
 				loading.data( "data-request", request );
@@ -121,4 +122,3 @@ define( function() {
 		return pager;
 	};
 } );
-
