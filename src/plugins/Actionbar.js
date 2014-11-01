@@ -4,7 +4,7 @@ define( [ "slick/curd/Delete",
 	"slick/curd/Add",
 	"slick/curd/Validation",
 	"slick/plugins/Genius",
-	/** "slick/plugins/MyColumns" */ ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
+	"slick/plugins/MyColumns" ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
 
 	"use strict";
 
@@ -35,11 +35,9 @@ define( [ "slick/curd/Delete",
 
 			init: function( $G, options ) {
 
-				/**
 				MyColumns( $G, $.extend( {
 					trigger: this
 				}, options || {} ) );
-				*/
 			}
 		},
 
@@ -62,7 +60,7 @@ define( [ "slick/curd/Delete",
 			enable: true,
 
 			callback: function( $G ) {
-				$G.setDeleteRows( $G.getSelectedRows() );
+				$G.getSelectionModel() && $G.setDeleteRows( $G.getSelectedRows() );
 			},
 
 			init: function( $G ) {
@@ -76,6 +74,8 @@ define( [ "slick/curd/Delete",
 						? self.removeAttr( "disabled" )
 						: self.attr( "disabled", "disabled" );
 				};
+
+				if ( !$G.getSelectionModel() ) { return; }
 
 				new Slick.EventHandler()
 					
@@ -154,7 +154,7 @@ define( [ "slick/curd/Delete",
 			selector: ".slick-actionbar-filter",
 			type: "click",
 			callback: function( $G ) {
-				$G.toggleHeaderRow();
+				$G.setHeaderRowVisibility( !$( $G.getHeaderRow() ).is( ":visible" ) );
 			},
 
 			enable: true
