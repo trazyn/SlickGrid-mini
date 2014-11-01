@@ -1,5 +1,5 @@
 
-define( function( Highlight ) {
+define( function() {
 	
 	"use strict";
 
