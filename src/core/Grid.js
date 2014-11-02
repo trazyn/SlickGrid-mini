@@ -1462,7 +1462,7 @@ if (typeof Slick === "undefined") {
         }
       }
 
-      stringArray.push("<div class='" + cellCss + "'><div class='outer'>");
+      stringArray.push("<div class='" + cellCss + "'>" + (m.enableCopy ? "<div class='slick-copy-outter'>"));
 
       // if there is a corresponding row (if not, this is the Add New row or this data hasn't been loaded yet)
       if (item) {
@@ -1471,7 +1471,7 @@ if (typeof Slick === "undefined") {
         m.enableCopy && stringArray.push("<div class='slick-copy-inner'></div>");
       }
 
-      stringArray.push("</div></div>");
+      stringArray.push("</div>" + (m.enableCopy ? "</div>" + ""));
 
       rowsCache[row].cellRenderQueue.push(cell);
       rowsCache[row].cellColSpans[cell] = colspan;
