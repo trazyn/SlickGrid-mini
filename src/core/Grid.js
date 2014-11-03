@@ -2268,18 +2268,62 @@ if (typeof Slick === "undefined") {
     }
 
     function handleClick(e) {
+      var target = $( e.target );
       if (!currentEditor) {
         // if this click resulted in some cell child node getting focus,
         // don't steal it back - keyboard events will still bubble up
         // IE9+ seems to default DIVs to tabIndex=0 instead of -1, so check for cell clicks directly.
-        if (e.target != document.activeElement || $(e.target).hasClass("slick-cell")) {
+        if (e.target != document.activeElement || target.hasClass("slick-cell")) {
           setFocus();
         }
       }
 
-      var cell = getCellFromEvent(e);
+      var cell = getCellFromEvent(e), m;
       if (!cell || (currentEditor !== null && activeRow == cell.row && activeCell == cell.cell)) {
         return;
+      }
+
+      if ( cell && (m = columns[ cell.cell ]) && m.enableCopy && target.is( ".slick-copy-inner" ) ) {
+	      var rect = getCellNode( cell.row, cell.cell ).getBoundingClientRect()
+	      , html = "<div class='slick-textarea-wrapper' tabindex='-1' style='position: absolute; z-index: 999; background: #fff;'>" +
+
+		      "<textarea rows=5 style='padding:13px;width:250px;height:80px;border:0;outline:0px;' readonly='readonly'></textarea>" +
+
+		      "<div class='slick-textarea-bottom'>" +
+		      "Press <kbd>Ctrl</kbd> + <kbd>C</kbd> copy content" +
+		      "</div></div>"
+	      , wrapper = $( html ).appendTo( document.body )
+	      .css( {
+		      top: rect.top,
+		      left: rect.left
+	      } ).focus()
+	      , input = wrapper.find( "textarea" );
+
+	      wrapper.on( "focusout", function( e ) {
+		      if ( e.relatedTarget !== input[ 0 ] ) {
+			      wrapper.remove();
+			      e.stopPropagation();
+			      e.preventDefault();
+		      }
+	      } );
+
+	      input.val( getDataItem( cell.row )[ m[ "field" ] ] )
+		      .on( "keyup", function( e ) {
+
+			      if ( e.ctrlKey && e.keyCode === 67 ) {
+
+			      	      wrapper.css( "border", "1px solid #1ABC9C" );
+				      setTimeout( function() {
+					      wrapper.remove();
+				      }, 333 );
+			      }
+		      } )
+	      .select()
+	      .focus();
+
+	      e.stopPropagation();
+	      e.preventDefault();
+	      return;
       }
 
       trigger(self.onClick, {row: cell.row, cell: cell.cell}, e);
