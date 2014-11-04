@@ -8,6 +8,8 @@ define( function() {
 		columnId: "_radio_selector",
 		cssClass: "slick-cell-radio",
 		width: 35,
+
+		autoSelected: true,
 		
 		key: "radio-select",
 		cssCellClass: "slick-radio-radio"
@@ -39,7 +41,14 @@ define( function() {
 					} )
 		
 					.subscribe( $G.onClick, function( e, args ) {
-						setRadioRow( args.row );
+
+						var cell = $G.getCellFromEvent( e );
+
+						if ( cell && 
+						   	(settings.autoSelected || $( $G.getCellNode( cell.row, cell.cell ) ).is( settings.cssClass )) ) {
+							
+							setRadioRow( args.row );
+						}
 					} )
 					
 					.subscribe( $G.onCellCssStylesChanged, function( e, args ) {
