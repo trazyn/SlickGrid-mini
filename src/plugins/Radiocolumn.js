@@ -8,7 +8,6 @@ define( function() {
 		columnId: "_radio_selector",
 		cssClass: "slick-cell-radio",
 		width: 35,
-
 		autoSelected: true,
 		
 		key: "radio-select",
@@ -44,10 +43,13 @@ define( function() {
 
 						var cell = $G.getCellFromEvent( e );
 
-						if ( cell && 
-						   	(settings.autoSelected || $( $G.getCellNode( cell.row, cell.cell ) ).is( settings.cssClass )) ) {
+						if ( cell ) {
 							
-							setRadioRow( args.row );
+							if ( settings.autoSelected ||
+								($( $G.getCellNode( cell.row, cell.cell ) ).is( "." + settings.cssClass )) ) {
+								
+									setRadioRow( args.row );
+								}
 						}
 					} )
 					
@@ -87,6 +89,8 @@ define( function() {
 		} );
 
 		$.extend( $G, {
+
+			onRadioRow: new Slick.Event(),
 			
 			getRadioRow: function() {
 				
@@ -114,6 +118,8 @@ define( function() {
 					row: row,
 					id: $G.getDataItem( row )[ dataView.getIdProperty() ]
 				} );
+
+				$G.onRadioRow.notify( { row: row } );
 			}
 		};
 
@@ -150,3 +156,4 @@ define( function() {
 		return plugin.getColumnDefinifion();
 	};
 } );
+
