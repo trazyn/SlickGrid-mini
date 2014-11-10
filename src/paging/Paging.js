@@ -156,14 +156,16 @@ define( [ "slick/paging/Local",
 						pageNum: +current.val() + 1
 					}, uiRefresh, $.extend( {}, conditions.getConditions(), lastInput || {} ) )
 					
-					.done( reset );
+					.done( reset )
+					.done( settings.onAfterSearch );
 				} else e.stopImmediatePropagation();
 			} );
 
 			pager = Remote( $G, settings.ajaxOptions, true );
 			
 			if ( true === settings.autoSearch ) {
-				pager( settings.pagingInfo, uiRefresh );
+				pager( settings.pagingInfo, uiRefresh )
+				.done( settings.onAfterSearch );
 			}
 		}
 
