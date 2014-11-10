@@ -157,7 +157,7 @@ define( [ "slick/paging/Local",
 					}, uiRefresh, $.extend( {}, conditions.getConditions(), lastInput || {} ) )
 					
 					.done( reset )
-					.done( settings.onAfterSearch );
+					.done( settings.onAfterPaging );
 				} else e.stopImmediatePropagation();
 			} );
 
@@ -165,7 +165,7 @@ define( [ "slick/paging/Local",
 			
 			if ( true === settings.autoSearch ) {
 				pager( settings.pagingInfo, uiRefresh )
-				.done( settings.onAfterSearch );
+				.done( settings.onAfterPaging );
 			}
 		}
 
