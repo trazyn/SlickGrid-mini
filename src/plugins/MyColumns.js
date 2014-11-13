@@ -59,6 +59,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 					originalWidth: column.width,
 					width: column.width,
 					always: settings.ignore.indexOf( column.id ) > -1,
+					originalTooltip: column.tooltip,
 					tooltip: column.tooltip,
 					hide: false,
 					index: i
@@ -145,9 +146,10 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 								
 								var item = mapping[ id ];
 
-								item.originalWidth !== item.width
-									
-									&& (original[ item.index ][ "width" ] = item.originalWidth);
+								$.extend( original[ item.index ], { 
+									width: item.originalWidth,
+									tooltip: (item.originalTooltip || "")
+								} );
 							}
 
 							miscellaneous.alwaysUpdateRows = options.alwaysUpdateRows = false;
@@ -197,6 +199,16 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 					ready.resolve();
 				}
 			} );
+		} );
+
+		$G.onHeaderCellRendered.subscribe( function( e, args ) {
+		
+			var column = args.column;
+
+			if ( column.tooltip ) {
+				$( "<smnall class='header-tooltip' tooltip=" + column.tooltip + "></small>" )
+					.appendTo( args.node );
+			}
 		} );
 	};
 
