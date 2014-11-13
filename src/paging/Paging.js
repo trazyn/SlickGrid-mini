@@ -76,8 +76,8 @@ define( [ "slick/paging/Local",
 			  prev = container.find( ".pager-prev" ), 
 			  next = container.find( ".pager-next" ),
 
-			  value = pagingInfo.pageNum >= 0 ? ++pagingInfo.pageNum : 1,
-			  max = pagingInfo.totalPages || 1;
+			  max = pagingInfo.totalPages || 1,
+			  value = (pagingInfo.pageNum >= 0 && pagingInfo.pageNum < max) ? ++pagingInfo.pageNum : 1;
 
 			/** Clear the last state, prevent has been disabled after the size change */
 			prev.removeAttr( "disabled" ), next.removeAttr( "disabled" );
@@ -187,7 +187,9 @@ define( [ "slick/paging/Local",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			current.val( +current.val() - 1 );
+			var value = +current.val() - 1;
+
+			current.val( value >= 1 ? value : 1 );
 
 			dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 		} )
@@ -197,7 +199,9 @@ define( [ "slick/paging/Local",
 			e.stopImmediatePropagation();
 			e.preventDefault();
 
-			current.val( +current.val() + 1 );
+			var value = +current.val() + 1, max = +total.attr( "data-total" );
+
+			current.val( value <= max ? value : max );
 
 			dataView.onPagingInfoChanged.notify( { doSearch: 1 } );
 		} )
