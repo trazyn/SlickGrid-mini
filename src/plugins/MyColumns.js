@@ -7,46 +7,53 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		scope: "local",
 
 		ignore: [ "_checkbox_selector", "_radio_selector", "idx" ]
-	};
+	}
 
-	var Lab = function( $G, settings ) {
+	, index = "originalIndex"
+
+	, Lab = function( $G, settings ) {
 		
-		var config = Storage.get( settings.key, !!{ "session": 0, "local": 1 }[ settings.scope ] )
-	
-		, original = $G.getColumns()
-		, options = $G.getOptions()
+		var 
+		  config = Storage.get( settings.key, !!{ "session": 0, "local": 1 }[ settings.scope ] ),
+		  options = $G.getOptions(),
+		  original = $G.getColumns(),
+		  mapping,
+		  miscellaneous;
 
-		, mapping
-		, miscellaneous
-
-		, applyConfig = function() {
+		function applyConfig( initialization ) {
 		
-			var columns = [];
+			var columns = [], index = initialization === true ? "originalIndex" : "index";
 
 			for ( var id in mapping ) {
 				
 				var column;
 
-				if ( mapping[ id ][ "always" ] | !mapping[ id ][ "hide" ] ) {
+				if ( mapping[ id ][ "always" ] | !mapping[ id ][ index ] ) {
 					
-					column = original[ mapping[ id ][ "index" ] ];
+					column = original[ mapping[ id ][ "originalIndex" ] ];
 
 					column.width = mapping[ id ][ "width" ];
 					column.tooltip = mapping[ id ][ "tooltip" ];
 
-					columns.push( column );
+					/** Column reorder */
+					columns[ +mapping[ id ][ "index" ] ] = column;
 				}
 			}
 
-			columns.length && $G.setColumns( columns );
+			/** Remove array gap */
+			for ( var _columns = [], i = columns.length; --i >= 0; columns[ i ] && _columns.unshift( columns[ i ] ) );
+
+			columns.length && $G.setColumns( _columns );
 
 			if ( miscellaneous ) {
 				options.alwaysUpdateRows = miscellaneous.alwaysUpdateRows;
 				options.alwaysDeleteRows = miscellaneous.alwaysDeleteRows;
 			}
+
+			index = "index";
 		}
 
-		, updateConfig = function() {
+		function updateConfig() {
 		
 			mapping = {};
 
@@ -62,6 +69,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 					originalTooltip: column.tooltip,
 					tooltip: column.tooltip,
 					hide: false,
+					originalIndex: i,
 					index: i
 				};
 			}
@@ -70,7 +78,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 				alwaysDeleteRows: options.alwaysDeleteRows,
 				alwaysUpdateRows: options.alwaysUpdateRows
 			};
-		};
+		}
 
 		$G.onColumnsResized.subscribe( function( e, args ) {
 			
@@ -81,6 +89,17 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 		} );
 
+		$G.onColumnsReordered.subscribe( function( e, args ) {
+			
+			var from = args.hash[ 0 ], to = args.hash[ 1 ];
+
+			mapping[ from.id ][ "index" ] = to.index;
+			mapping[ to.id ][ "index" ] = from.index;
+
+			/** Auto save config */
+			Storage.set( settings.key, config, settings.scope === "local" );
+		} );
+
 		if ( !config ) {
 
 			updateConfig(); 
@@ -89,11 +108,13 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 				mapping: mapping,
 				miscellaneous: miscellaneous
 			};
+
+			$G.setColumns( original );
 		} else {
 			mapping = config[ "mapping" ];
 			miscellaneous = config[ "miscellaneous" ];
 
-			applyConfig();
+			applyConfig( true );
 		}
 
 		$( settings.trigger ).on( "click", function() {
@@ -164,7 +185,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 						.delegate( "button[name=save]", "click", function() {
 						
 							close();
-							applyConfig();
+							applyConfig( true );
 							Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 						} )
 						
