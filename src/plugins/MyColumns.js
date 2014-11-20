@@ -9,7 +9,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		ignore: [ "_checkbox_selector", "_radio_selector", "idx" ]
 	}
 
-	, index = "originalIndex"
+	, index
 
 	, Lab = function( $G, settings ) {
 		
@@ -20,17 +20,17 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		  mapping,
 		  miscellaneous;
 
-		function applyConfig( initialization ) {
+		function applyConfig() {
 		
-			var columns = [], index = initialization === true ? "originalIndex" : "index";
+			var columns = [], currentColumns = index === "originalIndex" ? original : $G.getColumns();
 
 			for ( var id in mapping ) {
 				
 				var column;
 
-				if ( mapping[ id ][ "always" ] | !mapping[ id ][ index ] ) {
+				if ( mapping[ id ][ "always" ] | !mapping[ id ][ "hide" ] ) {
 					
-					column = original[ mapping[ id ][ "originalIndex" ] ];
+					column = currentColumns[ mapping[ id ][ index ] ];
 
 					column.width = mapping[ id ][ "width" ];
 					column.tooltip = mapping[ id ][ "tooltip" ];
@@ -50,16 +50,20 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 				options.alwaysDeleteRows = miscellaneous.alwaysDeleteRows;
 			}
 
-			index = "index";
+			updateConfig();
 		}
 
 		function updateConfig() {
+
+			var currentColumns = $G.getColumns();
+
+			index = "index";
 		
 			mapping = {};
 
-			for ( var i = 0, length = original.length; i < length; ++i ) {
+			for ( var i = 0, length = currentColumns.length; i < length; ++i ) {
 				
-				var column = original[ i ];
+				var column = currentColumns[ i ];
 
 				mapping[ column.id ] = {
 					name: column.name,
@@ -114,7 +118,9 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			mapping = config[ "mapping" ];
 			miscellaneous = config[ "miscellaneous" ];
 
-			applyConfig( true );
+			index = "originalIndex";
+
+			applyConfig();
 		}
 
 		$( settings.trigger ).on( "click", function() {
