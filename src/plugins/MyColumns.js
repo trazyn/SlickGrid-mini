@@ -59,23 +59,26 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 			index = "index";
 		
-			mapping = {};
-
 			for ( var i = 0, length = currentColumns.length; i < length; ++i ) {
 				
 				var column = currentColumns[ i ];
 
-				mapping[ column.id ] = {
-					name: column.name,
-					originalWidth: column.width,
-					width: column.width,
-					always: settings.ignore.indexOf( column.id ) > -1,
-					originalTooltip: column.tooltip,
-					tooltip: column.tooltip,
-					hide: false,
-					originalIndex: i,
-					index: i
-				};
+				if ( mapping[ column.id ] ) {
+					mapping[ column.id ][ "index" ] = i;
+				} else {
+				
+					mapping[ column.id ] = {
+						name: column.name,
+						originalWidth: column.width,
+						width: column.width,
+						always: settings.ignore.indexOf( column.id ) > -1,
+						originalTooltip: column.tooltip,
+						tooltip: column.tooltip,
+						hide: false,
+						originalIndex: i,
+						index: i
+					};
+				}
 			}
 
 			miscellaneous = {
@@ -105,6 +108,8 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		} );
 
 		if ( !config ) {
+
+			mapping = {};
 
 			updateConfig(); 
 
@@ -173,7 +178,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 								
 								var item = mapping[ id ];
 
-								$.extend( original[ item.index ], { 
+								$.extend( original[ item.originalIndex ], { 
 									width: item.originalWidth,
 									tooltip: (item.originalTooltip || "")
 								} );
@@ -183,8 +188,8 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 							miscellaneous.alwaysDeleteRows = options.alwaysDeleteRows = false;
 
 							close();
-							updateConfig();
 							$G.setColumns( original );
+							updateConfig();
 							Storage.remove( settings.key, { "session": false, "local": true }[ settings.scope ] );
 						} )
 
