@@ -75,8 +75,11 @@
 
           $( dd.proxy ).remove();
 
+          e.preventDefault();
+          e.stopPropagation();
+
           if ( !current 
-                  || current.removeClass( ".slick-column-reorder" )[ 0 ] === dd.drag ) { 
+                  || current.removeClass( "slick-column-reorder" )[ 0 ] === dd.drag ) { 
                           return; 
                   }
 
