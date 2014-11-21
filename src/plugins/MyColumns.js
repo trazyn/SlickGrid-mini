@@ -178,6 +178,8 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 								
 								var item = mapping[ id ];
 
+								item[ "hide" ] = false;
+
 								$.extend( original[ item.originalIndex ], { 
 									width: item.originalWidth,
 									tooltip: (item.originalTooltip || "")
