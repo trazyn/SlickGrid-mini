@@ -4,7 +4,7 @@ define( [ "slick/curd/Delete",
 	"slick/curd/Add",
 	"slick/curd/Validation",
 	"slick/plugins/Genius",
-	/** "slick/plugins/MyColumns" */ ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
+	"slick/plugins/MyColumns" ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
 
 	"use strict";
 
@@ -35,11 +35,9 @@ define( [ "slick/curd/Delete",
 
 			init: function( $G, options ) {
 
-				/**
 				MyColumns( $G, $.extend( {
 					trigger: this
-				}, options || {} ) );
-				**/
+				}, options ) );
 			}
 		},
 
@@ -70,14 +68,14 @@ define( [ "slick/curd/Delete",
 				var self = $( this ).attr( "disabled", "disabled" )
 					
 				, toggle = function() {
-					
+
+					if ( !$G.getSelectionModel() ) {
+						self.attr( "disabled", "disabled" );
+					} else
 					$G.getSelectedRows().length
-						
 						? self.removeAttr( "disabled" )
 						: self.attr( "disabled", "disabled" );
 				};
-
-				if ( !$G.getSelectionModel() ) { return; }
 
 				new Slick.EventHandler()
 					
@@ -126,8 +124,8 @@ define( [ "slick/curd/Delete",
 				
 					var 
 					  adds = $G.getAddRows(),
-					  deletes = $G.getDeleteRows(),
 					  updates = $G.getUpdateRows();
+					  deletes = $G.getDeleteRows();
 
 					if ( adds.length | deletes.length | updates.length ) {
 						
@@ -177,21 +175,26 @@ define( [ "slick/curd/Delete",
 			callback: function( $G ) {
 				
 				var self = $( this )
-				, wrapper = $( $G.getContainerNode().parentElement );
+				, container = $( $G.getContainerNode() )
+				, wrapper = container.parent();
 					
 				/** Save the inline style */
 				wrapper.data( "data-slick-style" ) 
 					|| wrapper.data( "data-slick-style", wrapper.attr( "style" ) );
+				container.data( "data-slick-height" ) 
+					|| container.data( "data-slick-height", container.height() );
 
 				if ( self.is( ".slick-actionbar-fullscreen-min" ) ) {
 
 					wrapper
 						.removeClass( "slick-fullscreen" )
 						.attr( "style", wrapper.data( "data-slick-style" ) );
+					container.css( "height", container.data( "data-slick-height" ) );
 					self.removeClass( "slick-actionbar-fullscreen-min" );
 				} else {
 					/** Remove the inline style */
 					wrapper.removeAttr( "style" ).addClass( "slick-fullscreen" );
+					container.css( "height", "90%" );
 					self.addClass( "slick-actionbar-fullscreen-min" );
 				}
 
