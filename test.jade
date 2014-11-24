@@ -1,0 +1,60 @@
+
+doctype html
+html( "lang=en" )
+	body
+		#content
+			.top.form
+				.inline
+					.field
+						label Country
+						.ui.dialog( name="country", data-role="dialog" )
+							input.text( type="text", name="country" )
+							small.icon.dialog
+					.field
+						label Project
+						.ui.dialog( name="project", data-role="dialog" )
+							input.text( type="text", name="project" )
+							small.icon.dialog
+					.field
+						label Current Period
+							.ui.dialog( name="currentPeriodFrom", data-role="dialog" )
+								input.text( type="text", name="currentPeriodFrom" )
+								small.icon.dialog
+							.ui-dialog( name="currentPeriodTo", data-role="dialog" )
+								input.text( type="text", name="currentPeriodTo" )
+								small.icon.dialog
+
+				.inline
+					.field
+						label Statistics By
+						label.ui.select
+							select
+								option Please Select
+								option( value="1" ) 1
+								option( value="2" ) 2
+								option( value="3" ) 3
+					.field
+						label Type
+						.ui.dialog( name="type", data-role="dialog" )
+							input.text( type="text", name="type" )
+							small.icon.dialog
+					.field
+						label Statistics
+						.ui.dialog( name="statistics", data-role="dialog" )
+							input.text( type="text", name="statistics" )
+							small.icon.dialog
+
+			.bottom
+				.slick-wrap.fade.out( style="width: 100%; height: 400px;" )
+					.slick-actionbar
+						.left
+							button.group Search
+							button.group Clear
+							button.group Export
+							button.group Export Query
+
+						.right
+							button.group.icon.fullscreen Fullscreen
+
+					#bizStatistics.h-full.v-full
+
