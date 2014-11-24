@@ -94,6 +94,7 @@ if (typeof Slick === "undefined") {
 
     var columnDefaults = {
       name: "",
+      showTitle: true,
       resizable: true,
       sortable: false,
       minWidth: 30,
