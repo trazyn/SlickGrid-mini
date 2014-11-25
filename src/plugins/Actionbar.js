@@ -196,7 +196,7 @@ define( [ "slick/curd/Delete",
 	
 	return function( $G, container, options ) {
 
-		var settings = $.extend( true, {}, options || {}, defaults );
+		var settings = $.extend( true, {}, defaults, options || {} );
 
 		container = $( container );
 
@@ -207,7 +207,7 @@ define( [ "slick/curd/Delete",
 			
 			var plugin;
 
-			action = settings[ action ];
+            action = settings[ action ];
 
 			if ( !action.enable ) { continue; }
 			
