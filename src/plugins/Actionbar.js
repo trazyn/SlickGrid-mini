@@ -12,7 +12,7 @@ define( [ "slick/curd/Delete",
 
 		genius: {
 			
-			enable: true,
+			enable: false,
 
 			selector: ".slick-actionbar-genius",
 			type: "click",
@@ -29,7 +29,7 @@ define( [ "slick/curd/Delete",
 
 		lab: {
 			
-			enable: true,
+			enable: false,
 
 			selector: ".slick-actionbar-lab",
 
@@ -42,7 +42,7 @@ define( [ "slick/curd/Delete",
 		},
 
 		add: {
-			enable: true,
+			enable: false,
 
 			selector: ".slick-actionbar-add",
 			type: "click",
@@ -57,7 +57,7 @@ define( [ "slick/curd/Delete",
 			selector: ".slick-actionbar-delete",
 			type: "click",
 
-			enable: true,
+			enable: false,
 
 			callback: function( $G ) {
 				$G.getSelectionModel() && $G.setDeleteRows( $G.getSelectedRows() );
@@ -87,7 +87,7 @@ define( [ "slick/curd/Delete",
 		},
 
 		save: {
-			enable: true,
+			enable: false,
 
 			selector: ".slick-actionbar-save",
 			type: "click",
@@ -102,7 +102,6 @@ define( [ "slick/curd/Delete",
 						self.attr( "disabled", "disabled" ); 
 
 						/** RESET CURD DATA */
-
 						$G.setAddRows && $G.setAddRows( {} );
 						$G.setDeleteRows && $G.setDeleteRows( [] );
 						$G.setUpdateRows && $G.setUpdateRows( {} );
@@ -157,19 +156,11 @@ define( [ "slick/curd/Delete",
 				$G.setHeaderRowVisibility( !$( $G.getHeaderRow() ).is( ":visible" ) );
 			},
 
-			enable: true
+			enable: false
 		},
 		
-		settings: {
-			selector: ".slick-actionbar-settings",
-			type: "click",
-			callback: function( e ) {
-			
-			}
-		},
-
 		fullscreen: {
-			enable: true,
+			enable: false,
 			selector: ".slick-actionbar-fullscreen",
 			type: "click",
 			callback: function( $G ) {
