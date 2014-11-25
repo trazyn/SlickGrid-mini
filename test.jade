@@ -1,0 +1,55 @@
+
+#container.fade.out
+	form.top.h-full
+		.inline
+			.ui.field.labeled
+				label Type
+				label.ui.select
+					select
+						option Please Select
+						option( value="1" ) 1
+						option( value="2" ) 2
+						option( value="3" ) 3
+			.ui.field.labeled
+				label Current Period
+					.ui.calendar.label( name="periodFrom", data-role="calendar" )
+						input.text( type="text", name="periodFrom" )
+						small.icon.calendar
+					.ui.calendar.label( name="periodTo", data-role="calendar" )
+						input.text( type="text", name="periodTo" )
+						small.icon.calendar
+
+		.inline
+			.ui.field.labeled
+				label Statistics By
+				label.ui.select
+					select
+						option Please Select
+						option( value="1" ) 1
+						option( value="2" ) 2
+						option( value="3" ) 3
+			.ui.field.labeled
+				label Entity
+				.ui.dialog.label( name="entity", data-role="dialog" )
+					input.text( type="text", name="entity" )
+					small.icon.dialog
+			.ui.field.labeled
+				label Project
+				.ui.dialog.label( name="project", data-role="dialog" )
+					input.text( type="text", name="project" )
+					small.icon.dialog
+
+	.bottom
+		.slick-wrap.h-full
+			.slick-actionbar
+				.left
+					button.group( name="search" ) Search
+					button.group( name="clear" ) Clear
+					button.group( name="export" ) Export
+					button.group( name="exportQuery" ) Export Query
+
+				.right
+					button.group.icon.fullscreen Fullscreen
+
+			div#statistics.h-full.v-full( style="height:400px;" )
+
