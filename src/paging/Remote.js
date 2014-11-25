@@ -29,7 +29,7 @@ define( function() {
 
 		if ( true === enable ) {
 
-			var dataView, request, loading;
+			var dataView, request, dom = $( $G.getContainerNode() );
 
 			if ( !ajaxOptions.serviceName ) {
 				
@@ -37,15 +37,12 @@ define( function() {
 			}
 
 			dataView = $G.getData();
-			loading = $( "<div class='slick-loading fade' style='display: none;'> <div class='slick-head-mask'> </div> </div>" );
-
-			$( $G.getContainerNode() ).append( loading );
 
 			pager = function( pagingInfo, callback, args ) {
 
 				var VO = { wpf_dup_token: +new Date() + Math.random() }
 				
-				, request = loading.data( "data-request" );
+				, request = dom.data( "data-request" );
 				
 				args = args || {};
 
@@ -70,7 +67,7 @@ define( function() {
 
 					beforeSend: function() { 
 						/** Show the loading */
-						loading.fadeIn(); 
+						$G.showLoading();
 					},
 
 					data: {
@@ -103,11 +100,11 @@ define( function() {
 				} )
 				
 				.always( function() { 
-					loading.is( ":visible" ) ? loading.fadeOut( 100 ) : loading.css( "display", "none" );
-					loading.removeData( "data-request" );
+					dom.removeData( "data-request" );
+					$G.hideLoading();
 				} );
 
-				loading.data( "data-request", request );
+				dom.data( "data-request", request );
 
 				return request;
 			};
@@ -122,3 +119,4 @@ define( function() {
 		return pager;
 	};
 } );
+
