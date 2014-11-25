@@ -1,7 +1,8 @@
 
 define( [ "slick/paging/Local", 
 	"slick/paging/Remote",
-	"slick/paging/Conditions" ], function( Local, Remote, Conditions ) {
+	"slick/paging/Conditions",
+	"slick/plugins/Loading" ], function( Local, Remote, Conditions, Loading ) {
 
 	"use strict";
 
@@ -103,6 +104,8 @@ define( [ "slick/paging/Local",
 		
 		/** A function that implement for paging */
 		, pager;
+
+		Loading( $G );
 
 		dataView.onRowCountChanged.subscribe( function() {
 			$G.updateRowCount();
