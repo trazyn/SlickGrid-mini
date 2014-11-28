@@ -1,115 +1,189 @@
 
-$( document ).on( "mousewheel", function( e ) {
-    
-    var 
-    header = $( "#head_div" ),
-    content = $( "[id^=wpflib_builders_HWScmMainPane]:first" );
+require.config( {
+	
+	baseUrl: "src",
 
-    /** Down */
-    if ( e.originalEvent.wheelDelta < 0 ) {
-        content.scrollTop() >= 100 && header.fadeOut();
-    } else {
-        header.is( ":visible" ) || header.fadeIn( "fast" );
-    }
+	paths: {
+		
+		"slick": "."
+	}
 } );
 
-var DateUtil = function( value ) {
+require( [ "slick/paging/Paging",
+	"slick/plugins/Checkboxcolumn",
+	"slick/plugins/Radiocolumn",
+	"slick/curd/Delete",
+	"slick/curd/Update",
+	"slick/plugins/Actionbar",
+	"slick/editors/Text",
+	"slick/editors/Select",
+	"slick/editors/Textarea",
+	"slick/core/Core", 
+	"slick/core/Grid",
+	"slick/core/DataView" ], function( Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, Text, Select, Textarea ) {
 
-    switch( true ) {
-        
-        case value instanceof Date:
-            break;
+	var $G
+	, dataView = new Slick.Data.DataView();
 
-        case typeof value === "number":
-            value = new Date( value );
-            break;
+	for ( var i = 0, data = []; i < 54; ++i ) {
+		
+		data[ i ] = {
+		
+			"rr": "# " + i,
+			"num1": i,
+			"num2": Math.random() * 1000,
+			"num3": Math.random() * 10000,
+			"num4": Math.random() * 100000,
+			"num5": Math.random() * 100000,
+			"num6": Math.random() * 100000,
+			"yesNo": Math.floor( Math.random() * 100000 ) & 1 ? "Y" : "N",
+			"desc": "Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+		};
+	}
 
-        case typeof value === "string":
-            value = new Date( value );
-            break;
+	$G = new Slick.Grid( "#myGrid", dataView, [], {
+		editable: true,
 
-        default:
-            value = new Date();
-    }
+		/** Enable keybord navigation */
+		enableCellNavigation: true,
 
-    this.value = defaultValue = isNaN( value ) ? new Date() : value;
-    this.defaults = {
-        formatter: "yyyy-MM-dd"
-    };
-};
+		/** Fast keybord navigation */
+		asyncEditorLoading: true,
 
-DateUtil.prototype = {
-    format: function( formatter ) {
-        
-        var data = this.value;
+		/** No horizontal scorllbar */
+		forceFitColumns: false,
 
-        return (formatter || this.defaults.formatter)
-            .replace( /(yyyy|MM|dd|HH|mm|ss)/g, function( match, post, originalText ) {
-            
-                switch ( match ) {
-                    
-                    case "yyyy":
-                        return date.getFullYear();
-                    case "MM":
-                        return date.getMonth() + 1;
-                    case "dd":
-                        return date.getDate();
-                    case "HH":
-                        return date.getHours();
-                    case "mm":
-                        return date.getMinutes();
-                    case "ss":
-                        return date.getSeconds();
-                }
-            } );
-    },
+		syncColumnCellResize: true,
 
-    day: function( value ) {
-        return new Date( this.value - new Date( value * 3600 * 1000 * 24 ) );
-    },
+		enableHeaderRow: true,
 
-    yesterday: function( formatter ) {
-        return this.format( this.day( -1 ), formatter );
-    },
+		headerRowVisibility: false,
 
-    tomorrow: function( formatter ) {
-        return this.format( this.day( 1 ), formatter );
-    },
+		explicitInitialization: true
+	} );
 
-    week: function( value ) {
-        return this.day( value * 7 );
-    },
+	;;window.$G = $G;
+	;;window.dataView = dataView;
+	
+	$G.setColumns( [ Checkboxcolumn( $G ), Radiocolumn( $G ), {
+		id: "column1",
+		name: "IDS",
+		field: "rr",
+		sortable: true,
+		width: 40
+	}, {
+		id: "column2",
+		name: "No.1",
+		field: "num1",
+		editor: Text,
+		filter: true,
+		width: 200,
+		sortable: true,
 
-    lastWeek: function( formatter ) {
-        return this.format( this.week( -1 ), formatter );
-    },
+		validator: function( value, item, column ) {
+			
+			var result = { valid: true };
 
-    nextWeek: function( formatter ) {
-        return this.format( this.week( 1 ), formatter );
-    },
+			if ( !value ) {
+				
+				result.valid = false;
+			}
 
-    month: function( value ) {
+			return result;
+		}
+	}, {
+		id: "column3",
+		name: "No.2",
+		field: "num2",
+		editor: Text,
+		filter: true,
+		sortable: true,
 
-        var 
-        date = this.value,
-        current = [ date.getFullYear(), date.getMonth() ],
-        offset = [ Math.floor( value / 12 ), value % 12 ];
+		width: 200,
+		require: true
+	}, {
+	
+		id: "column4",
+		name: "No.4",
+		field: "num4",
+		editor: Text,
+		filter: true,
+		width: 200,
+		sortable: true
+	}, {
+		id: "column8",
+		name: "Description",
+		field: "desc",
+		editor: Textarea,
+		editorArgs: { max: 500 },
+		width: 200,
+		sortable: true
+	}, {
+	
+		id: "column5",
+		name: "No.5",
+		field: "num5",
+		editor: Text,
+		filter: true,
+		width: 200,
+		sortable: true
+	}, {
+	
+		id: "column6",
+		name: "No.6",
+		field: "num6",
+		editor: Text,
+		filter: true,
+		width: 200,
+		sortable: true
+	}, {
+	
+		id: "column7",
+		name: "Yes No",
+		field: "yesNo",
+		editor: Select,
+		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
+		filter: true,
+		width: 200,
+		sortable: false
+	} ] );
 
-        return new Date( current[ 0 ] + offset[ 0 ], current[ 1 ] + offset[ 1 ]
-                            , date.getDay()
-                            , date.getHours()
-                            , date.getMinutes()
-                            , date.getSeconds() );
-    },
+	Paging( $G, dataView, {
+	
+		pagingInfo: {
+			pageSize: 50,
+			pageNum: 0,
 
-    year: function( value ) {
+			sizes: [ 50, 100, 500, 1000 ]
+		},
 
-        var date = this.value;
+		data: data,
 
-        return new Date( date.getFullYear() + value
-                            , date.getDay()
-                            , date.getHours()
-                            , date.getMinutes()
-                            , date.getSeconds() );
-    }
-};
+		/**
+		ajaxOptions: {
+		
+			data: {
+				
+				name: "getNames",
+				params: JSON.stringify( {} )
+			}
+		}
+		*/
+	} );
+
+	Actionbar( $G, $G.getContainerNode().previousElementSibling );
+
+	$G.init();
+
+	$( ".slick-header-column" )
+
+		.each( function() {
+			
+			this.addEventListener( "dragstart", function( e ) {
+			
+				e.dataTransfer.setImage( this, 0, 0 );
+			} );
+		} );
+} );
+
+//$.get( "/scm/scmui/ajax2?bst_model=huawei/wpf/Framework&nodeID=DC00000000091301" )
