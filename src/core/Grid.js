@@ -1734,6 +1734,8 @@ if (typeof Slick === "undefined") {
         autosizeColumns();
       }
       updateCanvasWidth(false);
+
+      self.getDataLength() ? $viewport.removeClass( "nodata" ) : $viewport.addClass( "nodata" );;
     }
 
     function getVisibleRange(viewportTop, viewportLeft) {
