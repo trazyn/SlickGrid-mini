@@ -4,7 +4,7 @@ define( [ "slick/curd/Delete",
 	"slick/curd/Add",
 	"slick/curd/Validation",
 	"slick/plugins/Genius",
-	/** "slick/plugins/MyColumns" */ ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
+	"slick/plugins/MyColumns" ], function( Delete, Update, Add, Validation, Genius, MyColumns ) {
 
 	"use strict";
 
@@ -35,11 +35,9 @@ define( [ "slick/curd/Delete",
 
 			init: function( $G, options ) {
 
-				/**
 				MyColumns( $G, $.extend( {
 					trigger: this
 				}, options ) );
-				*/
 			}
 		},
 
@@ -169,26 +167,47 @@ define( [ "slick/curd/Delete",
 				
 				var self = $( this )
 				, container = $( $G.getContainerNode() )
-				, wrapper = container.parent();
+				, wrapper = container.parent()
+				, autoHeight = false;
 					
 				/** Save the inline style */
-				wrapper.data( "data-slick-style" ) 
-					|| wrapper.data( "data-slick-style", wrapper.attr( "style" ) );
-				container.data( "data-slick-height" ) 
-					|| container.data( "data-slick-height", container.height() );
+				wrapper.data( "slick-fullscreen-style" ) 
+					|| wrapper.data( "slick-fullscreen-style", wrapper.attr( "style" ) );
+				container.data( "slick-fullscreen-height" ) 
+					|| container.data( "slick-fullscreen-height", container.height() );
+				container.data( "slick-fullscreen-autoheight" )
+					|| container.data( "slick-fullscreen-autoheight", $G.getOptions().autoHeight );
 
-				if ( self.is( ".slick-actionbar-fullscreen-min" ) ) {
+				autoHeight = container.data( "slick-fullscreen-autoheight" );
+
+				if ( self.is( ".fullscreen-min" ) ) {
+
+					if ( autoHeight ) {
+						var options = $G.getOptions();
+						options.autoHeight = true;
+						$G.setOptions( options );
+
+						/** Viewport autoheight */
+						container.find( ".slick-viewport:first" ).css( "height", "" );
+					}
 
 					wrapper
 						.removeClass( "slick-fullscreen" )
-						.attr( "style", wrapper.data( "data-slick-style" ) );
-					container.css( "height", container.data( "data-slick-height" ) );
-					self.removeClass( "slick-actionbar-fullscreen-min" );
+						.attr( "style", wrapper.data( "slick-fullscreen-style" ) );
+					container.css( "height", container.data( "slick-fullscreen-height" ) );
+					self.removeClass( "fullscreen-min" );
 				} else {
+
+					if ( autoHeight ) {
+						var options = $G.getOptions();
+						options.autoHeight = false;
+						$G.setOptions( options );
+					}
+
 					/** Remove the inline style */
 					wrapper.removeAttr( "style" ).addClass( "slick-fullscreen" );
 					container.css( "height", "90%" );
-					self.addClass( "slick-actionbar-fullscreen-min" );
+					self.addClass( "fullscreen-min" );
 				}
 
 				$G.resizeCanvas();
@@ -209,7 +228,7 @@ define( [ "slick/curd/Delete",
 			
 			var plugin;
 
-            action = settings[ action ];
+			action = settings[ action ];
 
 			if ( !action.enable ) { continue; }
 			
