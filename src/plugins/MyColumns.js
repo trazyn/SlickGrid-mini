@@ -235,15 +235,17 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			} );
 		} );
 
+                /**
 		$G.onHeaderCellRendered.subscribe( function( e, args ) {
 		
 			var column = args.column;
 
 			if ( column.tooltip ) {
-				$( "<smnall class='header-tooltip' tooltip=" + column.tooltip + "></small>" )
+				$( "<small class='header-tooltip' tooltip=" + column.tooltip + "></small>" )
 					.appendTo( args.node );
 			}
 		} );
+		*/
 	};
 
 	return function( $G, options ) {
