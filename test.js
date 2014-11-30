@@ -171,7 +171,15 @@ require( [ "slick/paging/Paging",
 		*/
 	} );
 
-	Actionbar( $G, $G.getContainerNode().previousElementSibling );
+	Actionbar( $G, $G.getContainerNode().previousElementSibling, {
+		
+		lab: { enable: true },
+		add: { enable: true },
+		del: { enable: true },
+		save: { enable: true },
+		genius: { enable: true },
+		fullscreen: { enable: true }
+	} );
 
 	$G.init();
 

@@ -9,8 +9,6 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		ignore: [ "_checkbox_selector", "_radio_selector", "idx" ]
 	}
 
-	, index
-
 	, Lab = function( $G, settings ) {
 		
 		var 
@@ -22,21 +20,23 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 		function applyConfig() {
 		
-			var columns = [], currentColumns = index === "originalIndex" ? original : $G.getColumns();
+			var columns = []; 
 
 			for ( var id in mapping ) {
 				
 				var column;
 
 				if ( mapping[ id ][ "always" ] | !mapping[ id ][ "hide" ] ) {
+
+					var index = +mapping[ id ][ "index" ];
 					
-					column = currentColumns[ mapping[ id ][ index ] ];
+					column = original[ index ];
 
 					column.width = mapping[ id ][ "width" ];
 					column.tooltip = mapping[ id ][ "tooltip" ];
 
 					/** Column reorder */
-					columns[ +mapping[ id ][ "index" ] ] = column;
+					columns[ index ] = column;
 				}
 			}
 
@@ -49,36 +49,25 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 				options.alwaysUpdateRows = miscellaneous.alwaysUpdateRows;
 				options.alwaysDeleteRows = miscellaneous.alwaysDeleteRows;
 			}
-
-			updateConfig();
 		}
 
 		function updateConfig() {
 
-			var currentColumns = $G.getColumns();
-
-			index = "index";
-		
-			for ( var i = 0, length = currentColumns.length; i < length; ++i ) {
+			for ( var i = 0, length = original.length; i < length; ++i ) {
 				
-				var column = currentColumns[ i ];
-
-				if ( mapping[ column.id ] ) {
-					mapping[ column.id ][ "index" ] = i;
-				} else {
+				var column = original[ i ];
 				
-					mapping[ column.id ] = {
-						name: column.name,
-						originalWidth: column.width,
-						width: column.width,
-						always: settings.ignore.indexOf( column.id ) > -1,
-						originalTooltip: column.tooltip,
-						tooltip: column.tooltip,
-						hide: false,
-						originalIndex: i,
-						index: i
-					};
-				}
+				mapping[ column.id ] = {
+					name: column.name,
+					originalWidth: column.width,
+					width: column.width,
+					always: settings.ignore.indexOf( column.id ) > -1,
+					originalTooltip: column.tooltip,
+					tooltip: column.tooltip,
+					hide: false,
+					originalIndex: i,
+					index: i
+				};
 			}
 
 			miscellaneous = {
@@ -117,8 +106,6 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 				mapping: mapping,
 				miscellaneous: miscellaneous
 			};
-
-			$G.setColumns( original );
 		} else {
 			mapping = config[ "mapping" ];
 			miscellaneous = config[ "miscellaneous" ];
@@ -129,17 +116,19 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		}
 
 		$( settings.trigger ).on( "click", function() {
+
+			var queue = {};
 		
 			$.amodal( {
 				showButtons: false,
-				closeByDocument: true,
+				closeByDocument: false,
 				showHead: false,
 
 				render: function( ready, loading, close ) {
 
 					var self = this;
 
-					self.load( window.wpf_context_path + "/huawei/wpf/clientjavascript/scmresource/clienthtml/lab.html", function() {
+					self.load( "./src/plugins/lab.html", function() {
 
 						var html = "";
 
@@ -170,7 +159,11 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 					} );
 
 					self
-						.delegate( "button[name=cancel]", "click", close )
+						.delegate( "button[name=cancel]", "click", function() {
+							
+							queue = {};
+							close();
+						} )
 
 						.delegate( "button[name=reset]", "click", function() {
 						
@@ -196,18 +189,18 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 						} )
 
 						.delegate( "button[name=save]", "click", function() {
+
+							for ( var id in queue ) { mapping[ id ][ "hide" ] = queue[ id ]; }
 						
 							close();
-							applyConfig( true );
+							applyConfig();
 							Storage.set( settings.key, config, { "session": false, "local": true }[ settings.scope ] );
 						} )
 						
 						.delegate( "li[data-id] :checkbox", "click", function( e ) {
 
-							var self = $( this )
-							, item = mapping[ self.parents( "li[data-id]" ).attr( "data-id" ) ];
-
-							item[ "hide" ] = !self.is( ":checked" );
+							var self = $( this );
+							queue[ self.parents( "li[data-id]" ).attr( "data-id" ) ] = !self.is( ":checked" );
 						} )
 						
 						.delegate( "li[data-id] :text[name=tooltip]", "change", function( e ) {
