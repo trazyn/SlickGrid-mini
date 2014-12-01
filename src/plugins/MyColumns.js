@@ -30,7 +30,7 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 					var index = +mapping[ id ][ "index" ];
 					
-					column = original[ index ];
+					column = original[ +mapping[ id ][ "originalIndex" ] ];
 
 					column.width = mapping[ id ][ "width" ];
 					column.tooltip = mapping[ id ][ "tooltip" ];
@@ -87,10 +87,15 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 		$G.onColumnsReordered.subscribe( function( e, args ) {
 			
-			var from = args.hash[ 0 ], to = args.hash[ 1 ];
+			var 
+			from = args.hash[ 0 ], to = args.hash[ 1 ];
 
 			mapping[ from.id ][ "index" ] = to.index;
 			mapping[ to.id ][ "index" ] = from.index;
+
+			for ( var m in mapping ) {
+			        console.log( m + ":" + mapping[ m ][ "index" ] + ":" + mapping[ m ][ "hide" ] );
+			}
 
 			/** Auto save config */
 			Storage.set( settings.key, config, settings.scope === "local" );
@@ -109,9 +114,6 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		} else {
 			mapping = config[ "mapping" ];
 			miscellaneous = config[ "miscellaneous" ];
-
-			index = "originalIndex";
-
 			applyConfig();
 		}
 
@@ -121,14 +123,14 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		
 			$.amodal( {
 				showButtons: false,
-				closeByDocument: false,
+				closeByDocument: true,
 				showHead: false,
 
 				render: function( ready, loading, close ) {
 
 					var self = this;
 
-					self.load( "./src/plugins/lab.html", function() {
+					self.load( window.wpf_context_path + "/huawei/wpf/clientjavascript/scmresource/clienthtml/lab.html", function() {
 
 						var html = "";
 
