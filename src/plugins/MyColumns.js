@@ -94,10 +94,6 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			mapping[ from.id ][ "index" ] = toIndex;
 			mapping[ to.id ][ "index" ] = fromIndex;
 
-			for ( var m in mapping ) {
-			        console.log( m + ":" + mapping[ m ][ "index" ] + ":" + mapping[ m ][ "hide" ] );
-			}
-
 			/** Auto save config */
 			Storage.set( settings.key, config, settings.scope === "local" );
 		} );
