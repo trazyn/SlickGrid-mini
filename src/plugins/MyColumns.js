@@ -88,10 +88,11 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 		$G.onColumnsReordered.subscribe( function( e, args ) {
 			
 			var 
-			from = args.hash[ 0 ], to = args.hash[ 1 ];
+			from = args.hash[ 0 ], to = args.hash[ 1 ],
+			fromIndex = mapping[ from.id ][ "index" ], toIndex = mapping[ to.id ][ "index" ];
 
-			mapping[ from.id ][ "index" ] = to.index;
-			mapping[ to.id ][ "index" ] = from.index;
+			mapping[ from.id ][ "index" ] = toIndex;
+			mapping[ to.id ][ "index" ] = fromIndex;
 
 			for ( var m in mapping ) {
 			        console.log( m + ":" + mapping[ m ][ "index" ] + ":" + mapping[ m ][ "hide" ] );
