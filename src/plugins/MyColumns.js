@@ -76,6 +76,18 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 			};
 		}
 
+		function initialization() {
+		
+			mapping = {};
+
+			updateConfig(); 
+
+			config = {
+				mapping: mapping,
+				miscellaneous: miscellaneous
+			};
+		}
+
 		$G.onColumnsResized.subscribe( function( e, args ) {
 			
 			for ( var id in args.hash ) {
@@ -100,18 +112,14 @@ define( [ "self/common/util/Storage", "self/common/ui/Amodal" ], function( Stora
 
 		if ( !config ) {
 
-			mapping = {};
-
-			updateConfig(); 
-
-			config = {
-				mapping: mapping,
-				miscellaneous: miscellaneous
-			};
+                        initialization();
 		} else {
 			mapping = config[ "mapping" ];
 			miscellaneous = config[ "miscellaneous" ];
-			applyConfig();
+
+			try {
+                                applyConfig();
+			} catch ( ex ) { initialization(); }
 		}
 
 		$( settings.trigger ).on( "click", function() {
