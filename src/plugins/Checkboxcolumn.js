@@ -6,6 +6,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 		columnId : "_checkbox_selector",
 		toolTip: "Select/Deselect All",
 		cssClass: "slick-cell-checkbox",
+		frozen: true,
 		width: 35
 	}
 
@@ -40,6 +41,7 @@ define( [ "slick/plugins/RowsModel" ], function( RowsModel ) {
 					width: settings.width,
 					resizable: false,
 					sortable: false,
+					frozen: settings.frozen,
 					cssClass: settings.cssClass,
 					formatter: function( row, cell, value, column, dataContext ) {
 

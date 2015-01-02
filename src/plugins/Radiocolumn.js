@@ -9,7 +9,7 @@ define( function() {
 		cssClass: "slick-cell-radio",
 		width: 35,
 		autoSelected: true,
-		
+		frozen: true,
 		key: "radio-select",
 		cssCellClass: "slick-radio-radio"
 	}
@@ -75,6 +75,7 @@ define( function() {
 					width: settings.width,
 					resizable: false,
 					sortable: false,
+					frozen: settings.frozen,
 					cssClass: settings.cssClass,
 					formatter: function( row, cell, value, column, dataContext ) {
 						
