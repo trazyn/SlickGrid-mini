@@ -57,9 +57,7 @@ require( [ "slick/paging/Paging",
 
 		enableHeaderRow: true,
 
-		headerRowVisibility: false,
-
-		explicitInitialization: true
+		headerRowVisibility: true
 	} );
 
 	;;window.$G = $G;
@@ -137,6 +135,45 @@ require( [ "slick/paging/Paging",
 		width: 200,
 		sortable: true
 	}, {
+		id: "column8",
+		name: "Yes No",
+		field: "yesNo8",
+		editor: Select,
+		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
+		filter: true,
+		width: 200,
+		sortable: false
+	}, {
+	
+		id: "column9",
+		name: "Yes No",
+		field: "yesNo9",
+		editor: Select,
+		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
+		filter: true,
+		width: 200,
+		sortable: false
+	}, {
+	
+		id: "column10",
+		name: "Yes No",
+		field: "yesNo10",
+		editor: Select,
+		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
+		filter: true,
+		width: 200,
+		sortable: false
+	}, {
+	
+		id: "column11",
+		name: "Yes No",
+		field: "yesNo11",
+		editor: Select,
+		editorArgs: { items: [ { value: "N", label: "No" }, { value: "Y", label: "Yes" } ] },
+		filter: true,
+		width: 200,
+		sortable: false
+	}, {
 	
 		id: "column7",
 		name: "Yes No",
@@ -173,7 +210,7 @@ require( [ "slick/paging/Paging",
 
 	Actionbar( $G, $G.getContainerNode().previousElementSibling, {
 		
-		lab: { enable: true },
+		//lab: { enable: true },
 		add: { enable: true },
 		del: { enable: true },
 		save: { enable: true },
