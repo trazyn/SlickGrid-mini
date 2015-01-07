@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Material UI</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,100' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen">
+
+</head>
+
+<body>
+
+
+    <div class="wrap">
+
+        <div class="block google-bar">
+
+            <a class="hamburger-icon" href="#" title="Menu">
+                <span class="line line-1"></span>
+                <span class="line line-2"></span>
+                <span class="line line-3"></span>
+            </a>
+
+            <a class="logo" href="#">
+                <img height="40" src="assets/images/google.svg" />
+            </a>
+
+            <div class="menu">
+
+                <div class="search-field">
+                    <form>
+                        <input type="text" value="" placeholder required />
+                        <span class="placeholder">Search here</span>
+                        <i class="border"></i>
+                    </form>
+                </div>
+
+                <ul class="actual-menu">
+                    <li class="active"><a href="#">Web</a>
+                    </li>
+                    <li><a href="#">Images</a>
+                    </li>
+                    <li><a href="#">Videos</a>
+                    </li>
+                    <li><a href="#">Shopping</a>
+                    </li>
+                    <li><a href="#">News</a>
+                    </li>
+                    <li><a href="#">More</a>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!--- PROFILE -->
+
+        <div class="block profile has-parallax">
+
+            <div class="pic">
+
+                <div class="meta">
+
+                    <div class="actions">
+                        <a href="#"><i class="icon-email"></i></a>
+                        <a href="#"><i class="icon-more-vert"></i></a>
+                    </div>
+                    <h3>Eric Smith</h3>
+
+                </div>
+
+                <img class="is-parallax" src="assets/images/profile-pic.png" />
+
+            </div>
+
+            <div class="content">
+
+                <div class="row">
+                    <p>Donec ullamcorper nulla non metus auctor fringilla. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.</p>
+                </div>
+
+                <div class="row table">
+
+                    <div class="cell">
+                        <span>373</span>
+                        <small>posts</small>
+                    </div>
+
+                    <div class="cell">
+                        <span>473,846</span>
+                        <small>Followers</small>
+                    </div>
+
+                    <div class="cell">
+                        <span>163</span>
+                        <small>Following</small>
+                    </div>
+
+                </div>
+
+                <div class="row follow">
+                    <button><i class="icon-perm-identity"></i>Follow</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- WEATHER -->
+
+        <div class="block weather">
+
+            <div class="content">
+
+                <span class="time">14:45 pm</span>
+
+                <i class="icon-chevron-left prev nav"></i>
+                <i class="icon-chevron-right next nav"></i>
+
+
+                <div class="carousel">
+
+                    <!-- SLIDE -->
+                    <div>
+                        <div class="forecast">
+                            <h1>24&deg;</h1>
+                            <span><i class="icon-wb-sunny"></i> Clear</span>
+                        </div>
+
+                        <img src="assets/images/weather.png" />
+                    </div>
+
+                    <!-- SLIDE -->
+                    <div>
+                        <div class="forecast">
+                            <h1>18&deg;</h1>
+                            <span><i class="icon-cloud"></i> Cloudy</span>
+                        </div>
+
+                        <img src="assets/images/weather-2.png" />
+                    </div>
+
+                    <!-- SLIDE -->
+                    <div>
+                        <div class="forecast">
+                            <h1>28&deg;</h1>
+                            <span><i class="icon-wb-sunny"></i> Clear</span>
+                        </div>
+
+                        <img src="assets/images/weather-3.png" />
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="location">
+                <h2>San Francisco<span>California</span></h2>
+            </div>
+        </div>
+
+        <!-- AUDIO PLAYER -->
+
+        <div class="block audio is-last">
+
+            <div class="artwork">
+                <img src="assets/images/artwork.png" />
+            </div>
+            <div class="controls">
+                <i class="icon-fast-rewind"></i>
+                <i class="icon-play-arrow play"></i>
+                <i class="icon-fast-forward"></i>
+            </div>
+            <div class="track-info">
+                <h2>Montreal<span>The weekend</span></h2>
+            </div>
+
+            <audio src="assets/audio/bubble.mp3"></audio>
+
+        </div>
+
+        <!-- VIDEO PLAYER -->
+
+        <div class="block video">
+
+            <div class="cover"><img src="assets/images/video.png" />
+            </div>
+
+            <div class="interface">
+                <div class="seek-bar">
+                    <div class="completed"></div>
+                </div>
+                <div class="controls">
+                    <button class="play">
+                        <i class="icon-play-arrow"></i>
+                    </button>
+                    <div class="time">
+                        <span class="current-time">
+                	58:49</span>
+                        <span class="duration">
+                	/  1:34:10</span>
+                    </div>
+                    <button class="fullscreen"><i class="icon-crop-free"></i>
+                    </button>
+                    <div class="sound">
+                        <button><i class="icon-volume-mute"></i>
+                        </button>
+                        <div class="volume">
+                            <div class="completed"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- ARTICLE -->
+
+        <div class="block article has-parallax is-last">
+
+            <div class="pic">
+
+                <div class="meta">
+
+                    <div class="actions">
+                        <a href="#"><i class="icon-favorite"></i></a>
+                        <a href="#"><i class="icon-more-vert"></i></a>
+                    </div>
+                    <h3>iPhone 6 Review</h3>
+
+                </div>
+
+                <img class="is-parallax" src="assets/images/article.png" />
+
+            </div>
+
+            <div class="content">
+                <p>Sed posuere consectetur est at lobortis. Vestibulum id ligula porta felis euismod semper. Morbi leo risus.</p>
+            </div>
+
+        </div>
+
+        <!-- CALENDAR -->
+
+        <div class="block calendar">
+
+            <div class="date">
+
+                <i class="icon-chevron-left"></i>
+                <i class="icon-chevron-right"></i>
+
+                <span>Tuesday</span>
+                <h2>23</h2>
+                <span>December / 2014</span>
+
+            </div>
+
+            <div class="content">
+
+                <table class="cal">
+                    <thead>
+                        <tr>
+                            <th>M</th>
+                            <th>T</th>
+                            <th>W</th>
+                            <th>T</th>
+                            <th>F</th>
+                            <th>S</th>
+                            <th>S</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="#">1</a>
+                            </td>
+                            <td>
+                                <a href="#">2</a>
+                            </td>
+                            <td>
+                                <a href="#">3</a>
+                            </td>
+                            <td>
+                                <a href="#">4</a>
+                            </td>
+                            <td>
+                                <a href="#">5</a>
+                            </td>
+                            <td>
+                                <a href="#">6</a>
+                            </td>
+                            <td><a href="#">7</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">8</a>
+                            </td>
+                            <td><a href="#">9</a>
+                            </td>
+                            <td><a href="#">10</a>
+                            </td>
+                            <td><a href="#">11</a>
+                            </td>
+                            <td><a href="#">12</a>
+                            </td>
+                            <td><a href="#">13</a>
+                            </td>
+                            <td><a href="#">14</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">15</a>
+                            </td>
+                            <td><a href="#">16</a>
+                            </td>
+                            <td><a href="#">17</a>
+                            </td>
+                            <td><a href="#">18</a>
+                            </td>
+                            <td><a href="#">19</a>
+                            </td>
+                            <td><a href="#">20</a>
+                            </td>
+                            <td><a href="#">21</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">22</a>
+                            </td>
+                            <td class="active"><a href="#">23</a>
+                            </td>
+                            <td><a href="#">24</a>
+                            </td>
+                            <td><a href="#">25</a>
+                            </td>
+                            <td><a href="#">26</a>
+                            </td>
+                            <td><a href="#">27</a>
+                            </td>
+                            <td><a href="#">28</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="#">29</a>
+                            </td>
+                            <td><a href="#">30</a>
+                            </td>
+                            <td><a href="#">31</a>
+                            </td>
+                            <td>
+                                <a href="#"></a>
+                            </td>
+                            <td>
+                                <a href="#"></a>
+                            </td>
+                            <td>
+                                <a href="#"></a>
+                            </td>
+                            <td>
+                                <a href="#"></a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+
+        <!-- PURCHASE CARD -->
+
+        <div class="block purchase">
+
+            <div class="pic">
+
+                <div class="meta">
+
+                    <div class="actions">
+                        <a href="#"><i class="icon-star"></i></a>
+                        <a href="#"><i class="icon-shopping-cart"></i></a>
+                        <a href="#"><i class="icon-more-vert"></i></a>
+                    </div>
+                    <h3>&euro;99</h3>
+
+                </div>
+
+                <img class="is-parallax" src="assets/images/purchase.png" />
+
+            </div>
+
+            <div class="content">
+
+                <h2>Wireless Speaker</h2>
+                <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibentum</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHART -->
+
+        <div class="block graph is-last">
+
+            <div class="chart">
+                <span>Last 30 days</span>
+
+                <svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="222px" height="121px" viewBox="0 0 222 121" enable-background="new 0 0 222 121" xml:space="preserve">
+                    <line class="path-1" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="1.262" y1="83.945" x2="30.738" y2="25.833" />
+                    <line class="path-2" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="30.82" y1="26.887" x2="55.531" y2="37.167" />
+                    <line class="path-3" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="55.079" y1="36.486" x2="85.275" y2="82" />
+                    <line class="path-4" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="84.275" y1="82" x2="110.476" y2="70" />
+                    <line class="path-5" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="109.476" y1="70" x2="136.968" y2="89.36" />
+                    <line class="path-6" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="136.968" y1="89.36" x2="162.952" y2="118.5" />
+                    <line class="path-7" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="162.952" y1="118.5" x2="192.178" y2="2.614" />
+                    <line class="path-8" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" x1="192.178" y1="2.614" x2="218.667" y2="37.167" />
+                </svg>
+
+
+
+                <div class="bars">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+
+            <div class="content">
+
+                <ul>
+                    <li>
+                        <small>Pageviews</small>
+                        <span class="count" data-before="28473085" data-count="28473585"></span>
+                    </li>
+                    <li>
+                        <small>Visitors</small>
+                        <span class="count" data-before="19594458" data-count="19594958"></span>
+                    </li>
+                    <li>
+                        <small>Sales</small>
+                        <span>&euro;<span class="count" data-before="274391874" data-count="274392374"></span></span>
+                    </li>
+                </ul>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/velocity.min.js"></script>
+    <script type="text/javascript" src="assets/js/owl.carousel.js"></script>
+    <script type="text/javascript" src="assets/js/bundle.js"></script>
+
+</body>
+
+</html>

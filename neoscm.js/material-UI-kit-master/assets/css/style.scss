@@ -1,0 +1,17 @@
+@import 'scss/utils/_config';
+@import 'scss/utils/_mixins';
+@import 'scss/utils/_icons';
+
+@import 'scss/base/_reset';
+@import 'scss/base/_base';
+@import 'scss/base/_carousel';
+
+@import 'scss/component/_google-bar.scss';
+@import 'scss/component/_profile.scss';
+@import 'scss/component/_weather.scss';
+@import 'scss/component/_audio.scss';
+@import 'scss/component/_video.scss';
+@import 'scss/component/_article.scss';
+@import 'scss/component/_calendar.scss';
+@import 'scss/component/_purchase.scss';
+@import 'scss/component/_chart.scss';
