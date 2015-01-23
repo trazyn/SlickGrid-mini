@@ -40,6 +40,7 @@ html {
     overflow: hidden;
     border-left: 0px;
     font-weight: 300;
+    background-color: #eaeaea;
 }
 .slick-row.odd {
     background: #F5F5F5;
@@ -62,7 +63,7 @@ html {
 .slick-headerrow-columns {
     background: #eaeaea;
 }
-.slick-headerrow-columns input {
+.slick-headerrow-columns input, .slick-headerrow-columns-left input {
     height: 35px;
     width: 100%;
     padding: 0;
@@ -74,7 +75,7 @@ html {
     transition: all 0.3s linear;
     color: #777;
 }
-.slick-headerrow-columns input:focus {
+.slick-headerrow-columns input:focus, .slick-headerrow-columns-left input:focus {
     background: rgba(50, 197, 180, 0.3);
 }
 .slick-header-column.ui-state-default {
@@ -927,4 +928,18 @@ input[type="checkbox"].slick-fast-query:disabled + label, input[type="checkbox"]
 .slick-cell.frozen {
     position: absolute;
     z-index: 10;
+}
+.slick-header-columns-left {
+	z-index: 99;
+	background-color: #e7e7e7;
+}
+.slick-headerrow-columns-right {
+	overflow: hidden;
+}
+.slick-headerrow-columns-left {
+		z-index: 99;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: #eaeaea;
 }

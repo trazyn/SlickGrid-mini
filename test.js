@@ -96,6 +96,7 @@ require( [ "slick/paging/Paging",
 		editor: Text,
 		filter: true,
 		sortable: true,
+		frozen: true,
 
 		width: 200,
 		require: true
