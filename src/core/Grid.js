@@ -799,7 +799,7 @@ if (typeof Slick === "undefined") {
             }
             columnElements.each(function(i, e) {
 
-            	i = this.getAttribute( "data-column-index" ) | 0;
+                i = this.getAttribute("data-column-index") | 0;
 
                 if (i < firstResizable || (options.forceFitColumns && i >= lastResizable)) {
                     return;
