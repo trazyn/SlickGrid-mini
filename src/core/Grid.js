@@ -86,8 +86,7 @@ if (typeof Slick === "undefined") {
             multiColumnSort: false,
             defaultFormatter: defaultFormatter,
             forceSyncScrolling: false,
-            syncColumnCellResize: false,
-            addNewRowCssClass: "new-row"
+            syncColumnCellResize: false
         };
 
         var columnDefaults = {
@@ -316,7 +315,7 @@ if (typeof Slick === "undefined") {
                 if (!options.enableTextSelectionOnCells) {
                     // disable text selection in grid cells except in input and textarea elements
                     // (this is IE-specific, because selectstart event will only fire in IE)
-                    $viewport.bind("selectstart.ui", function(event) {
+                    $viewport.add($viewportL).bind("selectstart.ui", function(event) {
                         return $(event.target).is("input,textarea");
                     });
                 }
@@ -1494,10 +1493,6 @@ if (typeof Slick === "undefined") {
                 (dataLoading ? " loading" : "") +
                 (row === activeRow ? " active" : "") +
                 (row % 2 == 1 ? " odd" : " even");
-
-            if (!d) {
-                rowCss += " " + options.addNewRowCssClass;
-            }
 
             var metadata = data.getItemMetadata && data.getItemMetadata(row);
 
