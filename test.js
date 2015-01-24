@@ -53,7 +53,7 @@ require( [ "slick/paging/Paging",
 		/** No horizontal scorllbar */
 		forceFitColumns: false,
 
-		syncColumnCellResize: true,
+		syncColumnCellResize: false,
 
 		enableHeaderRow: true,
 
@@ -110,9 +110,10 @@ require( [ "slick/paging/Paging",
 		width: 200,
 		sortable: true
 	}, {
-		id: "column8",
+		id: "column89",
 		name: "Description",
 		field: "desc",
+		frozen: true,
 		editor: Textarea,
 		editorArgs: { max: 500 },
 		width: 200,
