@@ -331,12 +331,12 @@ if (typeof Slick === "undefined") {
                     .bind("resize.slickgrid", resizeCanvas);
                 $viewport
                     .bind("scroll", handleScroll);
-                $headerScroller
+                $headerScroller.add($headersL)
                     .bind("contextmenu", handleHeaderContextMenu)
                     .bind("click", handleHeaderClick)
                     .delegate(".slick-header-column", "mouseenter", handleHeaderMouseEnter)
                     .delegate(".slick-header-column", "mouseleave", handleHeaderMouseLeave);
-                $headerRowScroller.add($headersL)
+                $headerRowScroller
                     .bind("scroll", handleHeaderRowScroll);
                 $focusSink.add($focusSink2)
                     .bind("keydown", handleKeyDown);
@@ -513,7 +513,7 @@ if (typeof Slick === "undefined") {
                     columns[idx].name = title;
                 }
                 if (tooltip !== undefined) {
-                    columns[idx].toolTip = tooltip;
+                    columns[idx].tooltip = tooltip;
                 }
 
                 trigger(self.onBeforeHeaderCellDestroy, {
@@ -2435,7 +2435,7 @@ if (typeof Slick === "undefined") {
                             wrapper.css("border", "1px solid #1ABC9C");
                             setTimeout(function() {
                                 wrapper.remove();
-                            }, 333);
+                            }, 250);
                         }
                     })
                     .select()

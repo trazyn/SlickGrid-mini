@@ -1,30 +1,31 @@
+require.config({
 
-require.config( {
-	
-	baseUrl: "src",
+    baseUrl: "src",
 
-	paths: {
-		
-		"slick": "."
-	}
-} );
+    paths: {
 
-require( [ "slick/paging/Paging",
-	"slick/plugins/Checkboxcolumn",
-	"slick/plugins/Radiocolumn",
-	"slick/curd/Delete",
-	"slick/curd/Update",
-	"slick/plugins/Actionbar",
-	"slick/editors/Text",
-	"slick/editors/Select",
-	"slick/editors/Textarea",
-	"slick/core/Core", 
-	"slick/core/Grid",
-	"slick/core/DataView" ], function( Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, Text, Select, Textarea ) {
+        "slick": "."
+    }
+});
 
-	var $G
-	, dataView = new Slick.Data.DataView();
+require(["slick/paging/Paging",
+    "slick/plugins/Checkboxcolumn",
+    "slick/plugins/Radiocolumn",
+    "slick/curd/Delete",
+    "slick/curd/Update",
+    "slick/plugins/Actionbar",
+    "test/MrQuery",
+    "slick/editors/Text",
+    "slick/editors/Select",
+    "slick/editors/Textarea",
+    "slick/core/Core",
+    "slick/core/Grid",
+    "slick/core/DataView"
+], function(Paging, Checkboxcolumn, Radiocolumn, Delete, Update, Actionbar, MrQuery, Text, Select, Textarea) {
 
+    var $G, dataView = new Slick.Data.DataView("mr_header_id");
+
+    /**
 	for ( var i = 0, data = []; i < 54; ++i ) {
 		
 		data[ i ] = {
@@ -40,29 +41,36 @@ require( [ "slick/paging/Paging",
 			"desc": "Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 		};
 	}
+	*/
 
-	$G = new Slick.Grid( "#myGrid", dataView, [], {
-		editable: true,
+    $G = new Slick.Grid("#myGrid", dataView, [], {
+        editable: true,
 
-		/** Enable keybord navigation */
-		enableCellNavigation: true,
+        /** Enable keybord navigation */
+        enableCellNavigation: true,
 
-		/** Fast keybord navigation */
-		asyncEditorLoading: true,
+        /** Fast keybord navigation */
+        asyncEditorLoading: true,
 
-		/** No horizontal scorllbar */
-		forceFitColumns: false,
+        /** No horizontal scorllbar */
+        forceFitColumns: false,
 
-		syncColumnCellResize: false,
+        syncColumnCellResize: false,
 
-		enableHeaderRow: true,
+        enableHeaderRow: true,
 
-		headerRowVisibility: true
-	} );
+        headerRowVisibility: false
+    });
 
-	;;window.$G = $G;
-	;;window.dataView = dataView;
-	
+    window.$G = $G;
+
+    $.ajaxSetup( {
+		url: ""
+    } );
+
+    $G.setColumns([Checkboxcolumn($G), Radiocolumn($G)].concat(MrQuery()));
+
+    /**
 	$G.setColumns( [ Checkboxcolumn( $G ), Radiocolumn( $G ), {
 		id: "column1",
 		name: "IDS",
@@ -186,19 +194,26 @@ require( [ "slick/paging/Paging",
 		width: 200,
 		sortable: false
 	} ] );
+	*/
 
-	Paging( $G, dataView, {
-	
-		pagingInfo: {
-			pageSize: 50,
-			pageNum: 0,
+    Paging($G, dataView, {
 
-			sizes: [ 50, 100, 500, 1000 ]
-		},
+        pagingInfo: {
+            pageSize: 500,
+            pageNum: 0,
+            sizes: [20, 50, 100, 500, 1e3, 5e3]
+        },
+        ajaxOptions: {
+            serviceName: "iss.mr.QueryHeadersListTest1",
+            moduleName: "gridElement_MRQueryHeadersTest1",
+            params: {
+            	entityId: "3449",
+            	status: "40"
+            }
+        }
+        //data: data,
 
-		data: data,
-
-		/**
+        /**
 		ajaxOptions: {
 		
 			data: {
@@ -208,29 +223,41 @@ require( [ "slick/paging/Paging",
 			}
 		}
 		*/
-	} );
+    });
 
-	Actionbar( $G, $G.getContainerNode().previousElementSibling, {
-		
-		//lab: { enable: true },
-		add: { enable: true },
-		del: { enable: true },
-		save: { enable: true },
-		genius: { enable: true },
-		fullscreen: { enable: true }
-	} );
+    Actionbar($G, $G.getContainerNode().previousElementSibling, {
 
-	$G.init();
+        //lab: { enable: true },
+        add: {
+            enable: true
+        },
+        del: {
+            enable: true
+        },
+        save: {
+            enable: true
+        },
+        genius: {
+            enable: true
+        },
+        fullscreen: {
+            enable: true
+        },
+        filter: {
+        	enable: true
+        }
+    });
 
-	$( ".slick-header-column" )
+    $G.init();
 
-		.each( function() {
-			
-			this.addEventListener( "dragstart", function( e ) {
-			
-				e.dataTransfer.setImage( this, 0, 0 );
-			} );
-		} );
-} );
+    $(".slick-header-column")
 
-//$.get( "/scm/scmui/ajax2?bst_model=huawei/wpf/Framework&nodeID=DC00000000091301" )
+    .each(function() {
+
+        this.addEventListener("dragstart", function(e) {
+
+            e.dataTransfer.setImage(this, 0, 0);
+        });
+    });
+});
+
