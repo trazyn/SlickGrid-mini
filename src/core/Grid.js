@@ -1435,7 +1435,7 @@ if (typeof Slick === "undefined") {
 
             if (prevScrollTop != newScrollTop) {
                 vScrollDir = (prevScrollTop + oldOffset < newScrollTop + offset) ? 1 : -1;
-                $viewport[0].scrollTop = (lastRenderedScrollTop = scrollTop = prevScrollTop = newScrollTop);
+                $viewportL[0].scrollTop = $viewport[0].scrollTop = (lastRenderedScrollTop = scrollTop = prevScrollTop = newScrollTop);
 
                 trigger(self.onViewportChanged, {});
             }
