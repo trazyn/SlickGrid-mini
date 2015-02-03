@@ -1,0 +1,43 @@
+
+.ui.dropdown {
+
+	> .title {
+	
+		position: relative;
+		display: block;
+		height: 30px;
+		line-height: 30px;
+		transition: all .2s ease-out;
+		width: 120px;
+		font-size: 12px;
+		background: #ccc;
+		text-align: left;
+		color: #fff;
+		letter-spacing: 1px;
+
+		&:hover {
+			background: #ea4c89;
+		}
+
+		p {
+			text-indent: 10px;
+		}
+
+		i.icon.arrow {
+			position: absolute;
+			top: 0px;
+			right: 5px;
+			display: inline-block;
+			text-align: center;
+			height: 24px;;
+			width: 24px;;
+			font-size: 20px;
+			transition: all .1s linear;
+
+			&.reverse {
+				-webkit-transform: rotate(-180deg);
+				top: 7px;
+			}
+		}
+	}
+}

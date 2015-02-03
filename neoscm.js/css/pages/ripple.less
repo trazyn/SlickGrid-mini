@@ -1,0 +1,56 @@
+
+@import (less) "../base/colors.less";
+@import (less) "../component/shape.less";
+@import (less) "../component/select.less";
+@import (less) "wikiTemplate.less";
+
+#ripple {
+	#wikiTemplate();
+
+	[class^=example-] {
+		position: relative;
+		display: inline-block;
+		box-shadow: none;
+		height: 180px;
+		width: 180px;
+		vertical-align: middle;
+	}
+
+	.example-div {
+		-webkit-box-shadow: 0 1px 24px rgba(0,0,0,.24);
+		-moz-box-shadow: 0 1px 24px rgba(0,0,0,.24);
+		box-shadow: 0 1px 24px rgba(0,0,0,.24);
+	}
+
+	.example-icon {
+		a {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-top: -19px;
+			margin-left: -19px;
+			background-color: @twitter;
+
+			&:hover {
+				background-color: darken( @twitter, 20% ) !important;
+			}
+		}
+
+		.icon.twitter {
+			font-size: 14px;
+		}
+
+		color: #fff;
+	}
+
+	.example-select {
+		
+		.ui.select {
+			position: absolute;
+			left: 50%;
+			top: 38.5%;
+			margin-left: -63px;
+			margin-top: -20px;
+		}
+	}
+}

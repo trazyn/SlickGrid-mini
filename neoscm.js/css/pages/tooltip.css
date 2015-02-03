@@ -1,0 +1,91 @@
+#tooltip {
+  padding-left: 340px;
+  padding-bottom: 100px;
+  font-family: "Roboto", Sans-serif;
+  font-size: 0.85rem;
+}
+#tooltip header {
+  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', Roboto, Arial, Sans-serif;
+  font-weight: 100;
+  font-size: 3.5rem;
+  color: #656d78;
+  text-align: left;
+  margin-bottom: 20px;
+}
+#tooltip section {
+  padding: 20px 0 5px 20px;
+  border-left: 1px solid #ddd;
+  margin-bottom: 30px;
+  position: relative;
+  width: 900px;
+}
+#tooltip section > div.view-code {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.55);
+  padding: 10px 0 0 11px;
+}
+#tooltip section > div.view-code:hover {
+  color: rgba(0, 0, 0, 0.9);
+}
+#tooltip section > div.view-code .icon {
+  font-size: 20px;
+}
+#tooltip section .circle {
+  height: 38px;
+  width: 38px;
+  line-height: 38px;
+  display: inline-block;
+  margin: 0 10px 0 10px;
+  cursor: pointer;
+  text-align: center;
+}
+#tooltip section .circle .icon {
+  font-size: 20px;
+}
+#tooltip section .circle .icon.play {
+  color: #13cc72;
+}
+#tooltip section .circle .icon.play:hover {
+  color: #0f9d58;
+}
+#tooltip section .circle .icon.stop {
+  color: #f77066;
+}
+#tooltip section .circle .icon.stop:hover {
+  color: #f44336;
+}
+#tooltip h1 {
+  font-family: "Roboto", Sans-serif;
+  font-size: 1rem;
+  font-weight: 100;
+}
+#tooltip code,
+#tooltip xmp,
+#tooltip .note {
+  display: block;
+  font-family: Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+#tooltip .note {
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 48px;
+  height: 48px;
+}
+#tooltip code,
+#tooltip xmp {
+  -webkit-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+}
+#tooltip .wrap p {
+  height: 48px;
+  line-height: 48px;
+  text-indent: 20px;
+  font-family: Georgia, "Times New Roman", Sans-serif;
+}

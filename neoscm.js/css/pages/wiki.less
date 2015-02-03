@@ -1,0 +1,196 @@
+
+@import (less) "../base/icons.less";
+@import (less) "../base/mixins.less";
+@import (less) "../base/animation.less";
+@import (less) "../base/transition.less";
+@import (less) "../component/hamburger.less";
+@import (less) "../component/button.less";
+@import (less) "../component/logo.less";
+@import (less) "../component/grid.less";
+@import (less) "../component/profile.less";
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+
+body {
+	font-size: 1.25rem;
+	font-weight: 400;
+	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', Roboto, Arial, Sans-serif;
+	line-height: 1.5;
+	color: rgba(0, 0, 0, 0.87);
+	-webkit-font-smoothing: antialiased;
+	background-color: #fff;
+}
+
+#nav {
+	
+	position: fixed;
+	width: 100%;
+	box-sizing: border-box;
+	height: 69px;
+	background-color: @google;
+	top: 0;
+	left: 0;
+	z-index: 9;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+	a.hamburger {
+		display: block;
+		position: relative;
+		top: 17px;
+		left: 32px;
+	}
+
+	i.icon.github2 {
+		cursor: pointer;
+		position: absolute;
+		top: 19px;
+		right: 32px;
+		font-size: 20px;
+		color: #fff;
+	}
+}
+
+#menu {
+
+	text-indent: 30px;
+
+	.logo {
+		cursor: pointer;
+		width: 100%;
+		background-color: @google;
+		color: #fff;
+		height: 69px;
+		line-height: 69px;
+
+		p {
+		
+			font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', Roboto, Arial, Sans-serif;
+			text-shadow: 0 0 40px #fff;
+			font-size: 38px;
+		}
+
+		p:hover {
+			-webkit-animation: pulse 1.6s infinite linear;
+		}
+	}
+
+	.item {
+	
+		font-family: "Roboto", Sans-serif;
+		font-size: 0.9rem;
+		line-height: 48px;
+		height: 48px;
+		font-weight: 300;
+		margin-top: 10px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.035);
+		}
+
+		&.active {
+			color: @coral;
+		}
+	}
+
+	li {
+
+		transition: .2s;
+		text-indent: 48px;
+		line-height: 32px;
+		height: 32px;
+		font-size: 0.7rem;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.035);
+		}
+
+		&.active {
+			color: @coral;
+		}
+	}
+}
+
+#canvas {
+	padding-top: 93px;
+
+	#brand {
+		text-align: center;
+
+		#intro {
+			font-family: "Roboto", Sans-serif;
+			color: rgba(0,0,0,.75);
+			margin: 74px;
+			margin-bottom: 38px;
+
+			h3 {
+				font-weight: 100;
+				font-size: 24px;
+			}
+		}
+
+		button {
+			width: 104px;
+			margin-left: 32px;
+			font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', Roboto, Arial, Sans-serif;
+		}
+	}
+
+	#checkout {
+		text-align: center;
+		font-size: 12px;
+		font-family: "Roboto", Sans-serif;
+		h3 {
+			font-size: 1.2rem;
+			font-weight: 100;
+			margin-bottom: 32px;
+		}
+
+		margin-bottom: 100px;
+	}
+
+	div[class^=example] {
+		margin: 30px;
+		transition: all .3s linear;
+		-webkit-transition: all .3s linear;
+	}
+	div[class^=example]:hover {
+		-webkit-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+		-moz-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+		box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+	}
+
+	#demo {
+		width: 80%; 
+		margin: 60px 10% 20px 10%;
+	}
+}
+
+#footer {
+	font-size: 14px;
+	color: white;
+	background-color: #212121;
+	text-align: center;
+	height: 107px;
+	line-height: 50px;
+	
+	a.icon {
+		font-size: 20px;
+	}
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	transition: .3s;
+}
+::-webkit-scrollbar-thumb {
+	background: rgba(0,0,0,.4);
+	&:hover {
+		background: rgba(0,0,0,.7);
+	}
+}

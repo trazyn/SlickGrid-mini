@@ -1,0 +1,35 @@
+
+<link rel="stylesheet" href="/css/pages/progress.css" type="text/css" media="screen" charset="utf-8">
+
+<section id="progress" class="ui ripple">
+	
+	<div class="ui progress"></div>
+
+	<header>
+		<h1>Progress.js</h1>
+		Inspired by NProgress.js
+	</header>
+
+	<a class="signal"></a>
+	<a class="hamburger">
+		<span class="line line-1"></span>
+		<span class="line line-2"></span>
+		<span class="line line-3"></span>
+	</a>
+
+	<section>
+		<button class="ui button transition" name="play">
+			<i class="icon play"></i>
+		</button>
+
+		<button class="ui button tranistion" name="stop">
+			<i class="icon stop"></i>
+		</button>
+	</section>
+</section>
+
+<script type="text/javascript" charset="utf-8">
+	require( [ "views/progress" ], function( page ) { 
+		page( $( "#progress" ) );
+	} );
+</script>

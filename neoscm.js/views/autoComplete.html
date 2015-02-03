@@ -1,0 +1,45 @@
+
+<link rel="stylesheet" href="/css/pages/autoComplete.css" type="text/css" media="screen" charset="utf-8">
+
+<ul id="peek">
+	<li data-anchor="example" class="item active">Example</li>
+	<li data-anchor="api" class="item">API</li>
+</ul>
+
+<section id="autoComplete">
+	
+	<header data-anchor="example">Example</header>
+
+	<section>
+		<div class="wrap">
+			<div class="ui yoursComplete">
+				<input class="ui text front" type="text" />
+				<input class="ui text hint" type="text" tabindex="-1" />
+				<i class="icon"></i>
+			</div>
+		</div>
+	</section>
+
+	<br>
+	<br>
+
+	<header data-anchor="api">API</header>
+
+	<section>
+		<pre>
+		<xmp>
+		<div class="ui yoursComplete">
+			<input class="ui text front" type="text" />
+			<input class="ui text hint" type="text" tabindex="-1" />
+			<i class="icon"></i>
+		</div>
+		</xmp>
+		</pre>
+	</section>
+</section>
+
+<script type="text/javascript" charset="utf-8">
+	require( [ "views/autoComplete" ], function( page ) { 
+		page( $( "#autoComplete" ) );		
+	} );
+</script>

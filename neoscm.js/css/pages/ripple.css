@@ -1,0 +1,163 @@
+.ui.circle {
+  height: 48px;
+  line-height: 48px;
+  border-radius: 48px;
+}
+.ui.circle:hover {
+  -webkit-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+}
+.ui.select > select {
+  font-size: .8rem;
+  width: auto;
+  margin: 0;
+  padding: 12px 32px 12px 14px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  background: #e0e0e0;
+  border-radius: 0;
+  /* Styling the select text color */
+  color: #333;
+  /* removes the fucking native down arrow */
+  -webkit-appearance: none;
+  -moz-appearance: window;
+}
+.ui.select:after {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  /* Styling the down arrow */
+  width: 0;
+  height: 0;
+  padding: 0;
+  content: '';
+  border-left: .25em solid transparent;
+  border-right: .25em solid transparent;
+  border-top: .375em solid #333;
+  border-width: 5px;
+  pointer-events: none;
+}
+#ripple {
+  padding-left: 340px;
+  padding-bottom: 100px;
+  font-family: "Roboto", Sans-serif;
+  font-size: 0.85rem;
+}
+#ripple header {
+  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', Roboto, Arial, Sans-serif;
+  font-weight: 100;
+  font-size: 3.5rem;
+  color: #656d78;
+  text-align: left;
+  margin-bottom: 20px;
+}
+#ripple section {
+  padding: 20px 0 5px 20px;
+  border-left: 1px solid #ddd;
+  margin-bottom: 30px;
+  position: relative;
+  width: 900px;
+}
+#ripple section > div.view-code {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.55);
+  padding: 9px 18px 0 0;
+}
+#ripple section > div.view-code:hover {
+  color: rgba(0, 0, 0, 0.9);
+}
+#ripple section > div.view-code .icon {
+  font-size: 20px;
+}
+#ripple section .circle {
+  height: 38px;
+  width: 38px;
+  line-height: 38px;
+  display: inline-block;
+  margin: 0 10px 0 10px;
+  cursor: pointer;
+  text-align: center;
+}
+#ripple section .circle .icon {
+  font-size: 20px;
+}
+#ripple section .circle .icon.play {
+  color: #13cc72;
+}
+#ripple section .circle .icon.play:hover {
+  color: #0f9d58;
+}
+#ripple section .circle .icon.stop {
+  color: #f77066;
+}
+#ripple section .circle .icon.stop:hover {
+  color: #f44336;
+}
+#ripple h1 {
+  font-family: "Roboto", Sans-serif;
+  font-size: 1rem;
+  font-weight: 100;
+}
+#ripple code,
+#ripple xmp,
+#ripple .note {
+  display: block;
+  font-family: Georgia, "Times New Roman", "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", serif;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+#ripple .note {
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 48px;
+  height: 48px;
+}
+#ripple code,
+#ripple xmp {
+  -webkit-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+}
+#ripple [class^=example-] {
+  position: relative;
+  display: inline-block;
+  box-shadow: none;
+  height: 180px;
+  width: 180px;
+  vertical-align: middle;
+}
+#ripple .example-div {
+  -webkit-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.24);
+}
+#ripple .example-icon {
+  color: #fff;
+}
+#ripple .example-icon a {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -19px;
+  margin-left: -19px;
+  background-color: #55acee;
+}
+#ripple .example-icon a:hover {
+  background-color: #147bc9 !important;
+}
+#ripple .example-icon .icon.twitter {
+  font-size: 14px;
+}
+#ripple .example-select .ui.select {
+  position: absolute;
+  left: 50%;
+  top: 38.5%;
+  margin-left: -63px;
+  margin-top: -20px;
+}
