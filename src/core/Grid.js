@@ -254,16 +254,6 @@ if (typeof Slick === "undefined") {
 
             $focusSink = $("<div tabIndex='0' hideFocus style='position:fixed;width:0;height:0;top:0;left:0;outline:0;'></div>").appendTo($container);
 
-            $headerScroller = $("<div class='slick-header ui-state-default' style='overflow:hidden;position:relative;'>" +
-                    "<div class='slick-header-columns-left' style='position:absolute;top:0;left:0;' />" +
-                    "<div class='slick-header-columns-right' style='overflow:hidden;position:relative;' />" +
-                    "</div>").appendTo($container)
-                .find(".slick-header-columns-right");
-
-            $headersL = $headerScroller.prev();
-            $headers = $("<div class='slick-header-columns' style='left:-1000px' />").appendTo($headerScroller);
-            $headers.width(getHeadersWidth());
-
             $headerRowScroller = $("<div class='slick-headerrow ui-state-default' style='overflow:hidden;position:relative;'>" +
                     "<div class='slick-headerrow-columns-left' />" +
                     "<div class='slick-headerrow-columns-right' />" +
@@ -276,6 +266,16 @@ if (typeof Slick === "undefined") {
             if (!options.enableHeaderRow) {
                 $headerRowScroller.parent().hide();
             }
+
+            $headerScroller = $("<div class='slick-header ui-state-default' style='overflow:hidden;position:relative;'>" +
+                    "<div class='slick-header-columns-left' style='position:absolute;top:0;left:0;' />" +
+                    "<div class='slick-header-columns-right' style='overflow:hidden;position:relative;' />" +
+                    "</div>").appendTo($container)
+                .find(".slick-header-columns-right");
+
+            $headersL = $headerScroller.prev();
+            $headers = $("<div class='slick-header-columns' style='left:-1000px' />").appendTo($headerScroller);
+            $headers.width(getHeadersWidth());
 
             $viewportL = $container.append("<div class='slick-viewport' style='width:100%;overflow:hidden;outline:0;position:relative;'>" +
                     "<div class='slick-viewport-left' style='overflow:hidden;outline:0;position:absolute;top:0;left:0'><div class='grid-canvas' /></div>" +
